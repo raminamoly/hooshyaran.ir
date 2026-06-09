@@ -1,0 +1,61 @@
+@page "/admin/articles"
+@model Hooshyaran.Web.Pages.Admin.Articles.IndexModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@{
+    ViewData["Title"] = "مدیریت مقالات";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">مقالات</p>
+            <h1>مدیریت مقالات</h1>
+        </div>
+        <a class="button button--primary" href="/admin/articles/edit">مقاله جدید</a>
+    </div>
+
+    <div class="admin-table-wrap glass-surface">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>عنوان</th>
+                    <th>Slug</th>
+                    <th>نویسنده</th>
+                    <th>انتشار</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var row in Model.Articles)
+            {
+                var article = row.Article;
+                <tr>
+                    <td>@article.Title</td>
+                    <td><code>@article.Slug</code></td>
+                    <td>@article.AuthorName</td>
+                    <td>
+                        <span>@(article.IsPublished ? "منتشر شده" : "پیش‌نویس")</span>
+                        <small>@PersianDateFormatter.ToPersianDate(article.PublishedAt)</small>
+                    </td>
+                    <td class="admin-actions">
+                        <a href="@row.PublicUrl" target="_blank" rel="noopener">نمایش</a>
+                        <a href="/admin/articles/edit/@article.Id">ویرایش</a>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@article.Id">
+                            <button type="submit" onclick="return confirm('حذف شود؟')">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="admin-pagination" aria-label="صفحه‌بندی مقالات">
+            <a class="@(Model.PageNumber <= 1 ? "is-disabled" : null)" href="/admin/articles?pageNumber=@(Model.PageNumber - 1)">قبلی</a>
+            <span>صفحه @Model.PageNumber از @Model.TotalPages - @Model.TotalItems مقاله</span>
+            <a class="@(Model.PageNumber >= Model.TotalPages ? "is-disabled" : null)" href="/admin/articles?pageNumber=@(Model.PageNumber + 1)">بعدی</a>
+        </nav>
+    }
+</section>

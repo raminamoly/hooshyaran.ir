@@ -1,0 +1,33 @@
+@page "/blog"
+@model Hooshyaran.Web.Pages.Blog.IndexModel
+@{
+    ViewData["Title"] = "بلاگ";
+    ViewData["Description"] = Model.Seo?.Description ?? "دانشنامه هوش مصنوعی سازمانی هوش‌یاران.";
+    ViewData["Keywords"] = Model.Seo?.Keywords ?? "بلاگ هوش مصنوعی, مقالات AI سازمانی";
+    ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/blog";
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "بلاگ",
+    "دانشنامه هوش مصنوعی سازمانی",
+    "مقاله‌هایی برای تصمیم‌گیری بهتر درباره هوش مصنوعی خصوصی، مدیریت مدل‌های زبانی و اتوماسیون هوشمند فرایندها.",
+    "تماس با ما",
+    "/contact"))
+
+<section class="content-band">
+    <div class="container article-grid">
+        @foreach (var article in Model.Articles)
+        {
+            <article class="article-card">
+                @if (!string.IsNullOrWhiteSpace(article.ImagePath))
+                {
+                    <img class="article-card__image" src="@AssetOptimizer.Image(article.ImagePath)" alt="@article.Title" width="1100" height="619" loading="lazy" decoding="async" />
+                }
+                <p>@PersianDateFormatter.ToPersianDate(article.PublishedAt)</p>
+                <h3>@article.Title</h3>
+                <span>@article.Summary</span>
+                <a class="text-link" href="/blog/@article.Slug">ادامه مطلب</a>
+            </article>
+        }
+    </div>
+</section>

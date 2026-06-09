@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="هوش‌یاران">
+  <rect width="64" height="64" rx="14" fill="#050505"/>
+  <path d="M10 18h17c8 0 13 4 13 11 0 5-3 9-8 11l8 6H29l-7-5h-5v5h-7V18Zm7 6v11h9c4 0 7-2 7-6s-3-5-7-5h-9Z" fill="#F28A00"/>
+  <path d="M34 46 49 18h8L42 46h-8Z" fill="#22C000"/>
+</svg>

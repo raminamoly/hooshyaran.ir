@@ -1,0 +1,60 @@
+@page "/admin/demo-requests"
+@model Hooshyaran.Web.Pages.Admin.DemoRequests.IndexModel
+@{
+    ViewData["Title"] = "درخواست‌های دمو";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">فروش و ارتباط</p>
+            <h1>درخواست‌های جلسه دمو</h1>
+            <p>درخواست‌هایی که از فرم عمومی سایت ثبت می‌شوند اینجا قابل پیگیری هستند.</p>
+        </div>
+    </div>
+
+    <div class="admin-table-wrap glass-surface">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>درخواست‌دهنده</th>
+                    <th>سازمان</th>
+                    <th>تماس</th>
+                    <th>نیاز</th>
+                    <th>وضعیت</th>
+                    <th>زمان ثبت</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var request in Model.Requests)
+            {
+                <tr>
+                    <td>
+                        <strong>@request.FullName</strong>
+                        <small>@request.JobTitle</small>
+                    </td>
+                    <td>@request.OrganizationName</td>
+                    <td>
+                        <span dir="ltr">@request.PhoneNumber</span>
+                        <small dir="ltr">@request.Email</small>
+                    </td>
+                    <td>
+                        @request.NeedArea
+                        <small>@request.Notes</small>
+                    </td>
+                    <td>
+                        <span class="admin-status @(request.Status == DemoRequestStatuses.New ? "admin-status--featured" : "admin-status--live")">
+                            @DemoRequestStatuses.ToPersian(request.Status)
+                        </span>
+                    </td>
+                    <td>@PersianDateFormatter.ToPersianDate(request.CreatedAt)</td>
+                    <td class="admin-actions">
+                        <a href="/admin/demo-requests/edit/@request.Id">جزئیات</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

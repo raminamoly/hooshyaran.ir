@@ -1,0 +1,46 @@
+@page "/admin/demo-requests/edit/{id:int}"
+@model Hooshyaran.Web.Pages.Admin.DemoRequests.EditModel
+@{
+    ViewData["Title"] = "جزئیات درخواست دمو";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">درخواست دمو</p>
+            <h1>@Model.RequestItem.OrganizationName</h1>
+            <p>@Model.RequestItem.FullName - @PersianDateFormatter.ToPersianDate(Model.RequestItem.CreatedAt)</p>
+        </div>
+        <a class="button button--secondary" href="/admin/demo-requests">بازگشت</a>
+    </div>
+
+    <div class="admin-detail-grid">
+        <article class="admin-detail-card glass-surface">
+            <h2>اطلاعات درخواست</h2>
+            <dl class="admin-definition-list">
+                <dt>نام</dt><dd>@Model.RequestItem.FullName</dd>
+                <dt>سازمان</dt><dd>@Model.RequestItem.OrganizationName</dd>
+                <dt>سمت</dt><dd>@Model.RequestItem.JobTitle</dd>
+                <dt>تلفن</dt><dd dir="ltr">@Model.RequestItem.PhoneNumber</dd>
+                <dt>ایمیل</dt><dd dir="ltr">@Model.RequestItem.Email</dd>
+                <dt>حوزه نیاز</dt><dd>@Model.RequestItem.NeedArea</dd>
+                <dt>زمان پیشنهادی</dt><dd>@Model.RequestItem.PreferredTime</dd>
+                <dt>توضیحات</dt><dd>@Model.RequestItem.Notes</dd>
+            </dl>
+        </article>
+
+        <form method="post" class="admin-form admin-edit-form glass-surface">
+            <input asp-for="Input.Id" type="hidden" />
+            <label asp-for="Input.Status"></label>
+            <select asp-for="Input.Status" asp-items="Model.StatusOptions"></select>
+            <span asp-validation-for="Input.Status"></span>
+
+            <label asp-for="Input.AdminNotes"></label>
+            <textarea asp-for="Input.AdminNotes" rows="8"></textarea>
+
+            <button class="button button--primary" type="submit">ذخیره پیگیری</button>
+        </form>
+    </div>
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,89 @@
+@page "/tags/{slug}"
+@model Hooshyaran.Web.Pages.Tags.DetailsModel
+@{
+    ViewData["Title"] = $"تگ {Model.Tag.Name}";
+    ViewData["Description"] = string.IsNullOrWhiteSpace(Model.Tag.Description)
+        ? $"آرشیو محتواهای مرتبط با تگ {Model.Tag.Name} در هوش‌یاران."
+        : Model.Tag.Description;
+    ViewData["CanonicalPath"] = $"/tags/{Model.Tag.Slug}";
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "آرشیو تگ",
+    Model.Tag.Name,
+    string.IsNullOrWhiteSpace(Model.Tag.Description) ? "محتواهای مرتبط با این تگ در هوش‌یاران." : Model.Tag.Description,
+    "مشاهده بلاگ",
+    "/blog",
+    "محصولات",
+    "/products"))
+
+<section class="content-band">
+    <div class="container tag-archive">
+        @if (!Model.Articles.Any() && !Model.Products.Any() && !Model.Pages.Any())
+        {
+            <div class="empty-state glass-surface">
+                <h2>هنوز محتوایی برای این تگ ثبت نشده است.</h2>
+                <p>بعد از اتصال این تگ به مقاله، محصول یا صفحه، نتیجه‌ها همین‌جا نمایش داده می‌شوند.</p>
+            </div>
+        }
+
+        @if (Model.Articles.Any())
+        {
+            <section class="tag-archive__section">
+                @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel("مقالات مرتبط", "مقالات", "مطالبی که با این تگ دسته‌بندی شده‌اند."))
+                <div class="article-grid">
+                    @foreach (var article in Model.Articles)
+                    {
+                        <article class="article-card">
+                            @if (!string.IsNullOrWhiteSpace(article.ImagePath))
+                            {
+                                <img class="article-card__image" src="@AssetOptimizer.Image(article.ImagePath)" alt="@article.Title" width="1100" height="619" loading="lazy" decoding="async" />
+                            }
+                            <p>@PersianDateFormatter.ToPersianDate(article.PublishedAt)</p>
+                            <h3>@article.Title</h3>
+                            <span>@article.Summary</span>
+                            <a class="text-link" href="/blog/@article.Slug">ادامه مطلب</a>
+                        </article>
+                    }
+                </div>
+            </section>
+        }
+
+        @if (Model.Products.Any())
+        {
+            <section class="tag-archive__section">
+                @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel("محصولات مرتبط", "محصولات", "راهکارهایی که با این تگ مرتبط شده‌اند."))
+                <div class="product-grid product-grid--catalog">
+                    @foreach (var product in Model.Products)
+                    {
+                        @await Html.PartialAsync("_ProductCard", new ProductCardViewModel(
+                            product.PersianTitle,
+                            product.ShortDescription,
+                            product.ProductCategory?.Title ?? "محصول",
+                            $"/products/{product.Slug}",
+                            "مشاهده محصول",
+                            Hooshyaran.Web.Pages.Products.DetailsModel.Lines(product.Benefits).Take(3).ToArray(),
+                            product.HeroImagePath))
+                    }
+                </div>
+            </section>
+        }
+
+        @if (Model.Pages.Any())
+        {
+            <section class="tag-archive__section">
+                @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel("صفحات مرتبط", "صفحات", "صفحات سایت که با این تگ مرتبط شده‌اند."))
+                <div class="feature-grid">
+                    @foreach (var staticPage in Model.Pages)
+                    {
+                        <article class="feature-item">
+                            <h3>@staticPage.Title</h3>
+                            <p>@staticPage.Summary</p>
+                            <a class="text-link" href="/@staticPage.Slug">مشاهده صفحه</a>
+                        </article>
+                    }
+                </div>
+            </section>
+        }
+    </div>
+</section>

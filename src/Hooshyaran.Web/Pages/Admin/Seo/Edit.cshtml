@@ -1,0 +1,35 @@
+@page "/admin/seo/edit/{id:int?}"
+@model Hooshyaran.Web.Pages.Admin.Seo.EditModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = Hooshyaran.Web.Models.AdminUserRoles.SuperAdmin)]
+@{
+    ViewData["Title"] = Model.Input.Id == 0 ? "SEO جدید" : "ویرایش SEO";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">SEO</p>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <a class="button button--secondary" href="/admin/seo">بازگشت</a>
+    </div>
+    <form method="post" class="admin-form admin-edit-form glass-surface">
+        <input asp-for="Input.Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="admin-validation"></div>
+        <label asp-for="Input.PageKey"></label>
+        <input asp-for="Input.PageKey" dir="ltr" />
+        <span asp-validation-for="Input.PageKey"></span>
+        <label asp-for="Input.Title"></label>
+        <input asp-for="Input.Title" />
+        <span asp-validation-for="Input.Title"></span>
+        <label asp-for="Input.Description"></label>
+        <textarea asp-for="Input.Description" rows="3"></textarea>
+        <label asp-for="Input.Keywords"></label>
+        <input asp-for="Input.Keywords" />
+        <label asp-for="Input.CanonicalPath"></label>
+        <input asp-for="Input.CanonicalPath" dir="ltr" />
+        <button class="button button--primary" type="submit">ذخیره</button>
+    </form>
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

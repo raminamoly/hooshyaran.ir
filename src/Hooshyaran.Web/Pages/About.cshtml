@@ -1,0 +1,61 @@
+@page "/about"
+@model Hooshyaran.Web.Pages.AboutModel
+@inject Hooshyaran.Web.Services.ICmsHtmlService CmsHtml
+@{
+    ViewData["Title"] = Model.PageContent?.Title ?? "درباره ما";
+    ViewData["Description"] = Model.Seo?.Description ?? Model.PageContent?.SeoDescription ?? "درباره شرکت داده‌پردازان کوشای پاسارگاد و تجربه آن در توسعه سامانه‌های سازمانی و هوش مصنوعی.";
+    ViewData["Keywords"] = Model.Seo?.Keywords ?? Model.PageContent?.SeoKeywords ?? "";
+    ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/about";
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "درباره ما",
+    Model.PageContent?.Title ?? "شرکت داده‌پردازان کوشای پاسارگاد",
+    Model.PageContent?.Summary ?? "تجربه طراحی و توسعه سامانه‌های نرم‌افزاری سازمانی، هوشمندسازی فرایندها و یکپارچه‌سازی اطلاعات.",
+    "تماس با ما",
+    "/contact"))
+
+<section class="content-band">
+    <div class="container about-story-grid">
+        <figure class="about-team-photo glass-surface">
+            <img src="/assets/content/about-iranian-ai-team.jpg" alt="تیم ایرانی هوش‌یاران در حال همکاری روی راهکارهای هوش مصنوعی سازمانی" width="1536" height="864" loading="lazy" decoding="async" />
+            <figcaption>
+                <img src="/assets/brand/hooshyaran-logo-small.png" alt="" width="88" height="49" />
+                <span>تیم محصول، داده و اتوماسیون سازمانی</span>
+            </figcaption>
+        </figure>
+
+        <article class="about-panel glass-surface about-panel--story">
+            <span class="card-icon" aria-hidden="true">
+                <svg><use href="#icon-spark"></use></svg>
+            </span>
+            <div class="cms-content">
+                @Html.Raw(CmsHtml.ToSafeHtml(Model.PageContent?.Body ?? string.Empty))
+                @if (Model.PageContent is not null)
+                {
+                    @await Html.PartialAsync("_TagChips", Model.PageContent.StaticPageTags.Select(item => item.Tag!).Where(tag => tag is not null))
+                }
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="content-band content-band--alt">
+    <div class="container feature-grid">
+        <article class="feature-item">
+            <span class="card-icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
+            <h3>تمرکز بر اعتماد سازمانی</h3>
+            <p>طراحی راهکارها با توجه به امنیت داده، کنترل دسترسی و قابلیت استقرار مرحله‌ای در سازمان انجام می‌شود.</p>
+        </article>
+        <article class="feature-item">
+            <span class="card-icon" aria-hidden="true"><svg><use href="#icon-flow"></use></svg></span>
+            <h3>تجربه فرایندمحور</h3>
+            <p>راهکارها فقط مدل زبانی نیستند؛ به فرایند، داده، مسئولیت‌پذیری و خروجی قابل پیگیری وصل می‌شوند.</p>
+        </article>
+        <article class="feature-item">
+            <span class="card-icon" aria-hidden="true"><svg><use href="#icon-database"></use></svg></span>
+            <h3>شناخت نیاز فارسی‌زبان</h3>
+            <p>تجربه کاربری، محتوا و سناریوها برای سازمان‌های فارسی‌زبان و نیازهای عملیاتی واقعی طراحی شده‌اند.</p>
+        </article>
+    </div>
+</section>

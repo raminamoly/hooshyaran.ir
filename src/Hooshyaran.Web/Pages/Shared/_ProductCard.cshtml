@@ -1,0 +1,26 @@
+@model Hooshyaran.Web.ViewModels.ProductCardViewModel
+
+<article class="product-card">
+    @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+    {
+        <a class="product-card__media" href="@Model.Url" aria-label="@Model.Title">
+            <img src="@AssetOptimizer.Image(Model.ImageUrl)" alt="@Model.Title" width="1100" height="619" loading="lazy" decoding="async" />
+        </a>
+    }
+    <span class="card-icon product-card__icon" aria-hidden="true">
+        <svg><use href="#icon-spark"></use></svg>
+    </span>
+    <p class="product-card__category">@Model.Category</p>
+    <h3>@Model.Title</h3>
+    <p>@Model.Description</p>
+    <ul>
+        @foreach (var benefit in Model.Benefits)
+        {
+            <li>@benefit</li>
+        }
+    </ul>
+    <a class="text-link text-link--icon" href="@Model.Url">
+        @Model.CtaText
+        <svg aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
+    </a>
+</article>

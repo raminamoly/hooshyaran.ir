@@ -1,0 +1,50 @@
+@page "/contact"
+@model Hooshyaran.Web.Pages.ContactModel
+@inject Hooshyaran.Web.Services.ICmsHtmlService CmsHtml
+@{
+    ViewData["Title"] = Model.PageContent?.Title ?? "تماس با ما";
+    ViewData["Description"] = Model.Seo?.Description ?? Model.PageContent?.SeoDescription ?? "راه‌های تماس با هوش‌یاران برای درخواست دمو، مشاوره و بررسی نیازهای سازمانی.";
+    ViewData["Keywords"] = Model.Seo?.Keywords ?? Model.PageContent?.SeoKeywords ?? "";
+    ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/contact";
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "تماس با ما",
+    Model.PageContent?.Title ?? "برای بررسی نیاز سازمانی خود با ما در تماس باشید",
+    Model.PageContent?.Summary ?? "برای دریافت مشاوره، درخواست دمو یا بررسی سناریوی سازمانی خود از اطلاعات تماس زیر استفاده کنید.",
+    "درخواست دمو",
+    "/request-demo"))
+
+<section class="content-band">
+    <div class="container contact-page-grid">
+        <section class="contact-panel glass-surface" aria-labelledby="contact-title">
+            <span class="card-icon" aria-hidden="true">
+                <svg><use href="#icon-mail"></use></svg>
+            </span>
+            <h2 id="contact-title">اطلاعات تماس</h2>
+            <div class="contact-list contact-list--plain cms-content">
+                @Html.Raw(CmsHtml.ToSafeHtml(Model.PageContent?.Body ?? string.Empty))
+            </div>
+        </section>
+
+        <section class="map-panel glass-surface" aria-labelledby="map-title">
+            <div class="map-panel__header">
+                <span class="card-icon" aria-hidden="true">
+                    <svg><use href="#icon-location"></use></svg>
+                </span>
+                <div>
+                    <h2 id="map-title">موقعیت شرکت روی نقشه</h2>
+                    <p>شرکت داده‌پردازان کوشای پاسارگاد</p>
+                </div>
+            </div>
+            <div class="offline-map" role="img" aria-label="موقعیت تقریبی شرکت داده‌پردازان کوشای پاسارگاد با مختصات 35.7276757 و 51.4189552">
+                <span class="offline-map__grid" aria-hidden="true"></span>
+                <span class="offline-map__route offline-map__route--one" aria-hidden="true"></span>
+                <span class="offline-map__route offline-map__route--two" aria-hidden="true"></span>
+                <span class="offline-map__pin" aria-hidden="true"><svg><use href="#icon-location"></use></svg></span>
+                <span class="offline-map__label">۳۵٫۷۲۷۶۷۵۷, ۵۱٫۴۱۸۹۵۵۲</span>
+            </div>
+            <p class="map-panel__note">نقشه به‌صورت آفلاین نمایش داده می‌شود تا صفحه تماس وابسته به سرویس خارجی نباشد.</p>
+        </section>
+    </div>
+</section>

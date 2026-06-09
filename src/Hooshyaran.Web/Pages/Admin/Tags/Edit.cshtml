@@ -1,0 +1,31 @@
+@page "/admin/tags/edit/{id:int?}"
+@model Hooshyaran.Web.Pages.Admin.Tags.EditModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = Hooshyaran.Web.Models.AdminUserRoles.SuperAdmin)]
+@{
+    ViewData["Title"] = Model.Input.Id == 0 ? "تگ جدید" : "ویرایش تگ";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">تگ‌ها</p>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <a class="button button--secondary" href="/admin/tags">بازگشت</a>
+    </div>
+    <form method="post" class="admin-form admin-edit-form glass-surface">
+        <input asp-for="Input.Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="admin-validation"></div>
+        <label asp-for="Input.Name"></label>
+        <input asp-for="Input.Name" />
+        <span asp-validation-for="Input.Name"></span>
+        <label asp-for="Input.Slug"></label>
+        <input asp-for="Input.Slug" dir="ltr" />
+        <span asp-validation-for="Input.Slug"></span>
+        <label asp-for="Input.Description"></label>
+        <textarea asp-for="Input.Description" rows="4"></textarea>
+        <button class="button button--primary" type="submit">ذخیره تگ</button>
+    </form>
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

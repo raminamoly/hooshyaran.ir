@@ -1,0 +1,188 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "خانه";
+    ViewData["Description"] = Model.Seo?.Description ?? "هوش‌یاران راهکارهای AI خصوصی و قابل کنترل را روی زیرساخت سازمانی برای مدیریت مدل‌های زبانی، اتوماسیون هوشمند و امنیت داده پیاده‌سازی می‌کند.";
+    ViewData["Keywords"] = Model.Seo?.Keywords ?? "هوش مصنوعی سازمانی, راهکار هوش مصنوعی برای سازمان‌ها, اتوماسیون هوشمند سازمانی, LLMOPS فارسی, WorkGraph AI";
+    ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/";
+
+    static string ProductImage(Hooshyaran.Web.Models.Product product) =>
+        !string.IsNullOrWhiteSpace(product.HeroImagePath)
+            ? product.HeroImagePath
+            : product.Slug switch
+            {
+                "llmops" => "/assets/content/article-llmops-enterprise-control.jpg",
+                "workgraph-ai" => "/assets/content/article-ai-workflow-automation.jpg",
+                _ => "/assets/content/home-enterprise-ai-hero.jpg"
+            };
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "",
+    "هوش مصنوعی سازمانی، امن و قابل کنترل",
+    "استقرار AI خصوصی روی زیرساخت سازمان، با کنترل داده، پایش مصرف و اتصال امن به فرایندهای داخلی.",
+    "درخواست جلسه معرفی",
+    "/request-demo",
+    "مشاهده محصولات",
+    "/products",
+    "/assets/content/home-enterprise-ai-hero.jpg",
+    "نمای تصویری از لایه هماهنگ‌سازی هوش مصنوعی سازمانی، داده‌ها و جریان‌های کاری",
+    CssClass: "page-hero--home"))
+
+<section class="home-signal-band">
+    <div class="container home-signal-grid">
+        <div class="home-signal glass-surface">
+            <span class="home-signal__icon" aria-hidden="true"><svg><use href="#icon-server"></use></svg></span>
+            <strong>استقرار لوکال AI</strong>
+            <span>مدل‌ها و ابزارها روی سرورها و شبکه داخلی سازمان اجرا می‌شوند.</span>
+        </div>
+        <div class="home-signal glass-surface">
+            <span class="home-signal__icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
+            <strong>کنترل و مانیتورینگ</strong>
+            <span>دسترسی، لاگ، مصرف و کیفیت خروجی AI قابل پایش و مدیریت است.</span>
+        </div>
+        <div class="home-signal glass-surface">
+            <span class="home-signal__icon" aria-hidden="true"><svg><use href="#icon-cpu"></use></svg></span>
+            <strong>LLM Apps سازمانی</strong>
+            <span>دستیارها و اپلیکیشن‌های هوشمند متصل به داده‌ها و فرایندهای واقعی.</span>
+        </div>
+    </div>
+</section>
+
+<section class="content-band">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "اتاق کنترل AI خصوصی",
+            "درخواست، مدل، داده و لاگ؛ همه داخل مرز سازمان",
+            "به‌جای اتصال مستقیم کاربر به سرویس خارجی، هوش‌یاران یک مسیر کنترل‌شده بین سامانه‌های داخلی، مدل‌های زبانی و سیاست‌های امنیتی سازمان می‌سازد."))
+        <div class="content-showcase content-showcase--control-room">
+            <div class="private-ai-map" aria-label="نمای مسیر کنترل‌شده هوش مصنوعی خصوصی">
+                <div class="private-ai-map__halo" aria-hidden="true"></div>
+                <div class="private-ai-map__core">
+                    <span class="private-ai-map__icon" aria-hidden="true"><svg><use href="#icon-cpu"></use></svg></span>
+                    <strong>هسته AI داخلی</strong>
+                    <span>مدل، حافظه و پردازش روی سرورهای شما</span>
+                </div>
+                <div class="private-ai-map__node private-ai-map__node--source">
+                    <span>داده سازمانی</span>
+                    <strong>اسناد، دیتابیس، ERP</strong>
+                </div>
+                <div class="private-ai-map__node private-ai-map__node--policy">
+                    <span>گاردریل امنیتی</span>
+                    <strong>دسترسی، ماسک داده، سیاست استفاده</strong>
+                </div>
+                <div class="private-ai-map__node private-ai-map__node--ops">
+                    <span>پایش عملیات</span>
+                    <strong>لاگ، کیفیت پاسخ، مصرف GPU</strong>
+                </div>
+                <div class="private-ai-map__node private-ai-map__node--apps">
+                    <span>اپلیکیشن‌های کاری</span>
+                    <strong>چت سازمانی، اتوماسیون، گزارش</strong>
+                </div>
+                <div class="private-ai-map__stream private-ai-map__stream--one" aria-hidden="true"></div>
+                <div class="private-ai-map__stream private-ai-map__stream--two" aria-hidden="true"></div>
+                <div class="private-ai-map__stream private-ai-map__stream--three" aria-hidden="true"></div>
+            </div>
+            <div class="control-room-panel">
+                <div class="control-room-panel__header">
+                    <span>Private AI Runtime</span>
+                    <strong>مسیر عملیاتی امن</strong>
+                </div>
+                <ol class="control-room-steps">
+                    <li>
+                        <span class="control-room-steps__marker">01</span>
+                        <div>
+                            <strong>اتصال کنترل‌شده به داده‌های داخلی</strong>
+                            <p>مدل فقط از مسیرهای تعریف‌شده به اسناد، دیتابیس‌ها و سامانه‌های سازمان وصل می‌شود.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="control-room-steps__marker">02</span>
+                        <div>
+                            <strong>اجرای مدل بدون هزینه توکن خارجی</strong>
+                            <p>مصرف پردازش، صف درخواست‌ها و ظرفیت GPU در همان زیرساخت داخلی قابل مدیریت است.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="control-room-steps__marker">03</span>
+                        <div>
+                            <strong>قفل‌گذاری، لاگ و ارزیابی خروجی</strong>
+                            <p>سطح دسترسی، ردپای درخواست‌ها، کیفیت پاسخ و رفتار کاربران از ابتدا قابل پایش می‌شود.</p>
+                        </div>
+                    </li>
+                </ol>
+                <div class="control-room-metrics" aria-label="شاخص‌های عملیاتی AI خصوصی">
+                    <span><strong>Local</strong> استقرار</span>
+                    <span><strong>Audit</strong> لاگ کامل</span>
+                    <span><strong>Policy</strong> کنترل دسترسی</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content-band content-band--alt">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "محصولات",
+            "راهکارهای هوش مصنوعی برای سازمان‌ها",
+            "محصولات هوش‌یاران برای ساخت اپلیکیشن‌های LLM، اتوماسیون فرایندها و مدیریت امن مدل‌ها طراحی شده‌اند."))
+        <div class="product-grid">
+            @foreach (var product in Model.FeaturedProducts)
+            {
+                @await Html.PartialAsync("_ProductCard", new ProductCardViewModel(
+                    product.PersianTitle,
+                    product.ShortDescription,
+                    product.ProductCategory?.Title ?? "هوش مصنوعی سازمانی",
+                    $"/products/{product.Slug}",
+                    "مشاهده جزئیات",
+                    product.Benefits.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(3).ToArray(),
+                    ProductImage(product)))
+            }
+        </div>
+    </div>
+</section>
+
+<section class="content-band">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "بانک دانش",
+            "بانک دانش هوش مصنوعی سازمانی",
+            "یادداشت‌های کوتاه برای انتخاب، استقرار و مدیریت AI خصوصی در سازمان‌ها."))
+        <div class="article-grid">
+            @foreach (var article in Model.LatestArticles)
+            {
+                <article class="article-card">
+                    @if (!string.IsNullOrWhiteSpace(article.ImagePath))
+                    {
+                        <img class="article-card__image" src="@AssetOptimizer.Image(article.ImagePath)" alt="@article.Title" width="1100" height="619" loading="lazy" decoding="async" />
+                    }
+                    <h3>@article.Title</h3>
+                    <span>@article.Summary</span>
+                    <div class="article-card__footer">
+                        <span class="article-card__date">
+                            <svg aria-hidden="true"><use href="#icon-calendar"></use></svg>
+                            @PersianDateFormatter.ToPersianDate(article.PublishedAt)
+                        </span>
+                        <a class="text-link text-link--icon" href="/blog/@article.Slug">
+                            ادامه مطلب
+                            <svg aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
+                        </a>
+                    </div>
+                </article>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="content-band content-band--alt">
+    <div class="container">
+        @await Html.PartialAsync("_CtaSection", new CtaSectionViewModel(
+            "مسیر AI خصوصی سازمانتان را دقیق شروع کنید",
+            "در جلسه معرفی، داده‌ها، سطح حساسیت، سناریوهای کاربردی و مسیر استقرار لوکال AI برای سازمان شما بررسی می‌شود.",
+            "درخواست جلسه معرفی",
+            "/request-demo",
+            "تماس با ما",
+            "/contact"))
+    </div>
+</section>

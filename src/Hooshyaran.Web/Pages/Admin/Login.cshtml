@@ -1,0 +1,26 @@
+@page "/admin/login"
+@model Hooshyaran.Web.Pages.Admin.LoginModel
+@{
+    ViewData["Title"] = "ورود";
+}
+
+<section class="admin-login glass-surface">
+    <p class="eyebrow">ورود مدیر</p>
+    <h1>ورود به پنل مدیریت</h1>
+    <form method="post" class="admin-form">
+        <div asp-validation-summary="ModelOnly" class="admin-validation"></div>
+        <label asp-for="Input.UserName"></label>
+        <input asp-for="Input.UserName" autocomplete="username" />
+        <span asp-validation-for="Input.UserName"></span>
+
+        <label asp-for="Input.Password"></label>
+        <input asp-for="Input.Password" autocomplete="current-password" />
+        <span asp-validation-for="Input.Password"></span>
+
+        <button class="button button--primary" type="submit">ورود</button>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

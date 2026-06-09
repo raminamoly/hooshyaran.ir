@@ -1,0 +1,94 @@
+@page "/admin/articles/edit/{id:int?}"
+@model Hooshyaran.Web.Pages.Admin.Articles.EditModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@{
+    ViewData["Title"] = Model.Input.Id == 0 ? "مقاله جدید" : "ویرایش مقاله";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">مقالات</p>
+            <h1>@ViewData["Title"]</h1>
+            @if (!string.IsNullOrWhiteSpace(Model.PublicUrl))
+            {
+                <p><a class="admin-inline-link" href="@Model.PublicUrl" target="_blank" rel="noopener">مشاهده مقاله در سایت</a></p>
+            }
+        </div>
+        <a class="button button--secondary" href="/admin/articles">بازگشت</a>
+    </div>
+
+    <form method="post" class="admin-form admin-edit-form glass-surface">
+        <input asp-for="Input.Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="admin-validation"></div>
+        <label asp-for="Input.Title"></label>
+        <input asp-for="Input.Title" />
+        <span asp-validation-for="Input.Title"></span>
+
+        <label asp-for="Input.Slug"></label>
+        <input asp-for="Input.Slug" dir="ltr" />
+        <span asp-validation-for="Input.Slug"></span>
+
+        <label asp-for="Input.Summary"></label>
+        <textarea asp-for="Input.Summary" rows="3"></textarea>
+
+        <label asp-for="Input.Body"></label>
+        <textarea asp-for="Input.Body" rows="12" class="js-rich-editor"></textarea>
+
+        <label asp-for="Input.ImagePath"></label>
+        <input asp-for="Input.ImagePath" dir="ltr" placeholder="/assets/content/article-name.jpg" />
+
+        <div class="admin-form-grid">
+            @if (Model.IsSuperAdmin)
+            {
+                <div>
+                    <label asp-for="Input.AuthorName"></label>
+                    <input asp-for="Input.AuthorName" />
+                </div>
+                <div>
+                    <label asp-for="Input.AdminUserId"></label>
+                    <select asp-for="Input.AdminUserId" asp-items="Model.AuthorOptions">
+                        <option value="">بدون اتصال به کاربر</option>
+                    </select>
+                </div>
+            }
+            else
+            {
+                <input asp-for="Input.AuthorName" type="hidden" />
+                <input asp-for="Input.AdminUserId" type="hidden" />
+            }
+            <div>
+                <label asp-for="Input.PublishedAt"></label>
+                <input asp-for="Input.PublishedAt" type="datetime-local" />
+            </div>
+        </div>
+
+        <label class="admin-checkbox">
+            <input asp-for="Input.IsPublished" />
+            <span>منتشر شود</span>
+        </label>
+
+        <fieldset class="admin-fieldset">
+            <legend>تگ‌ها</legend>
+            <label asp-for="Input.SelectedTagIds"></label>
+            <select asp-for="Input.SelectedTagIds" asp-items="Model.TagOptions" multiple class="admin-multi-select admin-tag-combobox"></select>
+            <span asp-validation-for="Input.SelectedTagIds"></span>
+            <p class="admin-help-text">برای افزودن یا تغییر نام تگ‌ها از بخش مدیریت تگ‌ها استفاده کنید.</p>
+        </fieldset>
+
+        <label asp-for="Input.SeoTitle"></label>
+        <input asp-for="Input.SeoTitle" />
+
+        <label asp-for="Input.SeoDescription"></label>
+        <textarea asp-for="Input.SeoDescription" rows="3"></textarea>
+
+        <label asp-for="Input.SeoKeywords"></label>
+        <input asp-for="Input.SeoKeywords" />
+
+        <button class="button button--primary" type="submit">ذخیره</button>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

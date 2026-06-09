@@ -1,0 +1,60 @@
+@page "/admin/pages/edit/{id:int?}"
+@model Hooshyaran.Web.Pages.Admin.Pages.EditModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = Hooshyaran.Web.Models.AdminUserRoles.SuperAdmin)]
+@{
+    ViewData["Title"] = Model.Input.Id == 0 ? "صفحه جدید" : "ویرایش صفحه";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">صفحات</p>
+            <h1>@ViewData["Title"]</h1>
+            @if (!string.IsNullOrWhiteSpace(Model.PublicUrl))
+            {
+                <p><a class="admin-inline-link" href="@Model.PublicUrl" target="_blank" rel="noopener">مشاهده صفحه در سایت</a></p>
+            }
+        </div>
+        <a class="button button--secondary" href="/admin/pages">بازگشت</a>
+    </div>
+    <form method="post" class="admin-form admin-edit-form glass-surface">
+        <input asp-for="Input.Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="admin-validation"></div>
+        <div class="admin-form-grid">
+            <div>
+                <label asp-for="Input.Key"></label>
+                <input asp-for="Input.Key" dir="ltr" />
+                <span asp-validation-for="Input.Key"></span>
+            </div>
+            <div>
+                <label asp-for="Input.Slug"></label>
+                <input asp-for="Input.Slug" dir="ltr" />
+                <span asp-validation-for="Input.Slug"></span>
+            </div>
+        </div>
+        <label asp-for="Input.Title"></label>
+        <input asp-for="Input.Title" />
+        <span asp-validation-for="Input.Title"></span>
+        <label asp-for="Input.Summary"></label>
+        <textarea asp-for="Input.Summary" rows="3"></textarea>
+        <label asp-for="Input.Body"></label>
+        <textarea asp-for="Input.Body" rows="10" class="js-rich-editor"></textarea>
+        <label class="admin-checkbox"><input asp-for="Input.IsPublished" /><span>منتشر شود</span></label>
+        <fieldset class="admin-fieldset">
+            <legend>تگ‌ها</legend>
+            <label asp-for="Input.SelectedTagIds"></label>
+            <select asp-for="Input.SelectedTagIds" asp-items="Model.TagOptions" multiple class="admin-multi-select admin-tag-combobox"></select>
+            <span asp-validation-for="Input.SelectedTagIds"></span>
+            <p class="admin-help-text">تگ‌ها فقط از بخش مدیریت تگ‌ها ساخته و ویرایش می‌شوند.</p>
+        </fieldset>
+        <label asp-for="Input.SeoTitle"></label>
+        <input asp-for="Input.SeoTitle" />
+        <label asp-for="Input.SeoDescription"></label>
+        <textarea asp-for="Input.SeoDescription" rows="3"></textarea>
+        <label asp-for="Input.SeoKeywords"></label>
+        <input asp-for="Input.SeoKeywords" />
+        <button class="button button--primary" type="submit">ذخیره</button>
+    </form>
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,107 @@
+@using Microsoft.AspNetCore.Authentication
+@using Hooshyaran.Web.Models
+@{
+    var pageTitle = ViewData["Title"] as string ?? "مدیریت";
+    var isSuperAdmin = User.IsInRole(AdminUserRoles.SuperAdmin);
+    var currentPath = Context.Request.Path.Value ?? string.Empty;
+}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@pageTitle - مدیریت هوش‌یاران</title>
+    <link rel="icon" type="image/svg+xml" href="~/assets/brand/favicon.svg" />
+    <link rel="preload" href="~/assets/fonts/iransansx-fa-num/IRANSansXFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="~/assets/fonts/iransansx-fa-num/IRANSansXFaNum-DemiBold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="~/css/fonts.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-body">
+    <svg class="admin-icon-sprite" aria-hidden="true" focusable="false">
+        <symbol id="admin-icon-dashboard" viewBox="0 0 24 24"><path d="M4 13h7V4H4v9Zm9 7h7V4h-7v16ZM4 20h7v-5H4v5Z" /></symbol>
+        <symbol id="admin-icon-chart" viewBox="0 0 24 24"><path d="M5 19V5h2v14H5Zm6 0V9h2v10h-2Zm6 0v-6h2v6h-2Z" /></symbol>
+        <symbol id="admin-icon-database" viewBox="0 0 24 24"><path d="M12 3c4.4 0 8 1.4 8 3.2v11.6c0 1.8-3.6 3.2-8 3.2s-8-1.4-8-3.2V6.2C4 4.4 7.6 3 12 3Zm0 2C8.1 5 6 6 6 6.2s2.1 1.2 6 1.2 6-1 6-1.2S15.9 5 12 5Zm6 4c-1.5.8-3.7 1.2-6 1.2S7.5 9.8 6 9v2.8c0 .2 2.1 1.2 6 1.2s6-1 6-1.2V9Zm0 5.6c-1.5.8-3.7 1.2-6 1.2s-4.5-.4-6-1.2v3.2c0 .2 2.1 1.2 6 1.2s6-1 6-1.2v-3.2Z" /></symbol>
+        <symbol id="admin-icon-article" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6V3Zm2 2v14h8V8h-3V5H8Zm1.5 6h5v2h-5v-2Zm0 4h5v2h-5v-2Z" /></symbol>
+        <symbol id="admin-icon-box" viewBox="0 0 24 24"><path d="m12 2 8 4.4v11.2L12 22l-8-4.4V6.4L12 2Zm0 2.3L7 7l5 2.7L17 7l-5-2.7ZM6 8.8v7.6l5 2.8v-7.7L6 8.8Zm7 10.4 5-2.8V8.8l-5 2.7v7.7Z" /></symbol>
+        <symbol id="admin-icon-folder" viewBox="0 0 24 24"><path d="M4 5h6l2 2h8v12H4V5Zm2 4v8h12V9H6Z" /></symbol>
+        <symbol id="admin-icon-page" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6V3Zm8 2H8v14h8V7h-2V5Zm-4 6h4v2h-4v-2Zm0 4h4v2h-4v-2Z" /></symbol>
+        <symbol id="admin-icon-tag" viewBox="0 0 24 24"><path d="M4 4h8l8 8-8 8-8-8V4Zm2 2v5.2l6 6 5.2-5.2-6-6H6Zm2.5 3.5A1.5 1.5 0 1 1 10 8a1.5 1.5 0 0 1-1.5 1.5Z" /></symbol>
+        <symbol id="admin-icon-form" viewBox="0 0 24 24"><path d="M5 3h14v18H5V3Zm2 2v14h10V5H7Zm2 3h6v2H9V8Zm0 4h6v2H9v-2Zm0 4h4v2H9v-2Z" /></symbol>
+        <symbol id="admin-icon-search" viewBox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 0 1 5.1 10.5l4 4-1.4 1.4-4-4A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z" /></symbol>
+        <symbol id="admin-icon-users" viewBox="0 0 24 24"><path d="M8.5 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8ZM3 21v-2.5C3 15.5 5.5 13 8.5 13s5.5 2.5 5.5 5.5V21H3Zm12.8-8c2.9.2 5.2 2.6 5.2 5.5V21h-4v-2.5c0-2.1-.8-4-2.2-5.5h1Zm-.3-10a3.5 3.5 0 0 1 0 7 3.7 3.7 0 0 1-1.4-.3 5.9 5.9 0 0 0 0-6.4 3.7 3.7 0 0 1 1.4-.3Z" /></symbol>
+        <symbol id="admin-icon-settings" viewBox="0 0 24 24"><path d="m19.4 13.5 1.6 1.2-2 3.5-2-.8a7 7 0 0 1-1.7 1l-.3 2.1h-4l-.3-2.1a7 7 0 0 1-1.7-1l-2 .8-2-3.5 1.6-1.2a6.4 6.4 0 0 1 0-2l-1.6-1.2 2-3.5 2 .8a7 7 0 0 1 1.7-1l.3-2.1h4l.3 2.1a7 7 0 0 1 1.7 1l2-.8 2 3.5-1.6 1.2a6.4 6.4 0 0 1 0 2ZM13 15.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" /></symbol>
+        <symbol id="admin-icon-eye" viewBox="0 0 24 24"><path d="M12 5c5 0 8.5 4.4 9.5 7-1 2.6-4.5 7-9.5 7s-8.5-4.4-9.5-7C3.5 9.4 7 5 12 5Zm0 2c-3.6 0-6.3 2.9-7.2 5 .9 2.1 3.6 5 7.2 5s6.3-2.9 7.2-5C18.3 9.9 15.6 7 12 7Zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z" /></symbol>
+        <symbol id="admin-icon-logout" viewBox="0 0 24 24"><path d="M5 3h8v2H7v14h6v2H5V3Zm11.6 5.6L20 12l-3.4 3.4-1.4-1.4 1-1H10v-2h6.2l-1-1 1.4-1.4Z" /></symbol>
+        <symbol id="admin-icon-menu" viewBox="0 0 24 24"><path d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z" /></symbol>
+    </svg>
+    <div class="admin-shell" data-admin-shell>
+        <aside class="admin-sidebar glass-surface" aria-label="پنل مدیریت">
+            <div class="admin-sidebar__head">
+                <a class="admin-brand" href="/admin">
+                    <img src="~/assets/brand/hooshyaran-logo-small.png" alt="نشان هوش‌یاران" width="86" height="48" />
+                    <span>CMS هوش‌یاران</span>
+                </a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <button class="admin-sidebar-toggle" type="button" data-admin-sidebar-toggle aria-label="باز و بسته کردن منوی مدیریت">
+                        <svg><use href="#admin-icon-menu"></use></svg>
+                    </button>
+                }
+            </div>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <nav class="admin-nav" aria-label="ناوبری مدیریت">
+                    <a class="@(currentPath.Equals("/admin", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin" title="داشبورد"><svg><use href="#admin-icon-dashboard"></use></svg><span>داشبورد</span></a>
+                    @if (isSuperAdmin)
+                    {
+                        <a class="@(currentPath.StartsWith("/admin/system-dashboard", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/system-dashboard" title="داشبورد آماری سیستم"><svg><use href="#admin-icon-chart"></use></svg><span>داشبورد آماری سیستم</span></a>
+                        <a class="@(currentPath.StartsWith("/admin/database", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/database" title="مدیریت پایگاه داده"><svg><use href="#admin-icon-database"></use></svg><span>مدیریت پایگاه داده</span></a>
+                    }
+                    <a class="@(currentPath.StartsWith("/admin/articles", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/articles" title="مقالات"><svg><use href="#admin-icon-article"></use></svg><span>مقالات</span></a>
+                    @if (isSuperAdmin)
+                    {
+                        <a class="@(currentPath.StartsWith("/admin/products", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/products" title="محصولات"><svg><use href="#admin-icon-box"></use></svg><span>محصولات</span></a>
+                        <a class="@(currentPath.StartsWith("/admin/categories", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/categories" title="دسته‌های محصول"><svg><use href="#admin-icon-folder"></use></svg><span>دسته‌های محصول</span></a>
+                        <a class="@(currentPath.StartsWith("/admin/pages", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/pages" title="صفحات"><svg><use href="#admin-icon-page"></use></svg><span>صفحات</span></a>
+                        <a class="@(currentPath.StartsWith("/admin/tags", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/tags" title="تگ‌ها"><svg><use href="#admin-icon-tag"></use></svg><span>تگ‌ها</span></a>
+                        <a class="@(currentPath.StartsWith("/admin/demo-requests", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/demo-requests" title="درخواست‌های دمو"><svg><use href="#admin-icon-form"></use></svg><span>درخواست‌های دمو</span></a>
+                        <a class="@(currentPath.StartsWith("/admin/seo", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/seo" title="SEO"><svg><use href="#admin-icon-search"></use></svg><span>SEO</span></a>
+                        <a class="@(currentPath.StartsWith("/admin/users", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/users" title="کاربران"><svg><use href="#admin-icon-users"></use></svg><span>کاربران</span></a>
+                        <a class="@(currentPath.StartsWith("/admin/settings", StringComparison.OrdinalIgnoreCase) ? "is-active" : "")" href="/admin/settings" title="تنظیمات"><svg><use href="#admin-icon-settings"></use></svg><span>تنظیمات</span></a>
+                    }
+                </nav>
+                <div class="admin-sidebar__footer">
+                    <a class="admin-preview-link" href="/" target="_blank" rel="noopener" title="مشاهده سایت"><svg><use href="#admin-icon-eye"></use></svg><span>مشاهده سایت</span></a>
+                    <form method="post" action="/admin/logout">
+                        @Html.AntiForgeryToken()
+                        <button class="admin-logout" type="submit" title="خروج"><svg><use href="#admin-icon-logout"></use></svg><span>خروج</span></button>
+                    </form>
+                </div>
+            }
+        </aside>
+
+        <div class="admin-workspace">
+            <header class="admin-topbar glass-surface">
+                <div>
+                    <span>پنل مدیریت محتوا</span>
+                    <strong>@pageTitle</strong>
+                </div>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a class="button button--primary" href="/admin/articles/edit">مقاله جدید</a>
+                }
+            </header>
+
+            <main class="admin-main">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/js/admin-shell.js" asp-append-version="true"></script>
+    <script src="~/js/admin-editor.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

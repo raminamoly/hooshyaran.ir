@@ -1,0 +1,51 @@
+@page "/products"
+@model Hooshyaran.Web.Pages.Products.IndexModel
+@{
+    ViewData["Title"] = "محصولات";
+    ViewData["Description"] = Model.Seo?.Description ?? "فهرست محصولات هوش‌یاران برای راهکارهای هوش مصنوعی سازمانی.";
+    ViewData["Keywords"] = Model.Seo?.Keywords ?? "محصولات هوش مصنوعی, LLMOPS فارسی, WorkGraph AI";
+    ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/products";
+
+    static string ProductImage(Hooshyaran.Web.Models.Product product) =>
+        !string.IsNullOrWhiteSpace(product.HeroImagePath)
+            ? product.HeroImagePath
+            : product.Slug switch
+            {
+                "llmops" => "/assets/content/article-llmops-enterprise-control.jpg",
+                "workgraph-ai" => "/assets/content/article-ai-workflow-automation.jpg",
+                _ => "/assets/content/home-enterprise-ai-hero.jpg"
+            };
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "محصولات",
+    "کاتالوگ محصولات هوش مصنوعی سازمانی",
+    "محصولات هوش‌یاران برای مدیریت مدل‌های زبانی، اتوماسیون فرایندها و توسعه کنترل‌شده کاربردهای AI در سازمان طراحی شده‌اند.",
+    "درخواست دمو",
+    "/request-demo",
+    CssClass: "page-hero--galaxy"))
+
+<section class="content-band">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "زیرساخت و عملیات هوش مصنوعی",
+            "محصولات آماده رشد در کنار هم",
+            "هر محصول یک مسیر مشخص برای مدیریت، پایش، اتوماسیون یا استانداردسازی استفاده سازمانی از هوش مصنوعی را پوشش می‌دهد."))
+        <div class="product-grid product-grid--catalog">
+            @foreach (var category in Model.Categories.Where(category => category.Products.Any()))
+            {
+                foreach (var product in category.Products.OrderBy(product => product.SortOrder))
+                {
+                    @await Html.PartialAsync("_ProductCard", new ProductCardViewModel(
+                        product.PersianTitle,
+                        product.ShortDescription,
+                        category.Title,
+                        $"/products/{product.Slug}",
+                        "مشاهده جزئیات",
+                        product.Benefits.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(3).ToArray(),
+                        ProductImage(product)))
+                }
+            }
+        </div>
+    </div>
+</section>

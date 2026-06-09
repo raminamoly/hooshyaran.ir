@@ -1,0 +1,91 @@
+@page "/admin/settings"
+@model Hooshyaran.Web.Pages.Admin.Settings.IndexModel
+@{
+    ViewData["Title"] = "تنظیمات سایت";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">تنظیمات</p>
+            <h1>تنظیمات سایت و ایمیل</h1>
+            <p>آدرس سایت برای ساخت لینک‌های مشاهده استفاده می‌شود. در محیط localhost، لینک‌ها خودکار با آدرس لوکال ساخته می‌شوند.</p>
+        </div>
+    </div>
+
+    @if (Model.Saved)
+    {
+        <div class="admin-alert admin-alert--success">تنظیمات ذخیره شد.</div>
+    }
+
+    <form method="post" class="admin-form admin-edit-form glass-surface admin-tabs">
+        <div asp-validation-summary="ModelOnly" class="admin-validation"></div>
+
+        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-general" checked />
+        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-email" />
+
+        <div class="admin-tab-list" role="tablist" aria-label="بخش‌های تنظیمات">
+            <label class="admin-tab" for="settings-general" role="tab">تنظیمات عمومی</label>
+            <label class="admin-tab" for="settings-email" role="tab">SMTP و ایمیل</label>
+        </div>
+
+        <section class="admin-tab-panel admin-tab-panel--general">
+            <fieldset class="admin-fieldset">
+                <legend>تنظیمات عمومی سایت</legend>
+                <label asp-for="Input.WebsiteUrl"></label>
+                <input asp-for="Input.WebsiteUrl" dir="ltr" placeholder="https://hooshyaran.ir" />
+                <span asp-validation-for="Input.WebsiteUrl"></span>
+                <p class="admin-help-text">اگر خالی بماند یا در لوکال باشید، لینک‌های مشاهده از آدرس فعلی درخواست ساخته می‌شوند.</p>
+            </fieldset>
+        </section>
+
+        <section class="admin-tab-panel admin-tab-panel--email">
+            <fieldset class="admin-fieldset">
+                <legend>SMTP و اعلان‌ها</legend>
+                <div class="admin-form-grid">
+                    <div>
+                        <label asp-for="Input.SmtpHost"></label>
+                        <input asp-for="Input.SmtpHost" dir="ltr" placeholder="smtp.example.com" />
+                    </div>
+                    <div>
+                        <label asp-for="Input.SmtpPort"></label>
+                        <input asp-for="Input.SmtpPort" type="number" dir="ltr" />
+                        <span asp-validation-for="Input.SmtpPort"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Input.SmtpUserName"></label>
+                        <input asp-for="Input.SmtpUserName" dir="ltr" />
+                    </div>
+                    <div>
+                        <label asp-for="Input.SmtpPassword"></label>
+                        <input asp-for="Input.SmtpPassword" placeholder="برای حفظ مقدار قبلی خالی بگذارید." />
+                    </div>
+                    <div>
+                        <label asp-for="Input.FromEmail"></label>
+                        <input asp-for="Input.FromEmail" dir="ltr" />
+                        <span asp-validation-for="Input.FromEmail"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Input.FromName"></label>
+                        <input asp-for="Input.FromName" />
+                    </div>
+                    <div>
+                        <label asp-for="Input.AdminNotificationEmail"></label>
+                        <input asp-for="Input.AdminNotificationEmail" dir="ltr" />
+                        <span asp-validation-for="Input.AdminNotificationEmail"></span>
+                    </div>
+                </div>
+                <label class="admin-checkbox">
+                    <input asp-for="Input.EnableSsl" />
+                    <span>SSL/TLS فعال باشد</span>
+                </label>
+            </fieldset>
+        </section>
+
+        <div class="admin-form-actions">
+            <button class="button button--primary" type="submit">ذخیره تنظیمات</button>
+        </div>
+    </form>
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

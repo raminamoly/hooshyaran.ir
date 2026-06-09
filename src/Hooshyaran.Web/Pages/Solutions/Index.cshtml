@@ -1,0 +1,39 @@
+@page "/solutions"
+@{
+    ViewData["Title"] = "راهکارها";
+    ViewData["Description"] = "جایگاه اولیه راهکارهای هوش مصنوعی سازمانی هوش‌یاران.";
+    ViewData["CanonicalPath"] = "/solutions";
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "راهکارها",
+    "راهکارهای AI برای نیازهای سازمانی",
+    "مسیرهای پیشنهادی برای ورود کنترل‌شده هوش مصنوعی به فرایندهای واقعی سازمان، از داده و امنیت تا اتوماسیون و تجربه کاربری.",
+    "درخواست مشاوره",
+    "/contact"))
+
+<section class="content-band">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "مسیرهای راهکار",
+            "از ایده AI تا بهره‌برداری قابل مدیریت",
+            "هر مسیر می‌تواند با یک پروژه کوچک شروع شود و بعد به تدریج در سطح سازمان توسعه پیدا کند."))
+        <div class="feature-grid">
+            <article class="feature-item">
+                <span class="card-icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
+                <h3>AI خصوصی و امن</h3>
+                <p>طراحی سناریوهای هوش مصنوعی با کنترل دسترسی، جداسازی داده‌های حساس و سیاست‌های حاکمیتی روشن.</p>
+            </article>
+            <article class="feature-item">
+                <span class="card-icon" aria-hidden="true"><svg><use href="#icon-flow"></use></svg></span>
+                <h3>اتوماسیون فرایندها</h3>
+                <p>اتصال مدل‌های زبانی به فرم‌ها، گردش‌کارها، سیستم‌های داخلی و خروجی‌های قابل پیگیری.</p>
+            </article>
+            <article class="feature-item">
+                <span class="card-icon" aria-hidden="true"><svg><use href="#icon-chart"></use></svg></span>
+                <h3>پایش و بهبود خروجی</h3>
+                <p>تعریف شاخص‌های کیفیت، هزینه، ریسک و بهره‌وری برای اینکه AI از حالت آزمایشی خارج شود.</p>
+            </article>
+        </div>
+    </div>
+</section>

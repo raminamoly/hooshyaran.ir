@@ -1,0 +1,57 @@
+@page "/admin"
+@model Hooshyaran.Web.Pages.Admin.IndexModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@{
+    ViewData["Title"] = "داشبورد";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">داشبورد</p>
+            <h1>مدیریت محتوای CMS-lite</h1>
+            <p>محصولات، مقالات، صفحات، SEO و دسته‌بندی‌ها از همین پنل مدیریت می‌شوند و مستقیما روی سایت نمایش داده می‌شوند.</p>
+        </div>
+    </div>
+
+    <div class="admin-stats">
+        <a class="admin-stat glass-surface" href="/admin/articles">
+            <strong>@Model.ArticleCount</strong>
+            <span>مقاله</span>
+            <small>محتوا و تصویر شاخص</small>
+        </a>
+        @if (Model.IsSuperAdmin)
+        {
+            <a class="admin-stat glass-surface" href="/admin/products">
+                <strong>@Model.ProductCount</strong>
+                <span>محصول</span>
+                <small>کاتالوگ و صفحات محصول</small>
+            </a>
+            <a class="admin-stat glass-surface" href="/admin/pages">
+                <strong>@Model.PageCount</strong>
+                <span>صفحه ثابت</span>
+                <small>درباره، تماس و صفحات عمومی</small>
+            </a>
+            <a class="admin-stat glass-surface" href="/admin/demo-requests">
+                <strong>@Model.DemoRequestCount</strong>
+                <span>درخواست دمو</span>
+                <small>پیگیری سرنخ‌های سازمانی</small>
+            </a>
+            <a class="admin-stat glass-surface" href="/admin/users">
+                <strong>@Model.UserCount</strong>
+                <span>کاربر پنل</span>
+                <small>SuperAdmin و نویسنده‌ها</small>
+            </a>
+            <a class="admin-stat glass-surface" href="/admin/seo">
+                <strong>@Model.SeoCount</strong>
+                <span>رکورد SEO</span>
+                <small>عنوان، توضیح، canonical</small>
+            </a>
+            <a class="admin-stat glass-surface" href="/admin/categories">
+                <strong>@Model.CategoryCount</strong>
+                <span>دسته محصول</span>
+                <small>گروه‌بندی کاتالوگ</small>
+            </a>
+        }
+    </div>
+</section>

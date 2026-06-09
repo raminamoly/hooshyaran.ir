@@ -1,0 +1,15 @@
+@model Hooshyaran.Web.ViewModels.CtaSectionViewModel
+
+<section class="cta-section">
+    <div>
+        <h2>@Model.Title</h2>
+        <p>@Model.Description</p>
+    </div>
+    <div class="cta-section__actions">
+        <a class="button button--primary" href="@Model.PrimaryUrl"><svg aria-hidden="true"><use href="#icon-calendar"></use></svg>@Model.PrimaryText</a>
+        @if (!string.IsNullOrWhiteSpace(Model.SecondaryText) && !string.IsNullOrWhiteSpace(Model.SecondaryUrl))
+        {
+            <a class="button button--secondary" href="@Model.SecondaryUrl"><svg aria-hidden="true"><use href="#icon-phone"></use></svg>@Model.SecondaryText</a>
+        }
+    </div>
+</section>

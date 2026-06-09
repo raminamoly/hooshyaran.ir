@@ -1,0 +1,224 @@
+@page "/admin/database"
+@model Hooshyaran.Web.Pages.Admin.Database.IndexModel
+@{
+    ViewData["Title"] = "مدیریت پایگاه داده";
+    var totalPages = Math.Max(1, (int)Math.Ceiling(Model.TableData.TotalRows / (double)Model.TableData.PageSize));
+}
+
+<section class="admin-page database-admin">
+    <div class="admin-page__header database-admin__header">
+        <div>
+            <p class="eyebrow">مدیریت پایگاه داده</p>
+            <h1>مرور جدول‌ها، اجرای SELECT و بکاپ/ریستور SQLite</h1>
+            <p>این ابزار فقط برای SuperAdmin فعال است و اجرای Queryهای تغییر دهنده دیتابیس را مسدود می‌کند.</p>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+    {
+        <div class="admin-alert admin-alert--success">@Model.StatusMessage</div>
+    }
+
+    <div class="database-stats">
+        <article class="database-stat glass-surface">
+            <span>دیتابیس فعال</span>
+            <strong>@Model.Overview.DatabaseName</strong>
+            <small>@Model.Overview.DatabasePath</small>
+        </article>
+        <article class="database-stat glass-surface">
+            <span>تعداد جدول‌ها</span>
+            <strong>@PersianDateFormatter.ToPersianDigits(Model.Overview.TableCount.ToString("N0"))</strong>
+            <small>شامل جدول‌های سیستمی</small>
+        </article>
+        <article class="database-stat glass-surface">
+            <span>رکوردهای تقریبی</span>
+            <strong>@PersianDateFormatter.ToPersianDigits(Model.Overview.ApproximateRecordCount.ToString("N0"))</strong>
+            <small>جدول‌های اصلی سایت</small>
+        </article>
+        <article class="database-stat glass-surface">
+            <span>حجم فایل</span>
+            <strong>@Model.Overview.DatabaseSize</strong>
+            <small>فایل اصلی SQLite</small>
+        </article>
+    </div>
+
+    <div class="database-tools">
+        <form method="post" asp-page-handler="Backup" class="database-tool glass-surface">
+            @Html.AntiForgeryToken()
+            <div>
+                <h2>بکاپ دیتابیس</h2>
+                <p>یک خروجی سازگار SQLite از دیتابیس فعال ساخته و دانلود می‌شود.</p>
+            </div>
+            <button class="button button--primary" type="submit">دانلود بکاپ</button>
+        </form>
+
+        <form method="post" asp-page-handler="Restore" enctype="multipart/form-data" class="database-tool glass-surface">
+            @Html.AntiForgeryToken()
+            <div>
+                <h2>ریستور دیتابیس</h2>
+                <p>فایل db معتبر جایگزین دیتابیس فعلی می‌شود و قبل از ریستور یک bak محلی ساخته می‌شود.</p>
+            </div>
+            <label class="database-file-input">
+                فایل بکاپ
+                <input asp-for="RestoreFile" accept=".db,.sqlite,.sqlite3" />
+            </label>
+            <button class="button button--primary" type="submit">ریستور</button>
+        </form>
+    </div>
+
+    <div class="database-layout">
+        <aside class="database-tables glass-surface" aria-label="جدول‌های دیتابیس">
+            <h2>جدول‌ها</h2>
+            <div class="database-table-list">
+                @foreach (var table in Model.Tables)
+                {
+                    var isActive = table.Name == Model.TableName ? "is-active" : "";
+                    <a class="@isActive" asp-page="/Admin/Database/Index" asp-route-TableName="@table.Name" asp-route-PageSize="@Model.PageSize">
+                        <span>
+                            <strong>@table.Name</strong>
+                            @if (table.IsSystemTable)
+                            {
+                                <small>سیستمی</small>
+                            }
+                        </span>
+                        <mark>@PersianDateFormatter.ToPersianDigits(table.RowCount.ToString("N0"))</mark>
+                    </a>
+                }
+            </div>
+        </aside>
+
+        <div class="database-main">
+            <section class="database-panel glass-surface">
+                <div class="database-panel__header">
+                    <div>
+                        <h2>داده‌های جدول @Model.TableName</h2>
+                        <span>@PersianDateFormatter.ToPersianDigits(Model.TableData.TotalRows.ToString("N0")) رکورد</span>
+                    </div>
+                    <form class="database-grid-filters" method="get">
+                        <input type="hidden" name="TableName" value="@Model.TableName" />
+                        <input name="SearchTerm" value="@Model.SearchTerm" placeholder="جستجو در جدول" />
+                        <select name="PageSize">
+                            <option value="25" selected="@(Model.PageSize == 25 ? "selected" : null)">25</option>
+                            <option value="50" selected="@(Model.PageSize == 50 ? "selected" : null)">50</option>
+                            <option value="100" selected="@(Model.PageSize == 100 ? "selected" : null)">100</option>
+                        </select>
+                        <button class="button button--primary" type="submit">اعمال</button>
+                    </form>
+                </div>
+
+                <div class="admin-table-wrap database-grid-wrap">
+                    <table class="admin-table database-grid">
+                        <thead>
+                            <tr>
+                                @foreach (var column in Model.TableData.Columns)
+                                {
+                                    <th class="@(column.IsPrimaryKey ? "is-primary-key" : "")">
+                                        @column.Name
+                                        <small>@column.Type</small>
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.TableData.Rows)
+                            {
+                                <tr>
+                                    @foreach (var column in Model.TableData.Columns)
+                                    {
+                                        var value = row.TryGetValue(column.Name, out var cellValue) ? cellValue : string.Empty;
+                                        <td class="@(column.IsPrimaryKey ? "is-primary-key" : "")">
+                                            <span title="@value">@ShortCell(value)</span>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="admin-pagination">
+                    <a class="@(Model.PageNumber <= 1 ? "is-disabled" : "")"
+                       asp-page="/Admin/Database/Index"
+                       asp-route-TableName="@Model.TableName"
+                       asp-route-SearchTerm="@Model.SearchTerm"
+                       asp-route-PageSize="@Model.PageSize"
+                       asp-route-PageNumber="@(Model.PageNumber - 1)">قبلی</a>
+                    <span>صفحه @PersianDateFormatter.ToPersianDigits(Model.PageNumber.ToString()) از @PersianDateFormatter.ToPersianDigits(totalPages.ToString())</span>
+                    <a class="@(Model.PageNumber >= totalPages ? "is-disabled" : "")"
+                       asp-page="/Admin/Database/Index"
+                       asp-route-TableName="@Model.TableName"
+                       asp-route-SearchTerm="@Model.SearchTerm"
+                       asp-route-PageSize="@Model.PageSize"
+                       asp-route-PageNumber="@(Model.PageNumber + 1)">بعدی</a>
+                </div>
+            </section>
+
+            <section class="database-panel glass-surface">
+                <div class="database-panel__header">
+                    <div>
+                        <h2>Query Editor</h2>
+                        <span>فقط SELECT / WITH، حداکثر ۵۰۰ ردیف خروجی</span>
+                    </div>
+                </div>
+                <form method="post" asp-page-handler="Query" class="database-query-form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="TableName" />
+                    <input type="hidden" asp-for="PageSize" />
+                    <textarea asp-for="QueryText" rows="6" spellcheck="false"></textarea>
+                    <button class="button button--primary" type="submit">اجرای کوئری</button>
+                </form>
+
+                @if (Model.QueryResult is not null)
+                {
+                    @if (!string.IsNullOrWhiteSpace(Model.QueryResult.ErrorMessage))
+                    {
+                        <div class="admin-alert database-query-error">@Model.QueryResult.ErrorMessage</div>
+                    }
+                    else
+                    {
+                        <p class="database-query-meta">
+                            @PersianDateFormatter.ToPersianDigits(Model.QueryResult.RowCount.ToString("N0")) ردیف،
+                            @PersianDateFormatter.ToPersianDigits(Model.QueryResult.ElapsedMilliseconds.ToString("N0")) میلی‌ثانیه
+                        </p>
+                        <div class="admin-table-wrap database-grid-wrap">
+                            <table class="admin-table database-grid">
+                                <thead>
+                                    <tr>
+                                        @foreach (var column in Model.QueryResult.Columns)
+                                        {
+                                            <th>@column</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var row in Model.QueryResult.Rows)
+                                    {
+                                        <tr>
+                                            @foreach (var column in Model.QueryResult.Columns)
+                                            {
+                                                var value = row.TryGetValue(column, out var cellValue) ? cellValue : string.Empty;
+                                                <td><span title="@value">@ShortCell(value)</span></td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                }
+            </section>
+        </div>
+    </div>
+</section>
+
+@functions {
+    private static string ShortCell(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return "";
+        }
+
+        return value.Length > 96 ? value[..96] + "..." : value;
+    }
+}

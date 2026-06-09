@@ -1,0 +1,51 @@
+@page "/admin/tags"
+@model Hooshyaran.Web.Pages.Admin.Tags.IndexModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = Hooshyaran.Web.Models.AdminUserRoles.SuperAdmin)]
+@{
+    ViewData["Title"] = "مدیریت تگ‌ها";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">تگ‌ها</p>
+            <h1>مدیریت تگ‌ها</h1>
+            <p>تگ‌ها از این بخش ساخته می‌شوند و در فرم مقالات، محصولات و صفحات فقط قابل انتخاب هستند.</p>
+        </div>
+        <a class="button button--primary" href="/admin/tags/edit">تگ جدید</a>
+    </div>
+    <div class="admin-table-wrap glass-surface">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>نام</th>
+                    <th>Slug</th>
+                    <th>توضیحات</th>
+                    <th>استفاده</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var tag in Model.Tags)
+            {
+                <tr>
+                    <td><strong>@tag.Name</strong></td>
+                    <td><code>@tag.Slug</code></td>
+                    <td><small>@tag.Description</small></td>
+                    <td>
+                        <span class="admin-tag-count">مقاله: @tag.BlogArticleTags.Count</span>
+                        <span class="admin-tag-count">محصول: @tag.ProductTags.Count</span>
+                        <span class="admin-tag-count">صفحه: @tag.StaticPageTags.Count</span>
+                    </td>
+                    <td class="admin-actions">
+                        <a href="/admin/tags/edit/@tag.Id">ویرایش</a>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@tag.Id">
+                            <button type="submit" onclick="return confirm('حذف شود؟ ارتباط این تگ با محتواها هم حذف می‌شود.')">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

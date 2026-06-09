@@ -1,0 +1,19 @@
+@model Hooshyaran.Web.ViewModels.FeatureGridViewModel
+
+<div class="feature-grid">
+    @{
+        var icons = new[] { "icon-shield", "icon-flow", "icon-database", "icon-chart", "icon-spark" };
+        var index = 0;
+    }
+    @foreach (var item in Model.Items)
+    {
+        <article class="feature-item">
+            <span class="card-icon" aria-hidden="true">
+                <svg><use href="#@icons[index % icons.Length]"></use></svg>
+            </span>
+            <h3>@item.Title</h3>
+            <p>@item.Description</p>
+        </article>
+        index++;
+    }
+</div>

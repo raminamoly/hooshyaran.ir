@@ -1,0 +1,16 @@
+@model IEnumerable<Hooshyaran.Web.Models.Tag>
+
+@{
+    var tags = Model.ToList();
+}
+
+@if (tags.Any())
+{
+    <nav class="tag-chip-list" aria-label="تگ‌های مرتبط">
+        <span>تگ‌ها</span>
+        @foreach (var tag in tags)
+        {
+            <a class="tag-chip" href="/tags/@tag.Slug">@tag.Name</a>
+        }
+    </nav>
+}

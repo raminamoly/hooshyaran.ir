@@ -1,0 +1,199 @@
+@page "/admin/system-dashboard"
+@model Hooshyaran.Web.Pages.Admin.SystemDashboard.IndexModel
+@{
+    ViewData["Title"] = "داشبورد آماری سیستم";
+    var metrics = new[]
+    {
+        Model.TodayVisitors,
+        Model.OnlineVisitors,
+        Model.TotalViews,
+        Model.DemoSubmits,
+        Model.DemoConversionRate,
+        Model.ArticleClicks
+    };
+}
+
+<section class="admin-page analytics-dashboard">
+    <div class="admin-page__header analytics-dashboard__header">
+        <div>
+            <p class="eyebrow">داشبورد آماری سیستم</p>
+            <h1>نمای زنده رفتار کاربران و عملکرد محتوا</h1>
+            <p>بازدیدها، کاربران آنلاین، کلیک مقالات، فرم‌های دمو و آخرین فعالیت‌ها از لاگ داخلی سایت خوانده می‌شوند.</p>
+        </div>
+    </div>
+
+    <form class="analytics-filters glass-surface" method="get">
+        <label>
+            بازه زمانی
+            <select asp-for="Range">
+                <option value="today">امروز</option>
+                <option value="7d">۷ روز اخیر</option>
+                <option value="30d">۳۰ روز اخیر</option>
+            </select>
+        </label>
+        <label>
+            مقاله
+            <select asp-for="ArticleId">
+                <option value="">همه مقاله‌ها</option>
+                @foreach (var article in Model.ArticleFilters)
+                {
+                    <option value="@article.Id">@article.Title</option>
+                }
+            </select>
+        </label>
+        <label>
+            نوع رویداد
+            <select asp-for="EventType">
+                <option value="all">همه رویدادها</option>
+                <option value="@SiteVisitEventTypes.PageView">بازدید</option>
+                <option value="@SiteVisitEventTypes.ArticleClick">کلیک مقاله</option>
+                <option value="@SiteVisitEventTypes.DemoSubmit">فرم دمو</option>
+            </select>
+        </label>
+        <button class="button button--primary" type="submit">اعمال فیلتر</button>
+    </form>
+
+    <div class="analytics-metrics">
+        @foreach (var metric in metrics)
+        {
+            <article class="analytics-metric glass-surface">
+                <span>@metric.Label</span>
+                <strong>@metric.Value</strong>
+                <small>@metric.Hint</small>
+            </article>
+        }
+    </div>
+
+    <div class="analytics-chart-grid">
+        <section class="analytics-panel glass-surface">
+            <div class="analytics-panel__header">
+                <h2>بازدید روزانه</h2>
+                <span>Page views</span>
+            </div>
+            <div id="visitsChart" class="analytics-chart"></div>
+        </section>
+        <section class="analytics-panel glass-surface">
+            <div class="analytics-panel__header">
+                <h2>کاربران آنلاین/آفلاین</h2>
+                <span>Live users</span>
+            </div>
+            <div id="onlineChart" class="analytics-chart"></div>
+        </section>
+        <section class="analytics-panel glass-surface">
+            <div class="analytics-panel__header">
+                <h2>کلیک مقالات</h2>
+                <span>Top articles</span>
+            </div>
+            <div id="articleClicksChart" class="analytics-chart"></div>
+        </section>
+        <section class="analytics-panel glass-surface">
+            <div class="analytics-panel__header">
+                <h2>سابمیت فرم دمو</h2>
+                <span>Demo requests</span>
+            </div>
+            <div id="demoSubmitsChart" class="analytics-chart"></div>
+        </section>
+    </div>
+
+    <div class="analytics-content-grid">
+        <section class="analytics-panel glass-surface">
+            <div class="analytics-panel__header">
+                <h2>آمار مقالات</h2>
+                <span>مرتب‌شده بر اساس کلیک</span>
+            </div>
+            <div class="admin-table-wrap">
+                <table class="admin-table analytics-table">
+                    <thead>
+                        <tr>
+                            <th>مقاله</th>
+                            <th>کلیک</th>
+                            <th>رشد</th>
+                            <th>مسیر</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var article in Model.ArticleRows)
+                        {
+                            var growthClass = article.GrowthPercent >= 0 ? "is-positive" : "is-negative";
+                            <tr>
+                                <td><strong>@article.Title</strong></td>
+                                <td>@PersianDateFormatter.ToPersianDigits(article.Clicks.ToString("N0"))</td>
+                                <td><span class="analytics-growth @growthClass">@PersianDateFormatter.ToPersianDigits(article.GrowthPercent.ToString("0.#"))٪</span></td>
+                                <td><code>/blog/@article.Slug</code></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="analytics-panel glass-surface">
+            <div class="analytics-panel__header">
+                <h2>آخرین فرم‌های دمو</h2>
+                <span>Lead status</span>
+            </div>
+            <div class="analytics-list">
+                @foreach (var request in Model.LatestDemoRequests)
+                {
+                    <article class="analytics-list-item">
+                        <div>
+                            <strong>@request.FullName</strong>
+                            <span>@request.OrganizationName</span>
+                        </div>
+                        <mark>@request.Status</mark>
+                        <time>@request.CreatedAt</time>
+                    </article>
+                }
+            </div>
+        </section>
+    </div>
+
+    <section class="analytics-panel glass-surface">
+        <div class="analytics-panel__header">
+            <h2>آخرین فعالیت کاربران</h2>
+            <span>لاگ ورود و رفتار</span>
+        </div>
+        <div class="admin-table-wrap">
+            <table class="admin-table analytics-table">
+                <thead>
+                    <tr>
+                        <th>زمان</th>
+                        <th>رویداد</th>
+                        <th>صفحه</th>
+                        <th>دستگاه</th>
+                        <th>مرورگر</th>
+                        <th>IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var activity in Model.LatestActivities)
+                    {
+                        <tr>
+                            <td>@activity.CreatedAt</td>
+                            <td><strong>@activity.EventType</strong></td>
+                            <td>
+                                @activity.PageTitle
+                                <small>@activity.Path</small>
+                            </td>
+                            <td>@activity.Device</td>
+                            <td>@activity.Browser</td>
+                            <td><code>@activity.IpAddress</code></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>
+
+@section Scripts {
+    <script>
+        window.hooshyaranAnalytics = {
+            visits: @Html.Raw(Model.VisitsChartJson),
+            online: @Html.Raw(Model.OnlineChartJson),
+            articleClicks: @Html.Raw(Model.ArticleClicksChartJson),
+            demoSubmits: @Html.Raw(Model.DemoSubmitsChartJson)
+        };
+    </script>
+    <script src="~/js/system-dashboard.js" asp-append-version="true"></script>
+}

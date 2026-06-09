@@ -1,0 +1,249 @@
+@page "/products/{slug}"
+@model Hooshyaran.Web.Pages.Products.DetailsModel
+@inject Hooshyaran.Web.Services.ICmsHtmlService CmsHtml
+@{
+    ViewData["Title"] = Model.Product.SeoTitle;
+    ViewData["Description"] = Model.Product.SeoDescription;
+    ViewData["Keywords"] = Model.Product.SeoKeywords;
+    ViewData["CanonicalPath"] = $"/products/{Model.Product.Slug}";
+    var isEmployeeMonitor = string.Equals(Model.Product.Slug, "workgraph-ai", StringComparison.OrdinalIgnoreCase);
+    var productHeroImage = string.IsNullOrWhiteSpace(Model.Product.HeroImagePath)
+        ? "/assets/content/home-enterprise-ai-hero.jpg"
+        : Model.Product.HeroImagePath;
+    var audienceItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.TargetAudience);
+    var problemItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.ProblemsSolved);
+    var benefitItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.Benefits);
+    var publicFeatureItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.PublicFeatures);
+    var useCaseItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.UseCases);
+    var useCaseIcons = new[] { "icon-briefcase", "icon-users", "icon-chart", "icon-flow", "icon-database", "icon-shield", "icon-cpu", "icon-server" };
+    var productSignal = Model.Product.Slug switch
+    {
+        "llmops" => "AI خصوصی",
+        "workgraph-ai" => "پایش بهره‌وری",
+        "complaint-management-ai" => "صدای مشتری",
+        _ => "AI سازمانی"
+    };
+    var productArchitecture = Model.Product.Slug switch
+    {
+        "llmops" => "Private LLMOps",
+        "workgraph-ai" => "Agent + Dashboard",
+        "complaint-management-ai" => "Workflow + NLP",
+        _ => "Enterprise AI"
+    };
+    var productOutcome = Model.Product.Slug switch
+    {
+        "llmops" => "کنترل، امنیت، استقرار",
+        "workgraph-ai" => "شفافیت، بهره‌وری، ریسک",
+        "complaint-management-ai" => "رضایت، SLA، ریشه‌یابی",
+        _ => "بینش مدیریتی"
+    };
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    Model.Product.ProductCategory?.Title ?? "محصول",
+    Model.Product.PersianTitle,
+    Model.Product.ShortDescription,
+    Model.Product.CtaText,
+    "/request-demo",
+    "بازگشت به محصولات",
+    "/products",
+    productHeroImage,
+    Model.Product.PersianTitle))
+
+<section class="content-band">
+    <div class="container product-detail-grid">
+        <article class="about-panel glass-surface product-detail-main cms-content">
+            <h2>معرفی محصول</h2>
+            @Html.Raw(CmsHtml.ToSafeHtml(Model.Product.LongDescription))
+            @await Html.PartialAsync("_TagChips", Model.Product.ProductTags.Select(item => item.Tag!).Where(tag => tag is not null))
+        </article>
+        <aside class="product-side-rail glass-surface" aria-label="خلاصه محصول">
+            <div class="product-side-rail__header">
+                <span class="product-side-rail__icon" aria-hidden="true"><svg><use href="#icon-briefcase"></use></svg></span>
+                <div>
+                    <p>مناسب برای</p>
+                    <h2>@Model.Product.ProductCategory?.Title</h2>
+                </div>
+            </div>
+            <ul class="product-audience-list">
+                @foreach (var item in audienceItems)
+                {
+                    <li><svg aria-hidden="true"><use href="#icon-spark"></use></svg><span>@item</span></li>
+                }
+            </ul>
+            <figure class="product-side-rail__visual">
+                <img src="@productHeroImage" alt="@Model.Product.PersianTitle" loading="lazy" />
+            </figure>
+            <div class="product-side-rail__metrics">
+                <div>
+                    <span>حوزه محصول</span>
+                    <strong>@productSignal</strong>
+                </div>
+                <div>
+                    <span>معماری</span>
+                    <strong>@productArchitecture</strong>
+                </div>
+                <div>
+                    <span>خروجی مدیریتی</span>
+                    <strong>@productOutcome</strong>
+                </div>
+            </div>
+            <a class="button button--primary product-side-rail__cta" href="/request-demo"><svg aria-hidden="true"><use href="#icon-calendar"></use></svg>درخواست دمو</a>
+        </aside>
+    </div>
+</section>
+
+<section class="content-band content-band--alt">
+    <div class="container product-summary-grid">
+        <article class="product-summary-card product-summary-card--problems">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-flow"></use></svg></span>
+            <h2>مسئله‌هایی که حل می‌کند</h2>
+            <ul>
+                @foreach (var item in problemItems)
+                {
+                    <li>@item</li>
+                }
+            </ul>
+        </article>
+        <article class="product-summary-card product-summary-card--benefits">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-chart"></use></svg></span>
+            <h2>مزیت‌های کلیدی</h2>
+            <ul>
+                @foreach (var item in benefitItems)
+                {
+                    <li>@item</li>
+                }
+            </ul>
+        </article>
+        <article class="product-summary-card product-summary-card--features">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-cpu"></use></svg></span>
+            <h2>قابلیت‌های عمومی</h2>
+            <ul>
+                @foreach (var item in publicFeatureItems)
+                {
+                    <li>@item</li>
+                }
+            </ul>
+        </article>
+    </div>
+</section>
+
+@if (isEmployeeMonitor)
+{
+    <section class="content-band employee-monitor-band">
+        <div class="container">
+            @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+                "مدل پایش و تحلیل",
+                "از داده خام تا تصمیم مدیریتی",
+                "سامانه، داده‌های کاری را در یک مسیر امن و قابل کنترل به تحلیل، گزارش، هشدار و اقدام مدیریتی تبدیل می‌کند."))
+            <div class="employee-process" aria-label="مدل فرایند پایش و تحلیل">
+                <article class="employee-process__step">
+                    <span class="employee-process__icon"><svg aria-hidden="true"><use href="#icon-server"></use></svg></span>
+                    <h3>جمع‌آوری داده</h3>
+                    <p>Agent سبک، داده‌های فعالیت مانند نرم‌افزار فعال، زمان فعالیت و وضعیت محیط کاری را طبق سیاست سازمان جمع‌آوری می‌کند.</p>
+                </article>
+                <article class="employee-process__step">
+                    <span class="employee-process__icon"><svg aria-hidden="true"><use href="#icon-database"></use></svg></span>
+                    <h3>پردازش و نرمال‌سازی</h3>
+                    <p>داده‌های خام پاک‌سازی، دسته‌بندی و برای تحلیل هوشمند آماده می‌شوند تا گزارش‌ها بر پایه داده قابل اتکا باشند.</p>
+                </article>
+                <article class="employee-process__step">
+                    <span class="employee-process__icon"><svg aria-hidden="true"><use href="#icon-cpu"></use></svg></span>
+                    <h3>تحلیل هوشمند</h3>
+                    <p>موتور AI نوع فعالیت، ارتباط با کار، سطح تمرکز و نشانه‌های رفتار غیرمعمول را تحلیل و شاخص‌سازی می‌کند.</p>
+                </article>
+                <article class="employee-process__step">
+                    <span class="employee-process__icon employee-process__icon--warm"><svg aria-hidden="true"><use href="#icon-chart"></use></svg></span>
+                    <h3>گزارش‌گیری و هشدار</h3>
+                    <p>داشبورد مدیریتی، گزارش‌های قابل ارائه و هشدارهای هوشمند، موارد مهم را بدون کنترل دستی مداوم نمایش می‌دهند.</p>
+                </article>
+                <article class="employee-process__step">
+                    <span class="employee-process__icon"><svg aria-hidden="true"><use href="#icon-flow"></use></svg></span>
+                    <h3>تصمیم و اقدام</h3>
+                    <p>مدیران بر اساس گزارش‌ها می‌توانند فرآیندها، تخصیص منابع، سیاست‌های امنیتی و گفت‌وگوهای مدیریتی را بهبود دهند.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-band content-band--alt">
+        <div class="container employee-architecture">
+            <div>
+                @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+                    "معماری سیستم",
+                    "لایه‌های محصول از Agent تا داشبورد مدیریتی",
+                    "معماری محصول برای استقرار سازمانی، امنیت داده، کنترل دسترسی، گزارش‌گیری و توسعه تدریجی طراحی می‌شود."))
+                <ul class="trust-list employee-metric-list">
+                    <li>Agent سبک سمت کاربر برای جمع‌آوری داده و رعایت سیاست‌های سازمان</li>
+                    <li>API Gateway برای احراز هویت، اعتبارسنجی، کنترل نرخ ارسال و هدایت داده‌ها</li>
+                    <li>سرویس پردازش داده، موتور تحلیل هوش مصنوعی، پایگاه داده و ماژول گزارش‌گیری</li>
+                    <li>لایه امنیت و حریم خصوصی برای کنترل دسترسی، رمزنگاری، ثبت لاگ و سیاست نگهداری داده</li>
+                </ul>
+            </div>
+            <figure class="employee-architecture__figure">
+                <img src="/assets/content/employee-monitor-ai-architecture.svg" alt="مدل معماری سامانه پایش هوشمند کارکنان شامل کلاینت، سرور، موتور هوش مصنوعی، پایگاه داده و داشبورد مدیریتی" loading="lazy" />
+            </figure>
+        </div>
+    </section>
+
+    <section class="content-band">
+        <div class="container employee-indicators-grid">
+            <article class="employee-indicators-card">
+                <h2>شاخص‌هایی که سامانه تحلیل می‌کند</h2>
+                <div class="employee-pill-list">
+                    <span>میزان فعالیت کاری در بازه مشخص</span>
+                    <span>نرم‌افزارهای پرکاربرد هر کارمند</span>
+                    <span>ابزارها یا وب‌سایت‌های غیرمرتبط</span>
+                    <span>زمان‌های تمرکز بالا یا پایین</span>
+                    <span>ارتباط فعالیت با نقش شغلی</span>
+                    <span>الگوهای افت بهره‌وری</span>
+                    <span>فعالیت‌های مشکوک یا پرریسک</span>
+                    <span>وضعیت تیم‌ها و واحدها</span>
+                </div>
+            </article>
+            <article class="employee-privacy-card">
+                <span class="employee-privacy-card__icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
+                <h2>امنیت، شفافیت، بهره‌وری</h2>
+                <p>پایش هوشمند باید با اطلاع‌رسانی، سیاست‌های روشن، سطح دسترسی مشخص و محدودسازی داده‌های قابل مشاهده اجرا شود. هدف، مدیریت بهتر سازمان است؛ نه کنترل فرسایشی افراد.</p>
+                <a class="button button--primary" href="/request-demo">درخواست دمو محصول</a>
+            </article>
+        </div>
+    </section>
+}
+
+<section class="content-band">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "کاربردها",
+            "سناریوهای رایج استفاده",
+            "این موارد نمونه‌هایی از مسیرهایی هستند که می‌توانند در جلسه معرفی بر اساس نیاز سازمان شما دقیق‌تر شوند."))
+        <div class="use-case-grid">
+            @for (var index = 0; index < useCaseItems.Count; index++)
+            {
+                var iconId = useCaseIcons[index % useCaseIcons.Length];
+                <article class="use-case-card">
+                    <span class="use-case-card__number">@(index + 1)</span>
+                    <span class="use-case-card__icon" aria-hidden="true"><svg><use href="@($"#{iconId}")"></use></svg></span>
+                    <h3>@useCaseItems[index]</h3>
+                </article>
+            }
+        </div>
+    </div>
+</section>
+
+@if (Model.Faqs.Any())
+{
+    @await Html.PartialAsync("_FaqSection", new FaqSectionViewModel("سوالات متداول", Model.Faqs.Select(faq => new FaqItemViewModel(faq.Question, faq.Answer)).ToArray()))
+}
+
+<section class="content-band content-band--alt product-cta-band">
+    <div class="container">
+        @await Html.PartialAsync("_CtaSection", new CtaSectionViewModel(
+            Model.Product.CtaText,
+            "برای بررسی تناسب این محصول با نیازهای سازمانی خود، یک جلسه معرفی کوتاه رزرو کنید.",
+            "درخواست جلسه معرفی",
+            "/request-demo",
+            "تماس با ما",
+            "/contact"))
+    </div>
+</section>

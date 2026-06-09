@@ -23,10 +23,10 @@
     <meta property="og:title" content="@pageTitle - هوش‌یاران" />
     <meta property="og:description" content="@description" />
     <meta property="og:type" content="website" />
-    <script type="importmap"></script>
     <link rel="icon" type="image/svg+xml" href="~/assets/brand/favicon.svg" />
     <link rel="preload" href="~/assets/fonts/iransansx-fa-num/IRANSansXFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="~/assets/fonts/iransansx-fa-num/IRANSansXFaNum-DemiBold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="~/assets/fonts/iransansx-fa-num/IRANSansXFaNum-Bold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="~/css/fonts.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Hooshyaran.Web.styles.css" asp-append-version="true" />
@@ -123,7 +123,7 @@
     <header class="site-header" data-site-header>
         <div class="container site-header__inner">
             <a class="brand-link" asp-area="" asp-page="/Index" aria-label="صفحه اصلی هوش‌یاران">
-                <img src="~/assets/brand/hooshyaran-logo.png" alt="نشان هوش‌یاران" width="86" height="48" />
+                <img src="~/assets/brand/hooshyaran-logo-small.png" alt="نشان هوش‌یاران" width="86" height="48" />
             </a>
 
             <button class="nav-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false">
@@ -142,8 +142,6 @@
                 <a href="/about"><svg aria-hidden="true"><use href="#icon-users"></use></svg>درباره ما</a>
                 <a href="/contact"><svg aria-hidden="true"><use href="#icon-phone"></use></svg>تماس با ما</a>
             </nav>
-
-            <a class="button button--primary header-cta" href="/request-demo"><svg aria-hidden="true"><use href="#icon-calendar"></use></svg>درخواست دمو</a>
         </div>
     </header>
 
@@ -155,7 +153,7 @@
         <div class="container site-footer__grid">
             <section class="site-footer__intro" aria-labelledby="footer-brand-title">
                 <a class="brand-link brand-link--footer" asp-area="" asp-page="/Index">
-                    <img src="~/assets/brand/hooshyaran-logo.png" alt="نشان هوش‌یاران" width="88" height="49" />
+                    <img src="~/assets/brand/hooshyaran-logo-small.png" alt="نشان هوش‌یاران" width="88" height="49" />
                     <span id="footer-brand-title">هوش‌یاران</span>
                 </a>
                 <p>هوش‌یاران راهکارهای AI خصوصی، کنترل‌شده و قابل اتصال به داده‌های داخلی سازمان را طراحی و پیاده‌سازی می‌کند.</p>
@@ -196,9 +194,7 @@
         </div>
     </footer>
 
-    <script src="~/lib/gsap/gsap.min.js" asp-append-version="true"></script>
-    <script src="~/lib/gsap/ScrollTrigger.min.js" asp-append-version="true"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true" defer></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

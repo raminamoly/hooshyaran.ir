@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Hooshyaran RM Logo Concept</title>
+  <desc id="desc">A public SVG concept inspired by the uploaded orange and green RM-style logo.</desc>
+  <rect width="1200" height="420" fill="#050505"/>
+  <path d="M70 95H275C365 95 430 135 430 210C430 263 396 302 336 320L430 395H320L235 330H160V395H70V95ZM160 165V260H268C310 260 335 244 335 212C335 180 310 165 268 165H160Z" fill="#F28A00"/>
+  <path d="M320 395L510 120H615L420 395H320Z" fill="#F24A00"/>
+  <path d="M430 395L620 120H735L545 395H430Z" fill="#188000"/>
+  <path d="M560 275L645 140H760L675 275H560Z" fill="#22D000"/>
+  <path d="M655 395L865 75H965L755 395H655Z" fill="#F26A00"/>
+  <path d="M800 320L910 145L1015 320H910L855 235L800 320Z" fill="#18C000"/>
+  <path d="M915 320L1075 105H1160L1005 320H915Z" fill="#20C000"/>
+</svg>

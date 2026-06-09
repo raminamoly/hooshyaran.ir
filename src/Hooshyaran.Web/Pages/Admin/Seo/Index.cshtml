@@ -1,0 +1,37 @@
+@page "/admin/seo"
+@model Hooshyaran.Web.Pages.Admin.Seo.IndexModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = Hooshyaran.Web.Models.AdminUserRoles.SuperAdmin)]
+@{
+    ViewData["Title"] = "مدیریت SEO";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">SEO</p>
+            <h1>مدیریت متادیتا</h1>
+        </div>
+        <a class="button button--primary" href="/admin/seo/edit">رکورد جدید</a>
+    </div>
+    <div class="admin-table-wrap glass-surface">
+        <table class="admin-table">
+            <thead><tr><th>PageKey</th><th>عنوان</th><th>Canonical</th><th>عملیات</th></tr></thead>
+            <tbody>
+            @foreach (var seo in Model.Metadata)
+            {
+                <tr>
+                    <td><code>@seo.PageKey</code></td>
+                    <td>@seo.Title</td>
+                    <td><code>@seo.CanonicalPath</code></td>
+                    <td class="admin-actions">
+                        <a href="/admin/seo/edit/@seo.Id">ویرایش</a>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@seo.Id">
+                            <button type="submit" onclick="return confirm('حذف شود؟')">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

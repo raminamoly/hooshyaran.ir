@@ -1,0 +1,63 @@
+@page "/admin/products"
+@model Hooshyaran.Web.Pages.Admin.Products.IndexModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = Hooshyaran.Web.Models.AdminUserRoles.SuperAdmin)]
+@{
+    ViewData["Title"] = "مدیریت محصولات";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">محصولات</p>
+            <h1>مدیریت کاتالوگ محصولات</h1>
+            <p>هر محصول بعد از ذخیره در آدرس عمومی <code>/products/slug</code> نمایش داده می‌شود.</p>
+        </div>
+        <a class="button button--primary" href="/admin/products/edit">محصول جدید</a>
+    </div>
+
+    <div class="admin-table-wrap glass-surface">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>محصول</th>
+                    <th>دسته</th>
+                    <th>Slug</th>
+                    <th>ترتیب</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var row in Model.Products)
+            {
+                var product = row.Product;
+                <tr>
+                    <td>
+                        <strong>@product.PersianTitle</strong>
+                        <small>@product.ShortDescription</small>
+                    </td>
+                    <td>@product.ProductCategory?.Title</td>
+                    <td><code>@product.Slug</code></td>
+                    <td>@product.SortOrder</td>
+                    <td>
+                        <span class="admin-status @(product.IsActive ? "admin-status--live" : "admin-status--draft")">
+                            @(product.IsActive ? "فعال" : "غیرفعال")
+                        </span>
+                        @if (product.IsFeatured)
+                        {
+                            <span class="admin-status admin-status--featured">ویژه</span>
+                        }
+                    </td>
+                    <td class="admin-actions">
+                        <a href="@row.PublicUrl" target="_blank" rel="noopener">نمایش</a>
+                        <a href="/admin/products/edit/@product.Id">ویرایش</a>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@product.Id">
+                            <button type="submit" onclick="return confirm('محصول حذف شود؟')">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

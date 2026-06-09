@@ -1,0 +1,33 @@
+# .NET build output
+bin/
+obj/
+**/bin/
+**/obj/
+
+# User and IDE files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Runtime data
+src/Hooshyaran.Web/App_Data/*.db
+src/Hooshyaran.Web/App_Data/*.db-shm
+src/Hooshyaran.Web/App_Data/*.db-wal
+src/Hooshyaran.Web/App_Data/backups/
+
+# Generated/heavy source images kept locally while optimized JPGs are committed.
+src/Hooshyaran.Web/wwwroot/assets/content/*.png
+
+# Unused local animation libraries from earlier experiments.
+src/Hooshyaran.Web/wwwroot/lib/gsap/
+src/Hooshyaran.Web/wwwroot/lib/bootstrap/
+
+# Local Codex run logs
+.codex-run/
+hooshyaran-run.*.log
+
+# OS files
+Thumbs.db
+.DS_Store

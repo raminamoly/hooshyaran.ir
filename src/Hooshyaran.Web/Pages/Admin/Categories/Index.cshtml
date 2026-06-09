@@ -1,0 +1,38 @@
+@page "/admin/categories"
+@model Hooshyaran.Web.Pages.Admin.Categories.IndexModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = Hooshyaran.Web.Models.AdminUserRoles.SuperAdmin)]
+@{
+    ViewData["Title"] = "مدیریت دسته‌ها";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">دسته‌ها</p>
+            <h1>دسته‌بندی محصولات</h1>
+        </div>
+        <a class="button button--primary" href="/admin/categories/edit">دسته جدید</a>
+    </div>
+    <div class="admin-table-wrap glass-surface">
+        <table class="admin-table">
+            <thead><tr><th>عنوان</th><th>Slug</th><th>ترتیب</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+            <tbody>
+            @foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@category.Title</td>
+                    <td><code>@category.Slug</code></td>
+                    <td>@category.SortOrder</td>
+                    <td>@(category.IsActive ? "فعال" : "غیرفعال")</td>
+                    <td class="admin-actions">
+                        <a href="/admin/categories/edit/@category.Id">ویرایش</a>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@category.Id">
+                            <button type="submit" onclick="return confirm('حذف شود؟ دسته‌هایی که محصول دارند حذف نمی‌شوند.')">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

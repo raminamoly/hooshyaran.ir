@@ -1,0 +1,17 @@
+@model Hooshyaran.Web.ViewModels.FaqSectionViewModel
+
+<section class="faq-section">
+    <div class="faq-section__heading">
+        <span class="faq-section__icon" aria-hidden="true"><svg><use href="#icon-book"></use></svg></span>
+        <h2>@Model.Title</h2>
+    </div>
+    <div class="faq-list">
+        @foreach (var item in Model.Items)
+        {
+            <details>
+                <summary>@item.Question</summary>
+                <p>@item.Answer</p>
+            </details>
+        }
+    </div>
+</section>

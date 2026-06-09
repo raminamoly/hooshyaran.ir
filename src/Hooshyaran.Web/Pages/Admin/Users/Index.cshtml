@@ -1,0 +1,57 @@
+@page "/admin/users"
+@model Hooshyaran.Web.Pages.Admin.Users.IndexModel
+@{
+    ViewData["Title"] = "مدیریت کاربران";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">تنظیمات</p>
+            <h1>مدیریت کاربران پنل</h1>
+            <p>کاربران نویسنده فقط به مقالات خودشان دسترسی دارند؛ SuperAdmin به همه بخش‌های پنل دسترسی دارد.</p>
+        </div>
+        <a class="button button--primary" href="/admin/users/edit">کاربر جدید</a>
+    </div>
+
+    <div class="admin-table-wrap glass-surface">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>کاربر</th>
+                    <th>ایمیل</th>
+                    <th>نقش</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>
+                        <strong>@user.DisplayName</strong>
+                        <small dir="ltr">@user.UserName</small>
+                    </td>
+                    <td dir="ltr">@user.Email</td>
+                    <td>@(user.Role == AdminUserRoles.SuperAdmin ? "SuperAdmin" : "نویسنده")</td>
+                    <td>
+                        <span class="admin-status @(user.IsActive ? "admin-status--live" : "admin-status--draft")">
+                            @(user.IsActive ? "فعال" : "غیرفعال")
+                        </span>
+                    </td>
+                    <td class="admin-actions">
+                        <a href="/admin/users/edit/@user.Id">ویرایش</a>
+                        @if (user.Id != Model.CurrentUserId)
+                        {
+                            <form method="post" asp-page-handler="Toggle" asp-route-id="@user.Id">
+                                <button type="submit">@(user.IsActive ? "غیرفعال" : "فعال")</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

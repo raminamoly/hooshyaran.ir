@@ -1,0 +1,39 @@
+@page "/use-cases"
+@{
+    ViewData["Title"] = "کاربردها";
+    ViewData["Description"] = "جایگاه اولیه کاربردهای هوش مصنوعی سازمانی در هوش‌یاران.";
+    ViewData["CanonicalPath"] = "/use-cases";
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "کاربردها",
+    "سناریوهای کاربردی هوش مصنوعی در سازمان",
+    "نمونه‌هایی از جاهایی که AI می‌تواند کار تکراری را کم کند، کیفیت تصمیم‌گیری را بالا ببرد و دانش سازمانی را قابل استفاده‌تر کند.",
+    "مشاهده محصولات",
+    "/products"))
+
+<section class="content-band">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "کاربردهای قابل شروع",
+            "سناریوهای کوچک، اثر قابل اندازه‌گیری",
+            "بهترین مسیر، شروع از نقاطی است که داده و فرایند مشخص دارند و خروجی آن‌ها برای سازمان قابل سنجش است."))
+        <div class="feature-grid">
+            <article class="feature-item">
+                <span class="card-icon" aria-hidden="true"><svg><use href="#icon-database"></use></svg></span>
+                <h3>پرسش از دانش سازمانی</h3>
+                <p>دسترسی سریع‌تر به آیین‌نامه‌ها، مستندات، قراردادها و سوابق بدون گم شدن در فایل‌ها و پوشه‌ها.</p>
+            </article>
+            <article class="feature-item">
+                <span class="card-icon" aria-hidden="true"><svg><use href="#icon-flow"></use></svg></span>
+                <h3>دستیار فرایند داخلی</h3>
+                <p>کمک به تیم‌ها برای تکمیل فرم‌ها، تولید پیش‌نویس، پیگیری وظایف و آماده‌سازی خروجی‌های تکراری.</p>
+            </article>
+            <article class="feature-item">
+                <span class="card-icon" aria-hidden="true"><svg><use href="#icon-chart"></use></svg></span>
+                <h3>تحلیل مدیریتی سریع</h3>
+                <p>تبدیل داده‌ها و گزارش‌های پراکنده به خلاصه‌های اجرایی، روندها و پیشنهادهای قابل بررسی.</p>
+            </article>
+        </div>
+    </div>
+</section>

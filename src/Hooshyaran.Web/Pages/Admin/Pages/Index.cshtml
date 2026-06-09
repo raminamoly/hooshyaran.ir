@@ -1,0 +1,42 @@
+@page "/admin/pages"
+@model Hooshyaran.Web.Pages.Admin.Pages.IndexModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = Hooshyaran.Web.Models.AdminUserRoles.SuperAdmin)]
+@{
+    ViewData["Title"] = "مدیریت صفحات";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">صفحات</p>
+            <h1>مدیریت صفحات ثابت</h1>
+        </div>
+        <a class="button button--primary" href="/admin/pages/edit">صفحه جدید</a>
+    </div>
+    <div class="admin-table-wrap glass-surface">
+        <table class="admin-table">
+            <thead>
+                <tr><th>کلید</th><th>عنوان</th><th>Slug</th><th>وضعیت</th><th>عملیات</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var row in Model.Pages)
+            {
+                var staticPage = row.Page;
+                <tr>
+                    <td><code>@staticPage.Key</code></td>
+                    <td>@staticPage.Title</td>
+                    <td><code>@staticPage.Slug</code></td>
+                    <td>@(staticPage.IsPublished ? "منتشر شده" : "پیش‌نویس")</td>
+                    <td class="admin-actions">
+                        <a href="@row.PublicUrl" target="_blank" rel="noopener">نمایش</a>
+                        <a href="/admin/pages/edit/@staticPage.Id">ویرایش</a>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@staticPage.Id">
+                            <button type="submit" onclick="return confirm('حذف شود؟')">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

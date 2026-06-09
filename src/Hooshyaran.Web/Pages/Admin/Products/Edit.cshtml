@@ -1,0 +1,132 @@
+@page "/admin/products/edit/{id:int?}"
+@model Hooshyaran.Web.Pages.Admin.Products.EditModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = Hooshyaran.Web.Models.AdminUserRoles.SuperAdmin)]
+@{
+    ViewData["Title"] = Model.Input.Id == 0 ? "محصول جدید" : "ویرایش محصول";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">محصولات</p>
+            <h1>@ViewData["Title"]</h1>
+            <p>متن‌های چندخطی مثل مزیت‌ها و کاربردها را هر مورد در یک خط وارد کنید.</p>
+            @if (!string.IsNullOrWhiteSpace(Model.PublicUrl))
+            {
+                <p><a class="admin-inline-link" href="@Model.PublicUrl" target="_blank" rel="noopener">مشاهده محصول در سایت</a></p>
+            }
+        </div>
+        <a class="button button--secondary" href="/admin/products">بازگشت</a>
+    </div>
+
+    <form method="post" class="admin-form admin-edit-form glass-surface">
+        <input asp-for="Input.Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="admin-validation"></div>
+
+        <fieldset class="admin-fieldset">
+            <legend>اطلاعات اصلی</legend>
+            <div class="admin-form-grid">
+                <div>
+                    <label asp-for="Input.Name"></label>
+                    <input asp-for="Input.Name" dir="ltr" />
+                    <span asp-validation-for="Input.Name"></span>
+                </div>
+                <div>
+                    <label asp-for="Input.PersianTitle"></label>
+                    <input asp-for="Input.PersianTitle" />
+                    <span asp-validation-for="Input.PersianTitle"></span>
+                </div>
+                <div>
+                    <label asp-for="Input.Slug"></label>
+                    <input asp-for="Input.Slug" dir="ltr" />
+                    <span asp-validation-for="Input.Slug"></span>
+                </div>
+                <div>
+                    <label asp-for="Input.ProductCategoryId"></label>
+                    <select asp-for="Input.ProductCategoryId" asp-items="Model.CategoryOptions">
+                        <option value="0">انتخاب دسته</option>
+                    </select>
+                    <span asp-validation-for="Input.ProductCategoryId"></span>
+                </div>
+            </div>
+
+            <label asp-for="Input.ShortDescription"></label>
+            <textarea asp-for="Input.ShortDescription" rows="3"></textarea>
+
+            <label asp-for="Input.LongDescription"></label>
+            <textarea asp-for="Input.LongDescription" rows="8" class="js-rich-editor"></textarea>
+        </fieldset>
+
+        <fieldset class="admin-fieldset">
+            <legend>محتوای صفحه محصول</legend>
+            <div class="admin-form-grid">
+                <div>
+                    <label asp-for="Input.ProblemsSolved"></label>
+                    <textarea asp-for="Input.ProblemsSolved" rows="7"></textarea>
+                </div>
+                <div>
+                    <label asp-for="Input.Benefits"></label>
+                    <textarea asp-for="Input.Benefits" rows="7"></textarea>
+                </div>
+                <div>
+                    <label asp-for="Input.PublicFeatures"></label>
+                    <textarea asp-for="Input.PublicFeatures" rows="7"></textarea>
+                </div>
+                <div>
+                    <label asp-for="Input.UseCases"></label>
+                    <textarea asp-for="Input.UseCases" rows="7"></textarea>
+                </div>
+            </div>
+
+            <label asp-for="Input.TargetAudience"></label>
+            <textarea asp-for="Input.TargetAudience" rows="5"></textarea>
+        </fieldset>
+
+        <fieldset class="admin-fieldset">
+            <legend>رسانه و انتشار</legend>
+            <div class="admin-form-grid">
+                <div>
+                    <label asp-for="Input.HeroImagePath"></label>
+                    <input asp-for="Input.HeroImagePath" dir="ltr" />
+                </div>
+                <div>
+                    <label asp-for="Input.LogoPath"></label>
+                    <input asp-for="Input.LogoPath" dir="ltr" />
+                </div>
+                <div>
+                    <label asp-for="Input.CtaText"></label>
+                    <input asp-for="Input.CtaText" />
+                </div>
+                <div>
+                    <label asp-for="Input.SortOrder"></label>
+                    <input asp-for="Input.SortOrder" type="number" />
+                </div>
+            </div>
+            <div class="admin-toggle-row">
+                <label class="admin-checkbox"><input asp-for="Input.IsActive" /><span>فعال باشد</span></label>
+                <label class="admin-checkbox"><input asp-for="Input.IsFeatured" /><span>در خانه نمایش داده شود</span></label>
+            </div>
+        </fieldset>
+
+        <fieldset class="admin-fieldset">
+            <legend>SEO</legend>
+            <label asp-for="Input.SelectedTagIds"></label>
+            <select asp-for="Input.SelectedTagIds" asp-items="Model.TagOptions" multiple class="admin-multi-select admin-tag-combobox"></select>
+            <span asp-validation-for="Input.SelectedTagIds"></span>
+            <p class="admin-help-text">تگ‌ها فقط از بخش مدیریت تگ‌ها ساخته و ویرایش می‌شوند.</p>
+            <label asp-for="Input.SeoTitle"></label>
+            <input asp-for="Input.SeoTitle" />
+            <label asp-for="Input.SeoDescription"></label>
+            <textarea asp-for="Input.SeoDescription" rows="3"></textarea>
+            <label asp-for="Input.SeoKeywords"></label>
+            <input asp-for="Input.SeoKeywords" />
+        </fieldset>
+
+        <div class="admin-form-actions">
+            <button class="button button--primary" type="submit">ذخیره محصول</button>
+            <a class="button button--secondary" href="/admin/products">انصراف</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,10 @@
+@model Hooshyaran.Web.ViewModels.SectionTitleViewModel
+
+<div class="section-title">
+    @if (!string.IsNullOrWhiteSpace(Model.Eyebrow))
+    {
+        <p class="eyebrow">@Model.Eyebrow</p>
+    }
+    <h2>@Model.Title</h2>
+    <p>@Model.Description</p>
+</div>

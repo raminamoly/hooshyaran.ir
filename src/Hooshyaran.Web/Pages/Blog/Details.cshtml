@@ -1,0 +1,66 @@
+@page "/blog/{slug}"
+@model Hooshyaran.Web.Pages.Blog.DetailsModel
+@inject Hooshyaran.Web.Services.ICmsHtmlService CmsHtml
+@{
+    ViewData["Title"] = Model.Article.SeoTitle;
+    ViewData["Description"] = Model.Article.SeoDescription;
+    ViewData["Keywords"] = Model.Article.SeoKeywords;
+    ViewData["CanonicalPath"] = $"/blog/{Model.Article.Slug}";
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "مقاله",
+    Model.Article.Title,
+    Model.Article.Summary,
+    "مشاهده محصولات",
+    "/products",
+    "بازگشت به بلاگ",
+    "/blog",
+    Model.Article.ImagePath,
+    Model.Article.Title))
+
+<section class="content-band">
+    <div class="container article-layout">
+        <article class="article-body glass-surface cms-content">
+            <div class="article-meta">
+                <span>@Model.Article.AuthorName</span>
+                <span>@PersianDateFormatter.ToPersianDate(Model.Article.PublishedAt)</span>
+            </div>
+            @Html.Raw(CmsHtml.ToSafeHtml(Model.Article.Body))
+            @await Html.PartialAsync("_TagChips", Model.Article.BlogArticleTags.Select(item => item.Tag!).Where(tag => tag is not null))
+        </article>
+        <aside class="contact-panel glass-surface">
+            <h2>موضوعات مرتبط</h2>
+            <p>برای اتصال مقاله به اقدام عملی، محصولات مرتبط هوش‌یاران را بررسی کنید.</p>
+            <a class="text-link" href="/products/llmops">LLMOPS</a>
+            <a class="text-link" href="/products/workgraph-ai">WorkGraph-AI</a>
+        </aside>
+    </div>
+</section>
+
+@if (Model.RelatedArticles.Any())
+{
+    <section class="content-band content-band--alt">
+        <div class="container">
+            @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+                "ادامه مطالعه",
+                "مقالات مرتبط",
+                "چند مطلب دیگر برای کامل‌تر شدن تصویر سازمانی شما از AI."))
+            <div class="article-grid">
+                @foreach (var article in Model.RelatedArticles)
+                {
+                    <article class="article-card">
+                        @if (!string.IsNullOrWhiteSpace(article.ImagePath))
+                        {
+                            <img class="article-card__image" src="@AssetOptimizer.Image(article.ImagePath)" alt="@article.Title" width="1100" height="619" loading="lazy" decoding="async" />
+                        }
+                        <p>@PersianDateFormatter.ToPersianDate(article.PublishedAt)</p>
+                        <h3>@article.Title</h3>
+                        <span>@article.Summary</span>
+                        <a class="text-link" href="/blog/@article.Slug">ادامه مطلب</a>
+                    </article>
+                }
+            </div>
+        </div>
+    </section>
+}

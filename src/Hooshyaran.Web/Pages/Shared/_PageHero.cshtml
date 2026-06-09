@@ -1,0 +1,77 @@
+@model Hooshyaran.Web.ViewModels.PageHeroViewModel
+@{
+    var providedHeroCssClass = Model.CssClass ?? string.Empty;
+    var isHomeHero = providedHeroCssClass.Contains("page-hero--home", StringComparison.OrdinalIgnoreCase);
+    var heroCssClass = isHomeHero || providedHeroCssClass.Contains("page-hero--galaxy", StringComparison.OrdinalIgnoreCase)
+        ? providedHeroCssClass
+        : $"{providedHeroCssClass} page-hero--galaxy".Trim();
+    var isGalaxyHero = heroCssClass.Contains("page-hero--galaxy", StringComparison.OrdinalIgnoreCase);
+    var sectionCssClass = isHomeHero
+        ? $"page-hero {(string.IsNullOrWhiteSpace(Model.ImageUrl) ? string.Empty : "page-hero--image")} {heroCssClass}".Trim()
+        : $"page-hero page-hero--text-only {heroCssClass}".Trim();
+    var optimizedHeroImage = AssetOptimizer.Image(Model.ImageUrl);
+    var heroStyle = isHomeHero && !string.IsNullOrWhiteSpace(optimizedHeroImage)
+        ? $"--hero-image: url('{optimizedHeroImage}')"
+        : null;
+}
+
+<section class="@sectionCssClass" style="@heroStyle">
+    <div class="hero-motion" aria-hidden="true">
+        <span class="hero-motion__grid"></span>
+        <span class="hero-motion__beam hero-motion__beam--one"></span>
+        <span class="hero-motion__beam hero-motion__beam--two"></span>
+        <span class="hero-motion__node hero-motion__node--one"></span>
+        <span class="hero-motion__node hero-motion__node--two"></span>
+        <span class="hero-motion__node hero-motion__node--three"></span>
+        @if (isGalaxyHero)
+        {
+            <span class="hero-motion__node hero-motion__node--four"></span>
+            <span class="hero-motion__node hero-motion__node--five"></span>
+            <span class="hero-motion__node hero-motion__node--six"></span>
+            <span class="hero-motion__node hero-motion__node--seven"></span>
+            <span class="hero-motion__node hero-motion__node--eight"></span>
+            <span class="hero-motion__node hero-motion__node--nine"></span>
+            <span class="hero-motion__node hero-motion__node--ten"></span>
+        }
+    </div>
+    <div class="page-hero__content">
+        @if (!string.IsNullOrWhiteSpace(Model.Eyebrow))
+        {
+            <p class="eyebrow">@Model.Eyebrow</p>
+        }
+        <h1>@Model.Title</h1>
+        <p>@Model.Description</p>
+        @if (!string.IsNullOrWhiteSpace(Model.PrimaryText) || !string.IsNullOrWhiteSpace(Model.SecondaryText))
+        {
+            <div class="hero-actions">
+                @if (!string.IsNullOrWhiteSpace(Model.PrimaryText) && !string.IsNullOrWhiteSpace(Model.PrimaryUrl))
+                {
+                    <a class="button button--primary" href="@Model.PrimaryUrl">@Model.PrimaryText</a>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.SecondaryText) && !string.IsNullOrWhiteSpace(Model.SecondaryUrl))
+                {
+                    <a class="button button--secondary" href="@Model.SecondaryUrl">@Model.SecondaryText</a>
+                }
+            </div>
+        }
+    </div>
+    @if (isHomeHero && !string.IsNullOrWhiteSpace(optimizedHeroImage))
+    {
+        <div class="page-hero__visual page-hero__visual--enterprise">
+            <div class="page-hero__fallback page-hero__fallback--gpu" aria-hidden="true">
+                <canvas class="hero-network-canvas hero-network-canvas--gpu" width="560" height="360"></canvas>
+                <div class="hero-gpu-chip">
+                    <svg aria-hidden="true"><use href="#icon-cpu"></use></svg>
+                    <strong>هسته AI خصوصی</strong>
+                    <span>GPU داخلی سازمان</span>
+                </div>
+                <div class="hero-system-node hero-system-node--erp"><span>ERP</span></div>
+                <div class="hero-system-node hero-system-node--docs"><span>اسناد</span></div>
+                <div class="hero-system-node hero-system-node--db"><span>دیتابیس</span></div>
+                <div class="hero-system-node hero-system-node--api"><span>API</span></div>
+                <div class="hero-system-node hero-system-node--bi"><span>تحلیل</span></div>
+                <div class="hero-graph-caption">پردازش امن روی زیرساخت شما</div>
+            </div>
+        </div>
+    }
+</section>
