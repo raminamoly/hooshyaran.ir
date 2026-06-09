@@ -1,0 +1,149 @@
+name: IIS CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hooshyaran-iis-production
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy Hooshyaran.Web to IIS
+    runs-on: [self-hosted, windows, x64]
+
+    env:
+      DOTNET_VERSION: '10.0.x'
+      SOLUTION_PATH: 'Hooshyaran.sln'
+      PROJECT_PATH: 'src/Hooshyaran.Web/Hooshyaran.Web.csproj'
+      PUBLISH_DIR: '${{ github.workspace }}\publish\Hooshyaran.Web'
+      IIS_SITE_NAME: 'hooshyaran.ir'
+      IIS_APP_POOL: 'hooshyaran.ir'
+      IIS_PATH: 'C:\inetpub\wwwroot\hooshyaran.ir'
+      BACKUP_ROOT: 'C:\inetpub\backups\hooshyaran.ir'
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        shell: pwsh
+        run: dotnet restore $env:SOLUTION_PATH
+
+      - name: Build
+        shell: pwsh
+        run: dotnet build $env:SOLUTION_PATH --configuration Release --no-restore
+
+      - name: Test if test projects exist
+        shell: pwsh
+        run: |
+          $testProjects = Get-ChildItem -Path . -Recurse -Filter "*.csproj" |
+            Where-Object { $_.FullName -match "(Tests|Test)" }
+
+          if (-not $testProjects) {
+            Write-Host "No test projects found. Skipping dotnet test."
+            exit 0
+          }
+
+          foreach ($project in $testProjects) {
+            Write-Host "Testing $($project.FullName)"
+            dotnet test $project.FullName --configuration Release --no-build
+          }
+
+      - name: Publish
+        shell: pwsh
+        run: |
+          if (Test-Path $env:PUBLISH_DIR) {
+            Remove-Item $env:PUBLISH_DIR -Recurse -Force
+          }
+
+          dotnet publish $env:PROJECT_PATH `
+            --configuration Release `
+            --no-build `
+            --output $env:PUBLISH_DIR `
+            -p:UseAppHost=false
+
+      - name: Deploy to IIS
+        shell: powershell
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          Import-Module WebAdministration
+
+          $publishPath = $env:PUBLISH_DIR
+          $iisPath = $env:IIS_PATH
+          $appPool = $env:IIS_APP_POOL
+          $backupRoot = $env:BACKUP_ROOT
+          $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+          $backupPath = Join-Path $backupRoot $timestamp
+
+          if (-not (Test-Path $publishPath)) {
+            throw "Publish folder was not found: $publishPath"
+          }
+
+          New-Item -ItemType Directory -Force -Path $iisPath | Out-Null
+          New-Item -ItemType Directory -Force -Path $backupRoot | Out-Null
+          New-Item -ItemType Directory -Force -Path (Join-Path $iisPath "App_Data") | Out-Null
+          New-Item -ItemType Directory -Force -Path (Join-Path $iisPath "logs") | Out-Null
+          New-Item -ItemType Directory -Force -Path (Join-Path $iisPath "wwwroot\uploads") | Out-Null
+
+          $hasExistingFiles = (Get-ChildItem -Path $iisPath -Force -ErrorAction SilentlyContinue | Select-Object -First 1) -ne $null
+          if ($hasExistingFiles) {
+            Write-Host "Backing up current IIS directory to $backupPath"
+            New-Item -ItemType Directory -Force -Path $backupPath | Out-Null
+            robocopy $iisPath $backupPath /MIR /R:2 /W:2 /XD "logs" | Out-Host
+            if ($LASTEXITCODE -gt 7) {
+              throw "Backup robocopy failed with exit code $LASTEXITCODE"
+            }
+          }
+
+          $offlineFile = Join-Path $iisPath "app_offline.htm"
+          Set-Content -Path $offlineFile -Value "Hooshyaran.ir is being deployed. Please try again in a few seconds." -Encoding UTF8 -Force
+
+          $appPoolPath = "IIS:\AppPools\$appPool"
+          $appPoolExists = Test-Path $appPoolPath
+          if ($appPoolExists) {
+            $state = (Get-WebAppPoolState -Name $appPool).Value
+            if ($state -ne "Stopped") {
+              Write-Host "Stopping IIS app pool: $appPool"
+              Stop-WebAppPool -Name $appPool
+            }
+          }
+          else {
+            Write-Warning "IIS app pool '$appPool' was not found. Create it before the first production deployment."
+          }
+
+          Start-Sleep -Seconds 5
+
+          Write-Host "Copying published files to IIS path..."
+          robocopy $publishPath $iisPath /MIR /R:3 /W:5 /XD "App_Data" "logs" "uploads" /XF "appsettings.Production.json" "appsettings.Local.json" "*.db" "*.db-shm" "*.db-wal" | Out-Host
+          $copyExitCode = $LASTEXITCODE
+          if ($copyExitCode -gt 7) {
+            throw "Deploy robocopy failed with exit code $copyExitCode"
+          }
+
+          New-Item -ItemType Directory -Force -Path (Join-Path $iisPath "App_Data") | Out-Null
+          New-Item -ItemType Directory -Force -Path (Join-Path $iisPath "logs") | Out-Null
+          New-Item -ItemType Directory -Force -Path (Join-Path $iisPath "wwwroot\uploads") | Out-Null
+
+          Remove-Item -Path $offlineFile -Force -ErrorAction SilentlyContinue
+
+          if ($appPoolExists) {
+            Write-Host "Starting IIS app pool: $appPool"
+            Start-WebAppPool -Name $appPool
+          }
+
+          Write-Host "IIS deployment completed successfully."
