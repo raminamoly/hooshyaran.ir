@@ -1,0 +1,72 @@
+[
+  {
+    "source": "/home.html",
+    "destination": "/",
+    "note": "صفحه خانه قدیمی به صفحه اصلی جدید."
+  },
+  {
+    "source": "/posts.html",
+    "destination": "/blog",
+    "note": "لیست پست‌های قدیمی به بلاگ جدید."
+  },
+  {
+    "source": "/contact.html",
+    "destination": "/contact",
+    "note": "صفحه تماس قدیمی به صفحه تماس جدید."
+  },
+  {
+    "source": "/posts/rag-enterprise-search-ai-iran.html",
+    "destination": "/blog/ai-in-banking-finance-iran",
+    "note": "مقاله قدیمی کاربرد هوش مصنوعی در بانکداری. مسیر /Posts هم به دلیل case-insensitive بودن همین rule پوشش داده می‌شود."
+  },
+  {
+    "source": "/posts/post1.html",
+    "destination": "/blog/ai-in-banking-finance-iran",
+    "note": "مقاله قدیمی کاربرد هوش مصنوعی در بانکداری."
+  },
+  {
+    "source": "/posts/post2.html",
+    "destination": "/blog/enterprise-ai-assistant-for-managers",
+    "note": "مقاله قدیمی دستیار هوشمند فارسی برای سازمان به مقاله جدید دستیار سازمانی برای مدیران."
+  },
+  {
+    "source": "/posts/post3.html",
+    "destination": "/blog/private-ai-for-enterprise",
+    "note": "مقاله قدیمی تحول کسب‌وکار با هوش مصنوعی خصوصی."
+  },
+  {
+    "source": "/posts/post4.html",
+    "destination": "/blog/ai-integration-erp-crm-automation",
+    "note": "مقاله قدیمی اتصال یکپارچه هوش مصنوعی به سیستم‌های سازمانی."
+  },
+  {
+    "source": "/posts/post5.html",
+    "destination": "/blog/on-premise-ai-data-security-iran",
+    "note": "مقاله قدیمی امنیت داده‌ها با هوش مصنوعی."
+  },
+  {
+    "source": "/posts/post6.html",
+    "destination": "/blog/rag-vs-fine-tuning-persian-enterprise-ai",
+    "note": "مقاله قدیمی Generative AI Fine-Tuning."
+  },
+  {
+    "source": "/posts/post7.html",
+    "destination": "/blog/ollama-for-enterprise-ai",
+    "note": "مقاله قدیمی Ollama به مقاله جدید درباره Ollama برای سازمان‌ها."
+  },
+  {
+    "source": "/posts/post8.html",
+    "destination": "/blog/ollama-chatgpt-azure-openai-comparison-iran",
+    "note": "مقاله قدیمی مقایسه Ollama با ChatGPT و Azure OpenAI به نسخه مقایسه‌ای جدید منتقل می‌شود."
+  },
+  {
+    "source": "/posts/hooshyarServer.html",
+    "destination": "/blog/enterprise-ai-assistant-for-managers",
+    "note": "مقاله قدیمی دستیار هوش مصنوعی سازمانی به مقاله جدید دستیار سازمانی برای مدیران منتقل می‌شود."
+  },
+  {
+    "source": "/posts/GovernmentsUseAI.html",
+    "destination": "/blog/ai-for-government-public-sector-iran",
+    "note": "مقاله قدیمی هوش مصنوعی در دولت‌ها به مقاله جدید دولت و خدمات عمومی منتقل می‌شود."
+  }
+]

@@ -5,7 +5,7 @@ Persian RTL CMS-lite product catalog for Hooshyaran enterprise AI solutions.
 ## Project
 
 - Framework: ASP.NET Core 10 Razor Pages
-- Database: SQLite with Entity Framework Core
+- Database: SQL Server with Entity Framework Core
 - UI: Persian RTL, server-rendered, SEO-friendly pages
 - Assets: local fonts, local scripts, local images, no public CDN dependency
 - Main project: `src/Hooshyaran.Web`
@@ -19,18 +19,19 @@ dotnet build Hooshyaran.sln
 dotnet run --project src/Hooshyaran.Web --urls http://127.0.0.1:5109
 ```
 
-The app applies EF Core migrations and seeds CMS-lite public marketing content on startup.
+In development, the app applies EF Core migrations and seed data on startup.
+In production, configure the database explicitly and run migrations as a deployment step.
 
 ## Admin Login
 
-Development seed credentials:
+Development seed credentials are read from local development configuration:
 
 ```text
-Username: admin
-Password: Admin@12345!
+Admin:DefaultUserName
+Admin:DefaultPassword
 ```
 
-Change the default password before production use.
+Do not publish development credentials or local connection strings to production.
 
 ## Current UI Notes
 

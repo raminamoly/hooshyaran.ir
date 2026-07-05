@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="AI workflow automation pipeline">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#082b35"/><stop offset="1" stop-color="#11736d"/></linearGradient></defs>
+  <rect width="1200" height="675" rx="42" fill="url(#bg)"/>
+  <g stroke="#9ff7e4" stroke-opacity=".16"><path d="M100 150h1000M100 330h1000M100 510h1000"/><path d="M240 90v500M470 90v500M700 90v500M930 90v500"/></g>
+  <g fill="#fff" opacity=".95">
+    <rect x="90" y="250" width="190" height="150" rx="26"/><rect x="355" y="250" width="190" height="150" rx="26"/><rect x="620" y="250" width="190" height="150" rx="26"/><rect x="885" y="250" width="220" height="150" rx="26"/>
+  </g>
+  <g fill="#123352" font-family="Arial" text-anchor="middle"><text x="185" y="322" font-size="25" font-weight="700">Request</text><text x="450" y="322" font-size="25" font-weight="700">AI Assist</text><text x="715" y="322" font-size="25" font-weight="700">Human Check</text><text x="995" y="322" font-size="25" font-weight="700">Workflow</text></g>
+  <g stroke="#16c8dc" stroke-width="12" stroke-linecap="round"><path d="M290 326h54"/><path d="M555 326h54"/><path d="M820 326h54"/></g>
+  <circle cx="450" cy="372" r="16" fill="#f6a23a"/><circle cx="715" cy="372" r="16" fill="#16c8dc"/>
+</svg>

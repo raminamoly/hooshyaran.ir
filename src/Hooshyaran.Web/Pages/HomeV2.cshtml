@@ -1,0 +1,68 @@
+@page "/home-v2"
+@{
+    ViewData["Title"] = "خانه دوم";
+    ViewData["Description"] = "نسخه دوم صفحه خانه هوش‌یاران با هیروی تصویری متحرک برای معرفی راهکارهای هوش مصنوعی سازمانی، امن و قابل کنترل.";
+    ViewData["Keywords"] = "هوش‌یاران, هوش مصنوعی سازمانی, AI خصوصی, صفحه خانه دوم هوش‌یاران";
+    ViewData["CanonicalPath"] = "/home-v2";
+
+    var heroVideoMp4 = "/assets/content/home-v2-ai-hero-orbit.mp4";
+}
+
+<section class="home-v2-hero" aria-labelledby="home-v2-title">
+    <div class="home-v2-hero__media" aria-hidden="true">
+        <video class="home-v2-hero__video" autoplay muted loop playsinline preload="auto" width="1280" height="720">
+            <source src="@heroVideoMp4" type="video/mp4" />
+        </video>
+        <span class="home-v2-hero__scan"></span>
+        <span class="home-v2-hero__mesh"></span>
+    </div>
+    <div class="home-v2-hero__content">
+        <p class="home-v2-hero__eyebrow">نسخه آزمایشی صفحه خانه</p>
+        <h1 id="home-v2-title">هوش‌یاران</h1>
+        <p class="home-v2-hero__lead">هوش مصنوعی سازمانی، خصوصی و قابل کنترل برای تیم‌هایی که می‌خواهند AI را کنار داده‌ها، فرایندها و سیاست‌های امنیتی خودشان اجرا کنند.</p>
+        <div class="home-v2-hero__actions">
+            <a class="button button--primary" href="/request-demo">درخواست جلسه معرفی</a>
+            <a class="button button--secondary" href="/products">مشاهده راهکارها</a>
+        </div>
+    </div>
+    <div class="home-v2-hero__status" aria-label="شاخص‌های صفحه خانه دوم">
+        <span><strong>Local AI</strong> اجرا روی زیرساخت سازمان</span>
+        <span><strong>Policy</strong> کنترل دسترسی و داده</span>
+        <span><strong>Workflow</strong> اتصال به فرایندهای واقعی</span>
+    </div>
+</section>
+
+<section class="home-v2-signal-band" aria-label="مزیت‌های کلیدی هوش‌یاران">
+    <div class="container home-v2-signal-grid">
+        <article class="home-v2-signal">
+            <span class="home-v2-signal__icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
+            <h2>AI امن داخل مرز سازمان</h2>
+            <p>داده‌ها، لاگ‌ها و سیاست‌های دسترسی در کنترل سازمان می‌مانند و مسیر استفاده از مدل قابل پایش است.</p>
+        </article>
+        <article class="home-v2-signal">
+            <span class="home-v2-signal__icon" aria-hidden="true"><svg><use href="#icon-flow"></use></svg></span>
+            <h2>اتصال به عملیات روزمره</h2>
+            <p>دستیارها و اتوماسیون‌های هوشمند به اسناد، دیتابیس‌ها، فرم‌ها و جریان‌های کاری داخلی متصل می‌شوند.</p>
+        </article>
+        <article class="home-v2-signal">
+            <span class="home-v2-signal__icon" aria-hidden="true"><svg><use href="#icon-cpu"></use></svg></span>
+            <h2>زیرساخت قابل مدیریت</h2>
+            <p>مصرف مدل، ظرفیت پردازش و کیفیت خروجی از ابتدا با داشبورد، گاردریل و گزارش‌های اجرایی کنترل می‌شود.</p>
+        </article>
+    </div>
+</section>
+
+<section class="content-band home-v2-flow">
+    <div class="container home-v2-flow__inner">
+        <div class="home-v2-flow__copy">
+            <p class="eyebrow">از ایده تا استقرار</p>
+            <h2>صفحه‌ای برای نشان دادن آینده عملیاتی AI در سازمان</h2>
+            <p>این نسخه با یک هیروی سینمایی شروع می‌شود و بعد خیلی سریع پیام اصلی را روشن می‌کند: هوش‌یاران فقط ابزار نمایشی نمی‌سازد، بلکه مسیر استقرار کنترل‌شده AI را برای سازمان طراحی و پیاده‌سازی می‌کند.</p>
+        </div>
+        <div class="home-v2-flow__steps" aria-label="مسیر همکاری">
+            <span>تحلیل سناریوها</span>
+            <span>طراحی معماری امن</span>
+            <span>پیاده‌سازی و پایش</span>
+        </div>
+    </div>
+</section>

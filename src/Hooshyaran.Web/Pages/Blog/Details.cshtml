@@ -6,6 +6,7 @@
     ViewData["Description"] = Model.Article.SeoDescription;
     ViewData["Keywords"] = Model.Article.SeoKeywords;
     ViewData["CanonicalPath"] = $"/blog/{Model.Article.Slug}";
+    ViewData["SocialImage"] = AssetOptimizer.Image(Model.Article.ImagePath);
 }
 
 @await Html.PartialAsync("_PageHero", new PageHeroViewModel(
@@ -34,6 +35,8 @@
             <p>برای اتصال مقاله به اقدام عملی، محصولات مرتبط هوش‌یاران را بررسی کنید.</p>
             <a class="text-link" href="/products/llmops">LLMOPS</a>
             <a class="text-link" href="/products/workgraph-ai">WorkGraph-AI</a>
+            <a class="text-link" href="/products/complaint-management-ai">Complaint Management AI</a>
+            <a class="text-link" href="/request-demo">درخواست جلسه مشاوره</a>
         </aside>
     </div>
 </section>
@@ -52,7 +55,7 @@
                     <article class="article-card">
                         @if (!string.IsNullOrWhiteSpace(article.ImagePath))
                         {
-                            <img class="article-card__image" src="@AssetOptimizer.Image(article.ImagePath)" alt="@article.Title" width="1100" height="619" loading="lazy" decoding="async" />
+                            <img class="article-card__image" src="@AssetOptimizer.Thumbnail(article.ImagePath)" alt="@article.Title" width="1100" height="619" loading="lazy" decoding="async" />
                         }
                         <p>@PersianDateFormatter.ToPersianDate(article.PublishedAt)</p>
                         <h3>@article.Title</h3>

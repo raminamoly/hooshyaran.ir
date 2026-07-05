@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hooshyaran-public-v1';
+const CACHE_NAME = 'hooshyaran-public-v6';
 const CORE_ASSETS = [
   '/',
   '/products',
@@ -11,7 +11,7 @@ const CORE_ASSETS = [
   '/css/fonts.css',
   '/css/site.css',
   '/js/site.js',
-  '/assets/brand/favicon.svg',
+  '/favicon.ico',
   '/assets/brand/hooshyaran-logo-small.png',
   '/assets/content/home-enterprise-ai-hero.jpg',
   '/assets/content/article-ai-workflow-automation.jpg',
@@ -69,8 +69,7 @@ self.addEventListener('fetch', (event) => {
       const cached = await cache.match(request);
 
       if (request.mode === 'navigate') {
-        const refresh = cacheFreshResponse(cache, request).catch(() => cached || cache.match('/'));
-        return cached || refresh;
+        return cacheFreshResponse(cache, request).catch(() => cached || cache.match('/'));
       }
 
       if (STATIC_FILE_PATTERN.test(url.pathname)) {

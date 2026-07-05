@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Enterprise AI pilot to production journey">
+  <defs>
+    <linearGradient id="bg6" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1321"/>
+      <stop offset="100%" stop-color="#1d2e42"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg6)"/>
+  <rect x="80" y="84" width="1440" height="734" rx="36" fill="#0a1118" stroke="#34506a" stroke-width="2"/>
+  <rect x="126" y="178" width="360" height="508" rx="28" fill="#0f1b28" stroke="#3f637f"/>
+  <rect x="620" y="178" width="360" height="508" rx="28" fill="#0f1b28" stroke="#3f637f"/>
+  <rect x="1114" y="178" width="360" height="508" rx="28" fill="#0f1b28" stroke="#3f637f"/>
+  <circle cx="306" cy="178" r="38" fill="#67d9ff"/>
+  <circle cx="800" cy="178" r="38" fill="#ffcf6a"/>
+  <circle cx="1294" cy="178" r="38" fill="#7ef1c5"/>
+  <path d="M486 432 H620" stroke="#5e84a0" stroke-width="10" stroke-linecap="round"/>
+  <path d="M980 432 H1114" stroke="#5e84a0" stroke-width="10" stroke-linecap="round"/>
+  <polygon points="612,418 640,432 612,446" fill="#5e84a0"/>
+  <polygon points="1106,418 1134,432 1106,446" fill="#5e84a0"/>
+  <rect x="168" y="250" width="276" height="88" rx="20" fill="#15324a"/>
+  <rect x="168" y="372" width="276" height="88" rx="20" fill="#15324a"/>
+  <rect x="168" y="494" width="276" height="138" rx="20" fill="#11273b"/>
+  <rect x="662" y="250" width="276" height="88" rx="20" fill="#23405b"/>
+  <rect x="662" y="372" width="276" height="88" rx="20" fill="#23405b"/>
+  <rect x="662" y="494" width="276" height="138" rx="20" fill="#17314a"/>
+  <rect x="1156" y="250" width="276" height="88" rx="20" fill="#28566f"/>
+  <rect x="1156" y="372" width="276" height="88" rx="20" fill="#28566f"/>
+  <rect x="1156" y="494" width="276" height="138" rx="20" fill="#16324a"/>
+  <rect x="168" y="662" width="164" height="14" rx="7" fill="#67d9ff"/>
+  <rect x="662" y="662" width="164" height="14" rx="7" fill="#ffcf6a"/>
+  <rect x="1156" y="662" width="164" height="14" rx="7" fill="#7ef1c5"/>
+</svg>

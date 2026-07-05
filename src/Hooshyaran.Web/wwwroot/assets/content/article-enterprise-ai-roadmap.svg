@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Enterprise AI roadmap">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#061f3a"/><stop offset="1" stop-color="#0f7785"/></linearGradient></defs>
+  <rect width="1200" height="675" rx="42" fill="url(#bg)"/>
+  <path d="M128 430c150-170 252-206 386-128s222 120 358-16c68-68 120-90 202-74" fill="none" stroke="#16c8dc" stroke-width="16" stroke-linecap="round"/>
+  <g fill="#fff" opacity=".95">
+    <rect x="94" y="386" width="190" height="112" rx="24"/><rect x="352" y="248" width="210" height="112" rx="24"/><rect x="620" y="340" width="210" height="112" rx="24"/><rect x="900" y="176" width="210" height="112" rx="24"/>
+  </g>
+  <g fill="#123352" font-family="Arial" font-size="22" font-weight="700" text-anchor="middle">
+    <text x="189" y="450">Discovery</text><text x="457" y="312">PoC</text><text x="725" y="404">Pilot</text><text x="1005" y="240">Scale</text>
+  </g>
+  <g fill="#f6a23a"><circle cx="128" cy="430" r="14"/><circle cx="514" cy="302" r="14"/><circle cx="872" cy="286" r="14"/><circle cx="1074" cy="212" r="14"/></g>
+</svg>

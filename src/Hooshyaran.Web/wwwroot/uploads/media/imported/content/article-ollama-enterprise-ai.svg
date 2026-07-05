@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Ollama enterprise deployment architecture">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0e1018"/>
+      <stop offset="100%" stop-color="#1c2332"/>
+    </linearGradient>
+    <linearGradient id="accent2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#65d3ff"/>
+      <stop offset="100%" stop-color="#4ee8a1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg2)"/>
+  <rect x="96" y="86" width="1408" height="728" rx="34" fill="#0c121b" stroke="#334355" stroke-width="2"/>
+  <rect x="140" y="132" width="412" height="638" rx="26" fill="#111a27" stroke="#35516c"/>
+  <rect x="596" y="132" width="418" height="300" rx="26" fill="#111a27" stroke="#35516c"/>
+  <rect x="1058" y="132" width="402" height="300" rx="26" fill="#111a27" stroke="#35516c"/>
+  <rect x="596" y="470" width="864" height="300" rx="26" fill="#111a27" stroke="#35516c"/>
+  <rect x="182" y="182" width="328" height="126" rx="22" fill="#12253a"/>
+  <rect x="182" y="344" width="328" height="126" rx="22" fill="#0f1e2f"/>
+  <rect x="182" y="506" width="328" height="126" rx="22" fill="#0f1e2f"/>
+  <rect x="182" y="668" width="328" height="62" rx="18" fill="#17344b"/>
+  <rect x="642" y="184" width="158" height="192" rx="20" fill="#16324b"/>
+  <rect x="824" y="184" width="144" height="192" rx="20" fill="#15354f"/>
+  <rect x="1104" y="184" width="126" height="192" rx="20" fill="#16324b"/>
+  <rect x="1250" y="184" width="158" height="192" rx="20" fill="#15354f"/>
+  <rect x="640" y="516" width="178" height="210" rx="18" fill="#17344b"/>
+  <rect x="840" y="516" width="178" height="210" rx="18" fill="#17344b"/>
+  <rect x="1040" y="516" width="178" height="210" rx="18" fill="#17344b"/>
+  <rect x="1240" y="516" width="178" height="210" rx="18" fill="#17344b"/>
+  <path d="M510 244 H594" stroke="#4f7d9c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M510 406 H594" stroke="#4f7d9c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M510 568 H594" stroke="#4f7d9c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M804 278 H1058" stroke="url(#accent2)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1250 278 H1230" stroke="url(#accent2)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M805 432 V468" stroke="#4f7d9c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1258 432 V468" stroke="#4f7d9c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M730 620 H1320" stroke="url(#accent2)" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="730" cy="620" r="12" fill="#65d3ff"/>
+  <circle cx="930" cy="620" r="12" fill="#4ee8a1"/>
+  <circle cx="1130" cy="620" r="12" fill="#65d3ff"/>
+  <circle cx="1320" cy="620" r="12" fill="#4ee8a1"/>
+</svg>

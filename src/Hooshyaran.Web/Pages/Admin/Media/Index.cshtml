@@ -1,0 +1,187 @@
+@page "/admin/media"
+@model Hooshyaran.Web.Pages.Admin.Media.IndexModel
+@{
+    ViewData["Title"] = "رسانه‌ها";
+}
+
+<section class="admin-page media-admin">
+    <div class="admin-page__header">
+        <div>
+            <p class="eyebrow">رسانه‌ها</p>
+            <h1>مدیریت فایل‌ها</h1>
+            <p>فایل‌های قابل استفاده در مقالات، محصولات و محتوای سایت را از اینجا آپلود و انتخاب کنید.</p>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+    {
+        <div class="admin-alert admin-alert--success">@Model.StatusMessage</div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="admin-alert">@Model.ErrorMessage</div>
+    }
+
+    <div class="media-toolbar glass-surface">
+        <form method="post" enctype="multipart/form-data" asp-page-handler="Upload" class="media-upload-form">
+            <div>
+                <label asp-for="UploadFile">آپلود فایل</label>
+                <input asp-for="UploadFile" type="file" />
+                <p class="admin-help-text">پسوندهای مجاز: @Model.AllowedExtensionsText - حداکثر حجم: @Model.MaxFileSizeText</p>
+            </div>
+            <button class="button button--primary" type="submit">آپلود</button>
+        </form>
+
+        <form method="get" class="media-filter-form">
+            <input name="SearchTerm" value="@Model.SearchTerm" placeholder="جستجوی نام، مسیر، alt یا توضیحات" />
+            <select name="FileType">
+                <option value="all" selected="@(Model.FileType == "all" ? "selected" : null)">همه فایل‌ها</option>
+                <option value="images" selected="@(Model.FileType == "images" ? "selected" : null)">فقط تصاویر</option>
+                <option value="documents" selected="@(Model.FileType == "documents" ? "selected" : null)">فایل‌های غیرتصویری</option>
+            </select>
+            <select name="UsageFilter">
+                <option value="all" selected="@(Model.UsageFilter == "all" ? "selected" : null)">همه وضعیت‌ها</option>
+                <option value="used" selected="@(Model.UsageFilter == "used" ? "selected" : null)">استفاده‌شده</option>
+                <option value="unused" selected="@(Model.UsageFilter == "unused" ? "selected" : null)">استفاده‌نشده</option>
+                <option value="duplicates" selected="@(Model.UsageFilter == "duplicates" ? "selected" : null)">تکراری‌ها</option>
+            </select>
+            <button class="button button--secondary" type="submit">اعمال فیلتر</button>
+        </form>
+    </div>
+
+    <div class="media-stats">
+        <span><strong>@Model.Library.TotalCount</strong> فایل</span>
+        <span><strong>@Model.Library.UsedCount</strong> استفاده‌شده</span>
+        <span><strong>@Model.Library.UnusedCount</strong> استفاده‌نشده</span>
+        <span><strong>@Model.Library.DuplicateCount</strong> تکراری</span>
+        @if (User.IsInRole(Hooshyaran.Web.Models.AdminUserRoles.SuperAdmin))
+        {
+            <form method="post" asp-page-handler="DeleteUnused">
+                <button class="button button--secondary" type="submit" onclick="return confirm('فقط فایل‌های استفاده‌نشده داخل uploads/media حذف می‌شوند. ادامه می‌دهید؟')">پاکسازی استفاده‌نشده‌ها</button>
+            </form>
+        }
+    </div>
+
+    @if (Model.Library.Files.Count == 0)
+    {
+        <div class="admin-empty-state glass-surface">
+            <strong>فایلی با این فیلتر پیدا نشد.</strong>
+            <span>فیلترها را تغییر دهید یا فایل تازه‌ای آپلود کنید.</span>
+        </div>
+    }
+    else
+    {
+        <div class="media-grid">
+            @foreach (var file in Model.Library.Files)
+            {
+                var usedIn = string.Join(" | ", file.UsedIn);
+                <article class="media-card glass-surface"
+                         data-media-card
+                         data-url="@file.Url"
+                         data-name="@file.Name"
+                         data-extension="@file.Extension"
+                         data-content-type="@file.ContentType"
+                         data-size="@file.Size"
+                         data-date="@PersianDateFormatter.ToPersianDate(file.LastModified)"
+                         data-is-image="@(file.IsImage ? "true" : "false")"
+                         data-alt="@file.AltText"
+                         data-title="@file.Title"
+                         data-description="@file.Description"
+                         data-seo-description="@file.SeoDescription"
+                         data-used="@(file.IsUsed ? "true" : "false")"
+                         data-usage="@usedIn"
+                         data-duplicate="@(file.HasDuplicate ? "true" : "false")">
+                    <button class="media-card__preview" type="button" data-media-open title="مشاهده و ویرایش">
+                        @if (file.IsImage)
+                        {
+                            <img src="@file.Url" alt="@(string.IsNullOrWhiteSpace(file.AltText) ? file.Name : file.AltText)" loading="lazy" decoding="async" />
+                        }
+                        else
+                        {
+                            <span class="media-file-tile" data-file-extension="@file.Extension">
+                                <span>@file.Extension</span>
+                                <small>فایل</small>
+                            </span>
+                        }
+                    </button>
+                    <div class="media-card__body">
+                        <strong title="@file.Name">@file.Name</strong>
+                        <code title="@file.Url">@file.Url</code>
+                        <span>@file.Size - @PersianDateFormatter.ToPersianDate(file.LastModified)</span>
+                        <div class="media-card__badges">
+                            <span class="media-badge @(file.IsUsed ? "media-badge--used" : "media-badge--unused")">@(file.IsUsed ? "استفاده‌شده" : "استفاده‌نشده")</span>
+                            @if (file.HasDuplicate)
+                            {
+                                <span class="media-badge media-badge--duplicate">@file.DuplicateCount نسخه تکراری</span>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(file.AltText))
+                            {
+                                <span class="media-badge">Alt دارد</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="media-card__actions">
+                        <button class="admin-action" type="button" title="مشاهده و ویرایش" data-media-open>
+                            <svg><use href="#admin-icon-edit"></use></svg>
+                            <span class="visually-hidden">مشاهده و ویرایش</span>
+                        </button>
+                        <button class="admin-action js-copy-media-url" type="button" title="کپی مسیر" data-media-url="@file.Url">
+                            <svg><use href="#admin-icon-copy"></use></svg>
+                            <span class="visually-hidden">کپی مسیر</span>
+                        </button>
+                        @if (!file.IsUsed)
+                        {
+                            <form method="post" asp-page-handler="Delete" asp-route-url="@file.Url">
+                                <button class="admin-action admin-action--danger" type="submit" title="حذف" onclick="return confirm('این فایل حذف شود؟')">
+                                    <svg><use href="#admin-icon-trash"></use></svg>
+                                    <span class="visually-hidden">حذف</span>
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </article>
+            }
+        </div>
+    }
+
+    <div class="media-detail" data-media-detail hidden aria-hidden="true">
+        <button class="media-detail__backdrop" type="button" data-media-detail-close aria-label="بستن"></button>
+        <section class="media-detail__panel glass-surface" role="dialog" aria-modal="true" aria-labelledby="media-detail-title">
+            <header class="media-detail__header">
+                <div>
+                    <p class="eyebrow">جزئیات رسانه</p>
+                    <h2 id="media-detail-title" data-media-detail-name></h2>
+                </div>
+                <button class="media-picker__close" type="button" data-media-detail-close aria-label="بستن">×</button>
+            </header>
+            <div class="media-detail__content">
+                <div class="media-detail__preview" data-media-detail-preview></div>
+                    <div class="media-detail__meta">
+                    <dl class="media-detail__info">
+                        <div><dt>مسیر</dt><dd><code data-media-detail-url></code></dd></div>
+                        <div><dt>نوع</dt><dd><span data-media-detail-extension></span><small data-media-detail-content-type></small></dd></div>
+                        <div><dt>حجم</dt><dd data-media-detail-size></dd></div>
+                        <div><dt>تاریخ</dt><dd data-media-detail-date></dd></div>
+                        <div><dt>وضعیت</dt><dd data-media-detail-used></dd></div>
+                        <div><dt>استفاده در</dt><dd data-media-detail-usage></dd></div>
+                    </dl>
+                    <form method="post" asp-page-handler="SaveMetadata" class="media-metadata-form">
+                        <input asp-for="MetadataInput.Url" type="hidden" data-media-detail-input="url" />
+                        <label asp-for="MetadataInput.AltText">متن جایگزین / توضیح دسترس‌پذیری</label>
+                        <input asp-for="MetadataInput.AltText" data-media-detail-input="alt" maxlength="220" />
+                        <label asp-for="MetadataInput.Title">عنوان</label>
+                        <input asp-for="MetadataInput.Title" data-media-detail-input="title" maxlength="220" />
+                        <label asp-for="MetadataInput.Description">توضیح / کپشن</label>
+                        <textarea asp-for="MetadataInput.Description" data-media-detail-input="description" maxlength="700" rows="3"></textarea>
+                        <label asp-for="MetadataInput.SeoDescription">توضیح سئو</label>
+                        <textarea asp-for="MetadataInput.SeoDescription" data-media-detail-input="seoDescription" maxlength="320" rows="2"></textarea>
+                        <div class="media-detail__actions">
+                            <button class="button button--primary" type="submit">ذخیره اطلاعات</button>
+                            <button class="button button--secondary js-copy-media-url" type="button" data-media-detail-copy data-media-url="">کپی مسیر</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

@@ -12,7 +12,7 @@ public class SiteVisitLoggingMiddleware(RequestDelegate next)
         "/lib",
         "/assets",
         "/favicon",
-        "/admin/system-dashboard"
+        "/admin"
     ];
 
     public async Task InvokeAsync(HttpContext context, ISiteVisitLogger visitLogger)

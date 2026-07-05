@@ -31,8 +31,8 @@ public class EditModel(
         if (id is null)
         {
             Input.SortOrder = 100;
-            Input.LogoPath = "/assets/brand/hooshyaran-logo-small.png";
-            Input.HeroImagePath = "/assets/content/home-enterprise-ai-hero.jpg";
+            Input.LogoPath = "/uploads/media/imported/brand/hooshyaran-logo-small.png";
+            Input.HeroImagePath = "/uploads/media/imported/content/home-enterprise-ai-hero.jpg";
             Input.CtaText = "درخواست جلسه معرفی";
             return Page();
         }

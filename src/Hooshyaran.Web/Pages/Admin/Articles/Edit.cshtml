@@ -35,8 +35,23 @@
         <label asp-for="Input.Body"></label>
         <textarea asp-for="Input.Body" rows="12" class="js-rich-editor"></textarea>
 
-        <label asp-for="Input.ImagePath"></label>
-        <input asp-for="Input.ImagePath" dir="ltr" placeholder="/assets/content/article-name.jpg" />
+        <div class="media-field">
+            <label asp-for="Input.ImagePath"></label>
+            <div class="media-field__control">
+                <input asp-for="Input.ImagePath" class="js-media-input" dir="ltr" placeholder="/uploads/media/images/article-name.jpg" />
+                <button class="button button--secondary js-media-picker" type="button" data-media-target="#Input_ImagePath" data-media-type="images">انتخاب از رسانه‌ها</button>
+            </div>
+            <div class="media-field__preview js-media-preview">
+                @if (!string.IsNullOrWhiteSpace(Model.Input.ImagePath))
+                {
+                    <img src="@AssetOptimizer.Image(Model.Input.ImagePath)" alt="پیش‌نمایش تصویر مقاله" loading="lazy" />
+                }
+                else
+                {
+                    <span>تصویری انتخاب نشده است.</span>
+                }
+            </div>
+        </div>
 
         <div class="admin-form-grid">
             @if (Model.IsSuperAdmin)
@@ -57,9 +72,35 @@
                 <input asp-for="Input.AuthorName" type="hidden" />
                 <input asp-for="Input.AdminUserId" type="hidden" />
             }
-            <div>
-                <label asp-for="Input.PublishedAt"></label>
-                <input asp-for="Input.PublishedAt" type="datetime-local" />
+            <div class="persian-datetime-picker js-persian-datetime-picker"
+                 data-start-year="@(PersianDateFormatter.CurrentPersianYearNumber() - 5)"
+                 data-end-year="@(PersianDateFormatter.CurrentPersianYearNumber() + 5)">
+                <label asp-for="Input.PublishedAtPersian" id="publishedAtPersianLabel"></label>
+                <input asp-for="Input.PublishedAtPersian" type="hidden" class="js-persian-datetime-value" />
+                <div class="persian-datetime-picker__grid" aria-labelledby="publishedAtPersianLabel">
+                    <div>
+                        <label for="PublishedAtYear">سال</label>
+                        <select id="PublishedAtYear" data-persian-part="year" aria-label="سال انتشار"></select>
+                    </div>
+                    <div>
+                        <label for="PublishedAtMonth">ماه</label>
+                        <select id="PublishedAtMonth" data-persian-part="month" aria-label="ماه انتشار"></select>
+                    </div>
+                    <div>
+                        <label for="PublishedAtDay">روز</label>
+                        <select id="PublishedAtDay" data-persian-part="day" aria-label="روز انتشار"></select>
+                    </div>
+                    <div>
+                        <label for="PublishedAtHour">ساعت</label>
+                        <select id="PublishedAtHour" data-persian-part="hour" aria-label="ساعت انتشار"></select>
+                    </div>
+                    <div>
+                        <label for="PublishedAtMinute">دقیقه</label>
+                        <select id="PublishedAtMinute" data-persian-part="minute" aria-label="دقیقه انتشار"></select>
+                    </div>
+                </div>
+                <p class="admin-help-text">تاریخ با تقویم شمسی انتخاب می‌شود و در دیتابیس به صورت میلادی ذخیره می‌شود.</p>
+                <span asp-validation-for="Input.PublishedAtPersian"></span>
             </div>
         </div>
 
@@ -87,6 +128,7 @@
 
         <button class="button button--primary" type="submit">ذخیره</button>
     </form>
+    <partial name="_MediaPicker" />
 </section>
 
 @section Scripts {

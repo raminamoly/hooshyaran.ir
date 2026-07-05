@@ -7,9 +7,12 @@
     ViewData["Keywords"] = Model.Product.SeoKeywords;
     ViewData["CanonicalPath"] = $"/products/{Model.Product.Slug}";
     var isEmployeeMonitor = string.Equals(Model.Product.Slug, "workgraph-ai", StringComparison.OrdinalIgnoreCase);
+    var isChatbotBuilder = string.Equals(Model.Product.Slug, "chatbot-builder", StringComparison.OrdinalIgnoreCase);
+    const string chatbotArchitectureImage = "/uploads/media/imported/content/chatbot-builder-sales-agent-architecture.jpg";
     var productHeroImage = string.IsNullOrWhiteSpace(Model.Product.HeroImagePath)
         ? "/assets/content/home-enterprise-ai-hero.jpg"
         : Model.Product.HeroImagePath;
+    ViewData["SocialImage"] = AssetOptimizer.Image(productHeroImage);
     var audienceItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.TargetAudience);
     var problemItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.ProblemsSolved);
     var benefitItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.Benefits);
@@ -21,6 +24,8 @@
         "llmops" => "AI خصوصی",
         "workgraph-ai" => "پایش بهره‌وری",
         "complaint-management-ai" => "صدای مشتری",
+        "ai-bi-dashboard-builder" => "BI هوشمند",
+        "chatbot-builder" => "چتبات سازمانی",
         _ => "AI سازمانی"
     };
     var productArchitecture = Model.Product.Slug switch
@@ -28,6 +33,8 @@
         "llmops" => "Private LLMOps",
         "workgraph-ai" => "Agent + Dashboard",
         "complaint-management-ai" => "Workflow + NLP",
+        "ai-bi-dashboard-builder" => "Voice BI + Dashboard",
+        "chatbot-builder" => "Multi-Agent RAG",
         _ => "Enterprise AI"
     };
     var productOutcome = Model.Product.Slug switch
@@ -35,6 +42,8 @@
         "llmops" => "کنترل، امنیت، استقرار",
         "workgraph-ai" => "شفافیت، بهره‌وری، ریسک",
         "complaint-management-ai" => "رضایت، SLA، ریشه‌یابی",
+        "ai-bi-dashboard-builder" => "تصمیم‌سازی داده‌محور",
+        "chatbot-builder" => "پاسخ دقیق، سریع، قابل کنترل",
         _ => "بینش مدیریتی"
     };
 }
@@ -48,7 +57,8 @@
     "بازگشت به محصولات",
     "/products",
     productHeroImage,
-    Model.Product.PersianTitle))
+    Model.Product.PersianTitle,
+    CssClass: "page-hero--product"))
 
 <section class="content-band">
     <div class="container product-detail-grid">
@@ -92,6 +102,76 @@
         </aside>
     </div>
 </section>
+
+@if (isChatbotBuilder)
+{
+    <section class="content-band chatbot-architecture-band">
+        <div class="container">
+            @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+                "معماری ایجنتیک",
+                "نمونه اتصال ایجنت‌های فروش در یک چتبات سازمانی",
+                "در این نمونه، ایجنت پلنر درخواست را تحلیل می‌کند، ایجنت‌های تخصصی فروش و داده به‌صورت موازی اجرا می‌شوند و خروجی‌ها پس از ترکیب، رتبه‌بندی و کش شدن به پاسخ نهایی چتبات تبدیل می‌شوند."))
+            <figure class="chatbot-architecture-figure">
+                <img src="@chatbotArchitectureImage" alt="نمونه معماری ایجنتیک چتبات‌ساز هوش‌یاران با ایجنت پلنر، ایجنت فروش، قوانین فروش، CRM، سفارش، موجودی، فاکتور، RAG، جست‌وجو، مرجر و رنکر، کش و پاسخ نهایی چتبات" loading="lazy" />
+            </figure>
+            <details class="chatbot-live-doc" id="chatbot-live-document">
+                <summary class="button button--secondary chatbot-live-doc__summary">
+                    <svg aria-hidden="true"><use href="#icon-flow"></use></svg>
+                    راهنمای معماری زنده
+                </summary>
+                <div class="chatbot-live-doc__panel">
+                    <div class="chatbot-live-doc__intro">
+                        <p class="eyebrow">Live Document</p>
+                        <h2>نقشه قابل ویرایش معماری چتبات‌ساز</h2>
+                        <p>این سند، تصویر عمومی و قابل ارائه از مسیر پاسخ‌دهی چتبات را نشان می‌دهد. متن و نقشه همین‌جا داخل صفحه نگهداری می‌شود تا هر زمان لازم بود، بدون بازطراحی تصویر، به‌روزرسانی شود.</p>
+                    </div>
+                    <div class="chatbot-live-map" aria-label="نقشه زنده معماری چتبات‌ساز">
+                        <div class="chatbot-live-node chatbot-live-node--planner">
+                            <span>ایجنت پلنر</span>
+                            <strong>تحلیل سوال و انتخاب مسیر</strong>
+                        </div>
+                        <div class="chatbot-live-agents">
+                            <div class="chatbot-live-node"><span>ایجنت RAG</span><strong>اسناد و دستورالعمل‌ها</strong></div>
+                            <div class="chatbot-live-node"><span>ایجنت داده</span><strong>CRM، سفارش و موجودی</strong></div>
+                            <div class="chatbot-live-node"><span>ایجنت فروش</span><strong>قوانین فروش و قیمت</strong></div>
+                            <div class="chatbot-live-node"><span>ایجنت جست‌وجو</span><strong>اطلاعات عمومی بازار</strong></div>
+                        </div>
+                        <div class="chatbot-live-node chatbot-live-node--merge">
+                            <span>مرجر و رنکر</span>
+                            <strong>ترکیب، رتبه‌بندی و کنترل کیفیت</strong>
+                        </div>
+                        <div class="chatbot-live-output">
+                            <div class="chatbot-live-node"><span>کش پاسخ‌ها</span><strong>پاسخ سریع‌تر برای درخواست‌های تکراری</strong></div>
+                            <div class="chatbot-live-node chatbot-live-node--answer"><span>پاسخ نهایی</span><strong>خروجی کنترل‌شده برای کاربر</strong></div>
+                        </div>
+                    </div>
+                    <div class="chatbot-live-doc__columns">
+                        <article>
+                            <h3>۱. پلنر</h3>
+                            <p>درخواست کاربر را می‌خواند، نیت سوال را تشخیص می‌دهد و تصمیم می‌گیرد کدام ایجنت‌ها باید به‌صورت ترتیبی یا موازی اجرا شوند.</p>
+                        </article>
+                        <article>
+                            <h3>۲. ایجنت‌های تخصصی</h3>
+                            <p>هر ایجنت فقط یک حوزه مشخص را پوشش می‌دهد؛ مثل دانش سازمانی، اطلاعات فروش، وضعیت سفارش، موجودی انبار یا جست‌وجوی کنترل‌شده.</p>
+                        </article>
+                        <article>
+                            <h3>۳. مرجر و رنکر</h3>
+                            <p>خروجی ایجنت‌ها را کنار هم می‌گذارد، پاسخ‌های ضعیف یا تکراری را کنار می‌زند و بهترین پاسخ قابل ارائه را آماده می‌کند.</p>
+                        </article>
+                        <article>
+                            <h3>۴. کش و پاسخ</h3>
+                            <p>پاسخ‌های پرتکرار در کش قرار می‌گیرند تا زمان پاسخ‌گویی کمتر شود و تجربه کاربر در استفاده روزمره روان‌تر بماند.</p>
+                        </article>
+                    </div>
+                    <div class="chatbot-live-doc__boundary">
+                        <h3>مرز نمایش به مشتری</h3>
+                        <p>این راهنما معماری کلان، نقش ایجنت‌ها و مسیر منطقی پاسخ را توضیح می‌دهد؛ جزئیات داخلی مانند پرامپت‌ها، تنظیمات زیرساخت، سیاست‌های امنیتی محرمانه و منطق اختصاصی اجرا در این سند عمومی نمایش داده نمی‌شود.</p>
+                    </div>
+                </div>
+            </details>
+        </div>
+    </section>
+}
 
 <section class="content-band content-band--alt">
     <div class="container product-summary-grid">

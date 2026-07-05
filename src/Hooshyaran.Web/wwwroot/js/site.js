@@ -213,7 +213,7 @@ const initHeroNetwork = () => {
 initHeroNetwork();
 
 const revealTargets = document.querySelectorAll(
-  '.page-hero__content, .page-hero__visual, .page-hero__dashboard, .home-signal, .section-title, .content-showcase__media, .feature-item, .product-card, .article-card, .cta-section, .employee-process__step, .employee-architecture__figure, .employee-indicators-card, .employee-privacy-card'
+  '.page-hero__content, .page-hero__visual, .page-hero__dashboard, .home-signal, .section-title, .home-product-spotlight__copy, .home-product-spotlight__media, .feature-item, .product-card, .article-card, .cta-section, .employee-process__step, .employee-architecture__figure, .employee-indicators-card, .employee-privacy-card'
 );
 
 revealTargets.forEach((target) => target.classList.add('reveal-ready'));

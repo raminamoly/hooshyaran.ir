@@ -17,16 +17,26 @@
     {
         <div class="admin-alert admin-alert--success">تنظیمات ذخیره شد.</div>
     }
+    @if (!string.IsNullOrWhiteSpace(Model.BackupErrorMessage))
+    {
+        <div class="admin-alert">@Model.BackupErrorMessage</div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.EmailTestMessage))
+    {
+        <div class="admin-alert @(Model.EmailTestSucceeded ? "admin-alert--success" : "admin-alert--error")">@Model.EmailTestMessage</div>
+    }
 
     <form method="post" class="admin-form admin-edit-form glass-surface admin-tabs">
         <div asp-validation-summary="ModelOnly" class="admin-validation"></div>
 
         <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-general" checked />
         <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-email" />
+        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-database" />
 
         <div class="admin-tab-list" role="tablist" aria-label="بخش‌های تنظیمات">
             <label class="admin-tab" for="settings-general" role="tab">تنظیمات عمومی</label>
             <label class="admin-tab" for="settings-email" role="tab">SMTP و ایمیل</label>
+            <label class="admin-tab" for="settings-database" role="tab">بکاپ دیتابیس</label>
         </div>
 
         <section class="admin-tab-panel admin-tab-panel--general">
@@ -79,6 +89,24 @@
                     <input asp-for="Input.EnableSsl" />
                     <span>SSL/TLS فعال باشد</span>
                 </label>
+                <div class="admin-form-actions">
+                    <button class="button button--secondary" type="submit" asp-page-handler="TestEmail">ارسال ایمیل تست</button>
+                    <p class="admin-help-text">قبل از ارسال تست، مقادیر همین فرم ذخیره می‌شوند.</p>
+                </div>
+            </fieldset>
+        </section>
+
+        <section class="admin-tab-panel admin-tab-panel--database">
+            <fieldset class="admin-fieldset">
+                <legend>بکاپ دیتابیس</legend>
+                <div class="database-tool">
+                    <div>
+                        <h2>دانلود بکاپ SQL Server</h2>
+                        <p>از دیتابیس فعال یک فایل bak ساخته می‌شود و همان لحظه برای دانلود آماده می‌شود.</p>
+                        <p class="admin-help-text" dir="ltr">@Model.DatabasePath</p>
+                    </div>
+                    <button class="button button--primary" type="submit" asp-page-handler="Backup" formnovalidate>دانلود بکاپ دیتابیس</button>
+                </div>
             </fieldset>
         </section>
 

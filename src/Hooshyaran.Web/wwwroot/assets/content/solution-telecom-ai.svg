@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="AI telecom operations center">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#071d3b"/><stop offset="1" stop-color="#413c95"/></linearGradient></defs>
+  <rect width="960" height="540" rx="34" fill="url(#bg)"/>
+  <g stroke="#d7dcff" stroke-opacity=".16"><path d="M110 100h740M110 205h740M110 310h740M110 415h740"/><path d="M250 70v390M480 70v390M710 70v390"/></g>
+  <g transform="translate(138 108)">
+    <rect width="250" height="300" rx="30" fill="#fff" opacity=".93"/>
+    <rect x="58" y="42" width="134" height="216" rx="26" fill="#e9fbff"/>
+    <circle cx="125" cy="282" r="14" fill="#16c8dc"/>
+    <path d="M88 102h74M88 142h74M88 182h74" stroke="#123352" stroke-opacity=".2" stroke-width="12" stroke-linecap="round"/>
+  </g>
+  <g fill="none" stroke="#16c8dc" stroke-width="10" stroke-linecap="round" opacity=".92">
+    <path d="M552 244a74 74 0 0 1 0-104M590 280a126 126 0 0 1 0-176M632 320a180 180 0 0 1 0-254"/>
+  </g>
+  <g transform="translate(606 168)">
+    <rect width="210" height="170" rx="24" fill="#fff" opacity=".94"/>
+    <path d="M40 122c34-58 66-20 100-58s54-8 76-34" fill="none" stroke="#413c95" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="72" cy="74" r="18" fill="#16c8dc"/><circle cx="154" cy="56" r="18" fill="#f6a23a"/>
+  </g>
+</svg>

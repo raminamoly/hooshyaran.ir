@@ -1,6 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Net.Mail;
 using Hooshyaran.Web.Data;
 using Hooshyaran.Web.Models;
+using Hooshyaran.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,12 +12,20 @@ using Microsoft.EntityFrameworkCore;
 namespace Hooshyaran.Web.Pages.Admin.Settings;
 
 [Authorize(Roles = AdminUserRoles.SuperAdmin)]
-public class IndexModel(HooshyaranDbContext dbContext) : PageModel
+public class IndexModel(HooshyaranDbContext dbContext, IDatabaseExplorerService databaseExplorer) : PageModel
 {
     [BindProperty]
     public SettingsInput Input { get; set; } = new();
 
     public bool Saved { get; private set; }
+
+    public string? BackupErrorMessage { get; private set; }
+
+    public string? EmailTestMessage { get; private set; }
+
+    public bool EmailTestSucceeded { get; private set; }
+
+    public string DatabasePath => databaseExplorer.DatabasePath;
 
     public async Task OnGetAsync()
     {
@@ -35,24 +46,93 @@ public class IndexModel(HooshyaranDbContext dbContext) : PageModel
         }
 
         var settings = await GetOrCreateSettingsAsync();
-        settings.WebsiteUrl = NormalizeUrl(Input.WebsiteUrl);
-        settings.SmtpHost = Input.SmtpHost.Trim();
-        settings.SmtpPort = Input.SmtpPort;
-        settings.SmtpUserName = Input.SmtpUserName.Trim();
-        if (!string.IsNullOrWhiteSpace(Input.SmtpPassword))
-        {
-            settings.SmtpPassword = Input.SmtpPassword;
-        }
-        settings.FromEmail = Input.FromEmail.Trim();
-        settings.FromName = Input.FromName.Trim();
-        settings.EnableSsl = Input.EnableSsl;
-        settings.AdminNotificationEmail = Input.AdminNotificationEmail.Trim();
-        settings.UpdatedAt = DateTimeOffset.UtcNow;
-
+        ApplyInput(settings);
         await dbContext.SaveChangesAsync();
         Input = ToInput(settings);
         Saved = true;
         return Page();
+    }
+
+    public async Task<IActionResult> OnPostTestEmailAsync(CancellationToken cancellationToken)
+    {
+        if (!IsValidWebsiteUrl(Input.WebsiteUrl))
+        {
+            ModelState.AddModelError("Input.WebsiteUrl", "آدرس سایت معتبر نیست. آدرس‌های localhost هم قابل قبول هستند.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return Page();
+        }
+
+        var settings = await GetOrCreateSettingsAsync();
+        ApplyInput(settings);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        Input = ToInput(settings);
+
+        var validationMessage = ValidateEmailSettings(settings);
+        if (validationMessage is not null)
+        {
+            EmailTestMessage = validationMessage;
+            EmailTestSucceeded = false;
+            return Page();
+        }
+
+        try
+        {
+            using var client = new SmtpClient(settings.SmtpHost, settings.SmtpPort)
+            {
+                EnableSsl = settings.EnableSsl
+            };
+            SmtpClientConfigurator.SetClientDomain(client, settings.FromEmail, settings.WebsiteUrl);
+
+            if (!string.IsNullOrWhiteSpace(settings.SmtpUserName))
+            {
+                client.Credentials = new NetworkCredential(settings.SmtpUserName, settings.SmtpPassword);
+            }
+
+            using var message = new MailMessage
+            {
+                From = new MailAddress(settings.FromEmail, settings.FromName),
+                Subject = "تست ایمیل هوش‌یاران",
+                Body = """
+                    این ایمیل برای تست تنظیمات SMTP پنل هوش‌یاران ارسال شده است.
+
+                    اگر این پیام را دریافت کرده‌اید، ارسال ایمیل از پورتال فعال است.
+                    """,
+                IsBodyHtml = false
+            };
+            message.To.Add(settings.AdminNotificationEmail);
+
+            await client.SendMailAsync(message, cancellationToken);
+            EmailTestSucceeded = true;
+            EmailTestMessage = $"ایمیل تست به {settings.AdminNotificationEmail} ارسال شد.";
+        }
+        catch (Exception exception) when (exception is SmtpException or InvalidOperationException or FormatException)
+        {
+            EmailTestSucceeded = false;
+            EmailTestMessage = "ارسال ایمیل تست انجام نشد. تنظیمات SMTP، نام کاربری، رمز یا دسترسی سرور را بررسی کنید.";
+        }
+
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostBackupAsync()
+    {
+        try
+        {
+            var backupPath = await databaseExplorer.CreateBackupAsync();
+
+            return PhysicalFile(backupPath, "application/octet-stream", Path.GetFileName(backupPath));
+        }
+        catch (Exception ex)
+        {
+            var settings = await GetOrCreateSettingsAsync();
+            Input = ToInput(settings);
+            BackupErrorMessage = $"بکاپ ساخته نشد: {ex.Message}";
+
+            return Page();
+        }
     }
 
     private async Task<SiteSettings> GetOrCreateSettingsAsync()
@@ -67,6 +147,43 @@ public class IndexModel(HooshyaranDbContext dbContext) : PageModel
         dbContext.SiteSettings.Add(settings);
         await dbContext.SaveChangesAsync();
         return settings;
+    }
+
+    private void ApplyInput(SiteSettings settings)
+    {
+        settings.WebsiteUrl = NormalizeUrl(Input.WebsiteUrl);
+        settings.SmtpHost = Input.SmtpHost.Trim();
+        settings.SmtpPort = Input.SmtpPort;
+        settings.SmtpUserName = Input.SmtpUserName.Trim();
+        if (!string.IsNullOrWhiteSpace(Input.SmtpPassword))
+        {
+            settings.SmtpPassword = Input.SmtpPassword;
+        }
+        settings.FromEmail = Input.FromEmail.Trim();
+        settings.FromName = Input.FromName.Trim();
+        settings.EnableSsl = Input.EnableSsl;
+        settings.AdminNotificationEmail = Input.AdminNotificationEmail.Trim();
+        settings.UpdatedAt = DateTimeOffset.UtcNow;
+    }
+
+    private static string? ValidateEmailSettings(SiteSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(settings.SmtpHost))
+        {
+            return "برای تست ایمیل، SMTP Host باید وارد شود.";
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.FromEmail))
+        {
+            return "برای تست ایمیل، From Email باید وارد شود.";
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.AdminNotificationEmail))
+        {
+            return "برای تست ایمیل، ایمیل دریافت اعلان ادمین باید وارد شود.";
+        }
+
+        return null;
     }
 
     private static SettingsInput ToInput(SiteSettings settings) => new()

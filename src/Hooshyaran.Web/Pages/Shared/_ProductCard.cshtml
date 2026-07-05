@@ -4,7 +4,7 @@
     @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
     {
         <a class="product-card__media" href="@Model.Url" aria-label="@Model.Title">
-            <img src="@AssetOptimizer.Image(Model.ImageUrl)" alt="@Model.Title" width="1100" height="619" loading="lazy" decoding="async" />
+            <img src="@AssetOptimizer.Thumbnail(Model.ImageUrl)" alt="@Model.Title" width="1100" height="619" loading="lazy" decoding="async" />
         </a>
     }
     <span class="card-icon product-card__icon" aria-hidden="true">

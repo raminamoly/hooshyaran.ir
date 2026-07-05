@@ -50,7 +50,10 @@
                     </td>
                     <td>@PersianDateFormatter.ToPersianDate(request.CreatedAt)</td>
                     <td class="admin-actions">
-                        <a href="/admin/demo-requests/edit/@request.Id">جزئیات</a>
+                        <a class="admin-action" href="/admin/demo-requests/edit/@request.Id" title="جزئیات">
+                            <svg><use href="#admin-icon-info"></use></svg>
+                            <span class="visually-hidden">جزئیات</span>
+                        </a>
                     </td>
                 </tr>
             }

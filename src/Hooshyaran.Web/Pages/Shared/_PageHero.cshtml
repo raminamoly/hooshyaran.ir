@@ -2,15 +2,19 @@
 @{
     var providedHeroCssClass = Model.CssClass ?? string.Empty;
     var isHomeHero = providedHeroCssClass.Contains("page-hero--home", StringComparison.OrdinalIgnoreCase);
-    var heroCssClass = isHomeHero || providedHeroCssClass.Contains("page-hero--galaxy", StringComparison.OrdinalIgnoreCase)
+    var isProductHero = providedHeroCssClass.Contains("page-hero--product", StringComparison.OrdinalIgnoreCase);
+    var optimizedHeroImage = AssetOptimizer.Image(Model.ImageUrl);
+    var usesImageHero = !string.IsNullOrWhiteSpace(optimizedHeroImage) && (isHomeHero || isProductHero);
+    var heroCssClass = isHomeHero || isProductHero || providedHeroCssClass.Contains("page-hero--galaxy", StringComparison.OrdinalIgnoreCase)
         ? providedHeroCssClass
         : $"{providedHeroCssClass} page-hero--galaxy".Trim();
     var isGalaxyHero = heroCssClass.Contains("page-hero--galaxy", StringComparison.OrdinalIgnoreCase);
     var sectionCssClass = isHomeHero
-        ? $"page-hero {(string.IsNullOrWhiteSpace(Model.ImageUrl) ? string.Empty : "page-hero--image")} {heroCssClass}".Trim()
-        : $"page-hero page-hero--text-only {heroCssClass}".Trim();
-    var optimizedHeroImage = AssetOptimizer.Image(Model.ImageUrl);
-    var heroStyle = isHomeHero && !string.IsNullOrWhiteSpace(optimizedHeroImage)
+        ? $"page-hero {(usesImageHero ? "page-hero--image" : string.Empty)} {heroCssClass}".Trim()
+        : usesImageHero
+            ? $"page-hero page-hero--image page-hero--product-image {heroCssClass}".Trim()
+            : $"page-hero page-hero--text-only {heroCssClass}".Trim();
+    var heroStyle = usesImageHero
         ? $"--hero-image: url('{optimizedHeroImage}')"
         : null;
 }

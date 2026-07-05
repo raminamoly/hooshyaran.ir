@@ -8,16 +8,22 @@ using Microsoft.EntityFrameworkCore;
 using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
+var databaseConnectionString = builder.Configuration.GetConnectionString("HooshyaranDb");
+if (string.IsNullOrWhiteSpace(databaseConnectionString))
+{
+    throw new InvalidOperationException("ConnectionStrings:HooshyaranDb must be configured before the application starts.");
+}
 
 // Add services to the container.
 builder.Services.AddDbContext<HooshyaranDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("HooshyaranDb")));
+    options.UseSqlServer(databaseConnectionString));
 builder.Services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddScoped<ISiteSettingsService, SiteSettingsService>();
 builder.Services.AddScoped<IPublicUrlBuilder, PublicUrlBuilder>();
 builder.Services.AddScoped<IDemoRequestEmailService, DemoRequestEmailService>();
 builder.Services.AddScoped<ISiteVisitLogger, SiteVisitLogger>();
 builder.Services.AddScoped<IDatabaseExplorerService, DatabaseExplorerService>();
+builder.Services.AddScoped<IMediaFileService, MediaFileService>();
 builder.Services.AddSingleton<ICmsHtmlService, CmsHtmlService>();
 builder.Services.AddScoped<IClaimsTransformation, AdminClaimsTransformation>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -27,6 +33,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LogoutPath = "/admin/logout";
         options.AccessDeniedPath = "/admin/login";
         options.Cookie.Name = "Hooshyaran.Admin";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+            ? CookieSecurePolicy.SameAsRequest
+            : CookieSecurePolicy.Always;
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
         options.SlidingExpiration = true;
     });
 builder.Services.AddAuthorization();
@@ -57,7 +69,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -65,10 +76,59 @@ app.UseHttpsRedirection();
 
 app.UseResponseCompression();
 
+app.Use(async (context, next) =>
+{
+    if (string.Equals(context.Request.Host.Host, "www.hooshyaran.ir", StringComparison.OrdinalIgnoreCase))
+    {
+        var target = string.Concat(
+            "https://hooshyaran.ir",
+            context.Request.PathBase.ToUriComponent(),
+            context.Request.Path.ToUriComponent(),
+            context.Request.QueryString.ToUriComponent());
+        context.Response.Redirect(target, permanent: true);
+        return;
+    }
+
+    await next();
+});
+
+app.Use(async (context, next) =>
+{
+    var headers = context.Response.Headers;
+    headers.Remove("X-Powered-By");
+    headers.TryAdd("X-Content-Type-Options", "nosniff");
+    headers.TryAdd("X-Frame-Options", "SAMEORIGIN");
+    headers.TryAdd("Referrer-Policy", "strict-origin-when-cross-origin");
+    headers.TryAdd("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+
+    var contentSecurityPolicy = app.Environment.IsDevelopment()
+        ? "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: https:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; form-action 'self'"
+        : "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: https:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; form-action 'self'; upgrade-insecure-requests";
+    headers.TryAdd("Content-Security-Policy", contentSecurityPolicy);
+
+    context.Response.OnStarting(() =>
+    {
+        context.Response.Headers.Remove("X-Powered-By");
+        return Task.CompletedTask;
+    });
+
+    await next();
+});
+
+app.UseLegacyRedirects();
+
 app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = context =>
     {
+        if (context.Context.Request.Path.Equals("/service-worker.js", StringComparison.OrdinalIgnoreCase))
+        {
+            context.Context.Response.Headers.CacheControl = "no-cache,no-store,must-revalidate";
+            context.Context.Response.Headers.Pragma = "no-cache";
+            context.Context.Response.Headers.Expires = "0";
+            return;
+        }
+
         context.Context.Response.Headers.CacheControl = "public,max-age=31536000,immutable";
         context.Context.Response.Headers.Expires = DateTimeOffset.UtcNow.AddYears(1).ToString("R");
     }

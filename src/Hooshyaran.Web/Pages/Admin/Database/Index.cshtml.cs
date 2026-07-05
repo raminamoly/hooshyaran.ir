@@ -23,7 +23,14 @@ public class IndexModel(IDatabaseExplorerService databaseExplorer) : PageModel
     public string SearchTerm { get; set; } = string.Empty;
 
     [BindProperty]
-    public string QueryText { get; set; } = "SELECT name, type FROM sqlite_master WHERE type = 'table' ORDER BY name;";
+    public string QueryText { get; set; } = """
+        SELECT s.name + '.' + t.name AS TableName, SUM(p.rows) AS RowCount
+        FROM sys.tables t
+        JOIN sys.schemas s ON s.schema_id = t.schema_id
+        LEFT JOIN sys.partitions p ON p.object_id = t.object_id AND p.index_id IN (0, 1)
+        GROUP BY s.name, t.name
+        ORDER BY TableName;
+        """;
 
     [BindProperty]
     public IFormFile? RestoreFile { get; set; }
@@ -37,6 +44,8 @@ public class IndexModel(IDatabaseExplorerService databaseExplorer) : PageModel
     public DatabaseQueryResult? QueryResult { get; private set; }
 
     public string? StatusMessage { get; private set; }
+
+    public bool CanRestoreDatabase => databaseExplorer.CanRestoreDatabase;
 
     public async Task OnGetAsync()
     {
@@ -53,14 +62,28 @@ public class IndexModel(IDatabaseExplorerService databaseExplorer) : PageModel
 
     public async Task<IActionResult> OnPostBackupAsync()
     {
-        var backupPath = await databaseExplorer.CreateBackupAsync();
+        try
+        {
+            var backupPath = await databaseExplorer.CreateBackupAsync();
 
-        return PhysicalFile(backupPath, "application/vnd.sqlite3", Path.GetFileName(backupPath));
+            return PhysicalFile(backupPath, "application/octet-stream", Path.GetFileName(backupPath));
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"بکاپ ساخته نشد: {ex.Message}";
+            await LoadPageAsync();
+
+            return Page();
+        }
     }
 
     public async Task<IActionResult> OnPostRestoreAsync()
     {
-        if (RestoreFile is null)
+        if (!CanRestoreDatabase)
+        {
+            StatusMessage = "ریستور دیتابیس در محیط production غیرفعال است.";
+        }
+        else if (RestoreFile is null)
         {
             StatusMessage = "فایل بکاپ انتخاب نشده است.";
         }

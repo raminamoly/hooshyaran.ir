@@ -25,9 +25,15 @@
                     <td>@category.SortOrder</td>
                     <td>@(category.IsActive ? "فعال" : "غیرفعال")</td>
                     <td class="admin-actions">
-                        <a href="/admin/categories/edit/@category.Id">ویرایش</a>
+                        <a class="admin-action" href="/admin/categories/edit/@category.Id" title="ویرایش">
+                            <svg><use href="#admin-icon-edit"></use></svg>
+                            <span class="visually-hidden">ویرایش</span>
+                        </a>
                         <form method="post" asp-page-handler="Delete" asp-route-id="@category.Id">
-                            <button type="submit" onclick="return confirm('حذف شود؟ دسته‌هایی که محصول دارند حذف نمی‌شوند.')">حذف</button>
+                            <button class="admin-action admin-action--danger" type="submit" title="حذف" onclick="return confirm('حذف شود؟ دسته‌هایی که محصول دارند حذف نمی‌شوند.')">
+                                <svg><use href="#admin-icon-trash"></use></svg>
+                                <span class="visually-hidden">حذف</span>
+                            </button>
                         </form>
                     </td>
                 </tr>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="AI insurance and healthcare case management">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#123047"/><stop offset="1" stop-color="#1f7d83"/></linearGradient></defs>
+  <rect width="960" height="540" rx="34" fill="url(#bg)"/>
+  <g stroke="#cafbff" stroke-opacity=".16"><path d="M100 108h760M100 216h760M100 324h760M100 432h760"/><path d="M250 72v390M480 72v390M710 72v390"/></g>
+  <g transform="translate(130 104)">
+    <rect width="286" height="320" rx="30" fill="#fff" opacity=".94"/>
+    <path d="M143 54l88 38v72c0 62-36 106-88 132-52-26-88-70-88-132V92z" fill="#dff8ff"/>
+    <path d="M143 112v104M91 164h104" stroke="#16c8dc" stroke-width="20" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(510 116)">
+    <rect width="300" height="290" rx="28" fill="#f8fdff" opacity=".95"/>
+    <path d="M54 70h192M54 124h192M54 178h142" stroke="#123352" stroke-opacity=".18" stroke-width="14" stroke-linecap="round"/>
+    <rect x="54" y="218" width="100" height="40" rx="12" fill="#16c8dc"/><rect x="172" y="218" width="74" height="40" rx="12" fill="#f6a23a"/>
+  </g>
+</svg>

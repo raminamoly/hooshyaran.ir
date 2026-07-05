@@ -141,6 +141,427 @@
     render();
   });
 
+  const persianDatePickers = document.querySelectorAll(".js-persian-datetime-picker");
+  const toEnglishDigits = (value) => (value || "")
+    .replace(/[۰-۹]/g, (digit) => "۰۱۲۳۴۵۶۷۸۹".indexOf(digit).toString())
+    .replace(/[٠-٩]/g, (digit) => "٠١٢٣٤٥٦٧٨٩".indexOf(digit).toString());
+  const toPersianDigits = (value) => String(value).replace(/\d/g, (digit) => "۰۱۲۳۴۵۶۷۸۹"[Number(digit)]);
+  const pad2 = (value) => String(value).padStart(2, "0");
+  const getPersianMonthDays = (year, month) => {
+    if (month <= 6) {
+      return 31;
+    }
+
+    if (month <= 11) {
+      return 30;
+    }
+
+    return [1, 5, 9, 13, 17, 22, 26, 30].includes(year % 33) ? 30 : 29;
+  };
+
+  const parsePersianDateTimeValue = (value) => {
+    const normalized = toEnglishDigits(value).replace(/-/g, "/").trim();
+    const match = normalized.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})(?:\s+(\d{1,2}):(\d{1,2}))?$/);
+    if (!match) {
+      return null;
+    }
+
+    return {
+      year: Number(match[1]),
+      month: Number(match[2]),
+      day: Number(match[3]),
+      hour: Number(match[4] || 0),
+      minute: Number(match[5] || 0)
+    };
+  };
+
+  const fillNumberSelect = (select, start, end, selected, formatter = (value) => value) => {
+    select.innerHTML = "";
+    for (let value = start; value <= end; value += 1) {
+      const option = document.createElement("option");
+      option.value = String(value);
+      option.textContent = formatter(value);
+      option.selected = value === selected;
+      select.appendChild(option);
+    }
+  };
+
+  persianDatePickers.forEach((picker) => {
+    const valueInput = picker.querySelector(".js-persian-datetime-value");
+    const yearSelect = picker.querySelector('[data-persian-part="year"]');
+    const monthSelect = picker.querySelector('[data-persian-part="month"]');
+    const daySelect = picker.querySelector('[data-persian-part="day"]');
+    const hourSelect = picker.querySelector('[data-persian-part="hour"]');
+    const minuteSelect = picker.querySelector('[data-persian-part="minute"]');
+    if (!valueInput || !yearSelect || !monthSelect || !daySelect || !hourSelect || !minuteSelect) {
+      return;
+    }
+
+    const parsed = parsePersianDateTimeValue(valueInput.value) || {
+      year: Number(picker.dataset.startYear || 1400),
+      month: 1,
+      day: 1,
+      hour: 0,
+      minute: 0
+    };
+    const startYear = Number(picker.dataset.startYear || parsed.year - 5);
+    const endYear = Number(picker.dataset.endYear || parsed.year + 5);
+
+    const syncValue = () => {
+      valueInput.value = `${yearSelect.value}/${pad2(monthSelect.value)}/${pad2(daySelect.value)} ${pad2(hourSelect.value)}:${pad2(minuteSelect.value)}`;
+      valueInput.dispatchEvent(new Event("input", { bubbles: true }));
+      valueInput.dispatchEvent(new Event("change", { bubbles: true }));
+    };
+
+    const fillDays = () => {
+      const year = Number(yearSelect.value);
+      const month = Number(monthSelect.value);
+      const selectedDay = Math.min(Number(daySelect.value || parsed.day), getPersianMonthDays(year, month));
+      fillNumberSelect(daySelect, 1, getPersianMonthDays(year, month), selectedDay, (value) => toPersianDigits(pad2(value)));
+    };
+
+    fillNumberSelect(yearSelect, startYear, endYear, parsed.year, (value) => toPersianDigits(value));
+    fillNumberSelect(monthSelect, 1, 12, parsed.month, (value) => toPersianDigits(pad2(value)));
+    fillDays();
+    fillNumberSelect(hourSelect, 0, 23, parsed.hour, (value) => toPersianDigits(pad2(value)));
+    fillNumberSelect(minuteSelect, 0, 59, parsed.minute, (value) => toPersianDigits(pad2(value)));
+    syncValue();
+
+    yearSelect.addEventListener("change", () => {
+      fillDays();
+      syncValue();
+    });
+    monthSelect.addEventListener("change", () => {
+      fillDays();
+      syncValue();
+    });
+    [daySelect, hourSelect, minuteSelect].forEach((select) => {
+      select.addEventListener("change", syncValue);
+    });
+    valueInput.form?.addEventListener("submit", syncValue);
+  });
+
+  const imageExtensionPattern = /\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i;
+  const mediaPicker = document.querySelector("[data-media-picker]");
+  const mediaPickerButtons = document.querySelectorAll(".js-media-picker");
+  const mediaInputs = document.querySelectorAll(".js-media-input");
+  const copyMediaButtons = document.querySelectorAll(".js-copy-media-url");
+  let activeMediaInput = null;
+  let mediaSearchTimer = null;
+
+  const getAntiForgeryToken = (form) =>
+    form?.querySelector('input[name="__RequestVerificationToken"]')?.value || "";
+
+  const isImageUrl = (url) => imageExtensionPattern.test(url || "");
+
+  const updateMediaPreview = (input) => {
+    const preview = input.closest(".media-field")?.querySelector(".js-media-preview");
+    if (!preview) {
+      return;
+    }
+
+    const url = input.value.trim();
+    preview.innerHTML = "";
+    if (url && isImageUrl(url)) {
+      const image = document.createElement("img");
+      image.src = url;
+      image.alt = "پیش‌نمایش فایل انتخاب‌شده";
+      image.loading = "lazy";
+      preview.appendChild(image);
+      return;
+    }
+
+    const empty = document.createElement("span");
+    empty.textContent = url ? "این فایل پیش‌نمایش تصویری ندارد." : "تصویری انتخاب نشده است.";
+    preview.appendChild(empty);
+  };
+
+  mediaInputs.forEach((input) => {
+    updateMediaPreview(input);
+    input.addEventListener("input", () => updateMediaPreview(input));
+    input.addEventListener("change", () => updateMediaPreview(input));
+  });
+
+  copyMediaButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const url = button.dataset.mediaUrl || "";
+      if (!url) {
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(url);
+        button.title = "کپی شد";
+        window.setTimeout(() => {
+          button.title = "کپی مسیر";
+        }, 1600);
+      } catch {
+        window.prompt("مسیر فایل:", url);
+      }
+    });
+  });
+
+  const mediaDetail = document.querySelector("[data-media-detail]");
+  if (mediaDetail) {
+    const preview = mediaDetail.querySelector("[data-media-detail-preview]");
+    const title = mediaDetail.querySelector("[data-media-detail-name]");
+    const url = mediaDetail.querySelector("[data-media-detail-url]");
+    const extension = mediaDetail.querySelector("[data-media-detail-extension]");
+    const contentType = mediaDetail.querySelector("[data-media-detail-content-type]");
+    const size = mediaDetail.querySelector("[data-media-detail-size]");
+    const date = mediaDetail.querySelector("[data-media-detail-date]");
+    const used = mediaDetail.querySelector("[data-media-detail-used]");
+    const usage = mediaDetail.querySelector("[data-media-detail-usage]");
+    const copyButton = mediaDetail.querySelector("[data-media-detail-copy]");
+    const inputs = {
+      url: mediaDetail.querySelector('[data-media-detail-input="url"]'),
+      alt: mediaDetail.querySelector('[data-media-detail-input="alt"]'),
+      title: mediaDetail.querySelector('[data-media-detail-input="title"]'),
+      description: mediaDetail.querySelector('[data-media-detail-input="description"]'),
+      seoDescription: mediaDetail.querySelector('[data-media-detail-input="seoDescription"]')
+    };
+
+    const closeDetail = () => {
+      mediaDetail.hidden = true;
+      mediaDetail.setAttribute("aria-hidden", "true");
+    };
+
+    const openDetail = (card) => {
+      const data = card.dataset;
+      title.textContent = data.name || "";
+      url.textContent = data.url || "";
+      extension.textContent = data.extension || "";
+      contentType.textContent = data.contentType || "";
+      size.textContent = data.size || "";
+      date.textContent = data.date || "";
+      used.textContent = data.used === "true" ? "استفاده‌شده" : "استفاده‌نشده";
+      usage.textContent = data.usage || "در مقاله، محصول یا صفحه‌ای پیدا نشد.";
+      copyButton.dataset.mediaUrl = data.url || "";
+      inputs.url.value = data.url || "";
+      inputs.alt.value = data.alt || "";
+      inputs.title.value = data.title || "";
+      inputs.description.value = data.description || "";
+      inputs.seoDescription.value = data.seoDescription || "";
+
+      preview.innerHTML = "";
+      if (data.isImage === "true") {
+        const image = document.createElement("img");
+        image.src = data.url || "";
+        image.alt = data.alt || data.name || "";
+        image.loading = "lazy";
+        preview.appendChild(image);
+      } else {
+        const fileTile = document.createElement("span");
+        fileTile.className = "media-file-tile media-file-tile--large";
+        fileTile.dataset.fileExtension = data.extension || "FILE";
+
+        const ext = document.createElement("span");
+        ext.textContent = data.extension || "FILE";
+
+        const label = document.createElement("small");
+        label.textContent = data.contentType || "فایل";
+
+        fileTile.append(ext, label);
+        preview.appendChild(fileTile);
+      }
+
+      mediaDetail.hidden = false;
+      mediaDetail.setAttribute("aria-hidden", "false");
+      inputs.alt.focus();
+    };
+
+    document.querySelectorAll("[data-media-card]").forEach((card) => {
+      card.querySelectorAll("[data-media-open]").forEach((button) => {
+        button.addEventListener("click", () => openDetail(card));
+      });
+    });
+
+    mediaDetail.querySelectorAll("[data-media-detail-close]").forEach((button) => {
+      button.addEventListener("click", closeDetail);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !mediaDetail.hidden) {
+        closeDetail();
+      }
+    });
+  }
+
+  if (mediaPicker && mediaPickerButtons.length) {
+    const grid = mediaPicker.querySelector("[data-media-picker-grid]");
+    const search = mediaPicker.querySelector("[data-media-picker-search]");
+    const status = mediaPicker.querySelector("[data-media-picker-status]");
+    const uploadInput = mediaPicker.querySelector("[data-media-picker-upload]");
+    const uploadButton = mediaPicker.querySelector("[data-media-picker-upload-button]");
+
+    const closePicker = () => {
+      mediaPicker.hidden = true;
+      mediaPicker.setAttribute("aria-hidden", "true");
+      activeMediaInput = null;
+    };
+
+    const setPickerStatus = (message) => {
+      status.textContent = message || "";
+    };
+
+    const normalizeMediaFile = (file) => ({
+      name: file.name || file.Name || "",
+      url: file.url || file.Url || "",
+      extension: file.extension || file.Extension || "",
+      size: file.size || file.Size || "",
+      lastModified: file.lastModified || file.LastModified || "",
+      isImage: Boolean(file.isImage ?? file.IsImage)
+    });
+
+    const renderMediaFiles = (files) => {
+      grid.innerHTML = "";
+      if (!files.length) {
+        const empty = document.createElement("div");
+        empty.className = "media-picker__empty";
+        empty.textContent = "فایلی پیدا نشد.";
+        grid.appendChild(empty);
+        return;
+      }
+
+      files.map(normalizeMediaFile).forEach((file) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "media-picker-card";
+        card.title = file.url;
+
+        const preview = document.createElement("span");
+        preview.className = "media-picker-card__preview";
+        if (file.isImage) {
+          const image = document.createElement("img");
+          image.src = file.url;
+          image.alt = file.name;
+          image.loading = "lazy";
+          preview.appendChild(image);
+        } else {
+          preview.textContent = file.extension || "FILE";
+        }
+
+        const name = document.createElement("strong");
+        name.textContent = file.name;
+
+        const meta = document.createElement("small");
+        meta.textContent = file.size;
+
+        card.append(preview, name, meta);
+        card.addEventListener("click", () => {
+          if (!activeMediaInput) {
+            return;
+          }
+
+          activeMediaInput.value = file.url;
+          activeMediaInput.dispatchEvent(new Event("input", { bubbles: true }));
+          activeMediaInput.dispatchEvent(new Event("change", { bubbles: true }));
+          closePicker();
+        });
+        grid.appendChild(card);
+      });
+    };
+
+    const loadMediaFiles = async () => {
+      const params = new URLSearchParams({
+        handler: "Library",
+        fileType: "images",
+        searchTerm: search.value.trim()
+      });
+      setPickerStatus("در حال دریافت فایل‌ها...");
+
+      try {
+        const response = await fetch(`/admin/media?${params.toString()}`, {
+          headers: { Accept: "application/json" }
+        });
+        const files = await response.json();
+        if (!response.ok) {
+          throw new Error(files.error || "لیست فایل‌ها دریافت نشد.");
+        }
+
+        renderMediaFiles(files);
+        setPickerStatus("");
+      } catch (error) {
+        renderMediaFiles([]);
+        setPickerStatus(error.message);
+      }
+    };
+
+    const openPicker = (input) => {
+      activeMediaInput = input;
+      mediaPicker.hidden = false;
+      mediaPicker.setAttribute("aria-hidden", "false");
+      search.value = "";
+      loadMediaFiles();
+      search.focus();
+    };
+
+    mediaPickerButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const targetSelector = button.dataset.mediaTarget || "";
+        if (!targetSelector) {
+          return;
+        }
+
+        const input = document.querySelector(targetSelector);
+        if (input) {
+          openPicker(input);
+        }
+      });
+    });
+
+    mediaPicker.querySelectorAll("[data-media-picker-close]").forEach((button) => {
+      button.addEventListener("click", closePicker);
+    });
+
+    search.addEventListener("input", () => {
+      window.clearTimeout(mediaSearchTimer);
+      mediaSearchTimer = window.setTimeout(loadMediaFiles, 250);
+    });
+
+    uploadButton.addEventListener("click", () => uploadInput.click());
+    uploadInput.addEventListener("change", async () => {
+      const file = uploadInput.files?.[0];
+      if (!file || !activeMediaInput) {
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+      setPickerStatus("در حال آپلود فایل...");
+
+      try {
+        const response = await fetch("/admin/media?handler=UploadJson", {
+          method: "POST",
+          headers: {
+            RequestVerificationToken: getAntiForgeryToken(activeMediaInput.form)
+          },
+          body: formData
+        });
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "آپلود انجام نشد.");
+        }
+
+        activeMediaInput.value = normalizeMediaFile(payload).url;
+        activeMediaInput.dispatchEvent(new Event("input", { bubbles: true }));
+        activeMediaInput.dispatchEvent(new Event("change", { bubbles: true }));
+        await loadMediaFiles();
+        setPickerStatus("فایل آپلود و انتخاب شد.");
+      } catch (error) {
+        setPickerStatus(error.message);
+      } finally {
+        uploadInput.value = "";
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !mediaPicker.hidden) {
+        closePicker();
+      }
+    });
+  }
+
   const editorTargets = document.querySelectorAll(".js-rich-editor");
   if (!editorTargets.length) {
     return;
@@ -192,9 +613,6 @@
     surface.focus();
     document.execCommand("insertHTML", false, html);
   };
-
-  const getAntiForgeryToken = (form) =>
-    form?.querySelector('input[name="__RequestVerificationToken"]')?.value || "";
 
   editorTargets.forEach((textarea) => {
     const wrapper = document.createElement("div");

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Comparison of Ollama ChatGPT and Azure OpenAI">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1520"/>
+      <stop offset="100%" stop-color="#202c38"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg3)"/>
+  <rect x="86" y="78" width="1428" height="744" rx="34" fill="#0a1118" stroke="#2f4657" stroke-width="2"/>
+  <rect x="126" y="120" width="430" height="680" rx="26" fill="#111d28" stroke="#45657e"/>
+  <rect x="585" y="120" width="430" height="680" rx="26" fill="#111d28" stroke="#45657e"/>
+  <rect x="1044" y="120" width="430" height="680" rx="26" fill="#111d28" stroke="#45657e"/>
+  <rect x="170" y="178" width="342" height="84" rx="22" fill="#153047"/>
+  <rect x="629" y="178" width="342" height="84" rx="22" fill="#17374e"/>
+  <rect x="1088" y="178" width="342" height="84" rx="22" fill="#12334a"/>
+  <g fill="#304f66">
+    <rect x="170" y="304" width="342" height="52" rx="14"/>
+    <rect x="170" y="382" width="342" height="52" rx="14"/>
+    <rect x="170" y="460" width="342" height="52" rx="14"/>
+    <rect x="170" y="538" width="342" height="52" rx="14"/>
+    <rect x="170" y="616" width="342" height="52" rx="14"/>
+    <rect x="629" y="304" width="342" height="52" rx="14"/>
+    <rect x="629" y="382" width="342" height="52" rx="14"/>
+    <rect x="629" y="460" width="342" height="52" rx="14"/>
+    <rect x="629" y="538" width="342" height="52" rx="14"/>
+    <rect x="629" y="616" width="342" height="52" rx="14"/>
+    <rect x="1088" y="304" width="342" height="52" rx="14"/>
+    <rect x="1088" y="382" width="342" height="52" rx="14"/>
+    <rect x="1088" y="460" width="342" height="52" rx="14"/>
+    <rect x="1088" y="538" width="342" height="52" rx="14"/>
+    <rect x="1088" y="616" width="342" height="52" rx="14"/>
+  </g>
+  <g fill="#5fe5be">
+    <rect x="202" y="318" width="136" height="24" rx="12"/>
+    <rect x="661" y="318" width="198" height="24" rx="12"/>
+    <rect x="1120" y="318" width="166" height="24" rx="12"/>
+    <rect x="202" y="396" width="120" height="24" rx="12"/>
+    <rect x="661" y="396" width="172" height="24" rx="12"/>
+    <rect x="1120" y="396" width="228" height="24" rx="12"/>
+    <rect x="202" y="474" width="110" height="24" rx="12"/>
+    <rect x="661" y="474" width="210" height="24" rx="12"/>
+    <rect x="1120" y="474" width="152" height="24" rx="12"/>
+    <rect x="202" y="552" width="162" height="24" rx="12"/>
+    <rect x="661" y="552" width="144" height="24" rx="12"/>
+    <rect x="1120" y="552" width="188" height="24" rx="12"/>
+    <rect x="202" y="630" width="94" height="24" rx="12"/>
+    <rect x="661" y="630" width="184" height="24" rx="12"/>
+    <rect x="1120" y="630" width="206" height="24" rx="12"/>
+  </g>
+  <circle cx="1342" cy="716" r="28" fill="#63d6ff"/>
+  <circle cx="883" cy="716" r="28" fill="#ffcf6a"/>
+  <circle cx="424" cy="716" r="28" fill="#63d6ff"/>
+</svg>

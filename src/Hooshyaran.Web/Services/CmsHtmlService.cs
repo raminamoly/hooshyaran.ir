@@ -14,6 +14,7 @@ public class CmsHtmlService : ICmsHtmlService
         foreach (var tag in new[]
         {
             "p", "br", "strong", "b", "em", "i", "u", "s",
+            "section", "article", "div", "span",
             "ul", "ol", "li", "a",
             "h2", "h3", "h4", "blockquote",
             "img", "figure", "figcaption",

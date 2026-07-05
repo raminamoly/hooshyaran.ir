@@ -19,6 +19,7 @@
         <table class="admin-table">
             <thead>
                 <tr>
+                    <th>تصویر</th>
                     <th>محصول</th>
                     <th>دسته</th>
                     <th>Slug</th>
@@ -31,7 +32,20 @@
             @foreach (var row in Model.Products)
             {
                 var product = row.Product;
+                var previewImage = !string.IsNullOrWhiteSpace(product.HeroImagePath) ? product.HeroImagePath : product.LogoPath;
                 <tr>
+                    <td>
+                        <span class="admin-thumb">
+                            @if (!string.IsNullOrWhiteSpace(previewImage))
+                            {
+                                <img src="@AssetOptimizer.Image(previewImage)" alt="@product.PersianTitle" loading="lazy" />
+                            }
+                            else
+                            {
+                                <span>بدون تصویر</span>
+                            }
+                        </span>
+                    </td>
                     <td>
                         <strong>@product.PersianTitle</strong>
                         <small>@product.ShortDescription</small>
@@ -49,10 +63,19 @@
                         }
                     </td>
                     <td class="admin-actions">
-                        <a href="@row.PublicUrl" target="_blank" rel="noopener">نمایش</a>
-                        <a href="/admin/products/edit/@product.Id">ویرایش</a>
+                        <a class="admin-action" href="@row.PublicUrl" target="_blank" rel="noopener" title="نمایش">
+                            <svg><use href="#admin-icon-eye"></use></svg>
+                            <span class="visually-hidden">نمایش</span>
+                        </a>
+                        <a class="admin-action" href="/admin/products/edit/@product.Id" title="ویرایش">
+                            <svg><use href="#admin-icon-edit"></use></svg>
+                            <span class="visually-hidden">ویرایش</span>
+                        </a>
                         <form method="post" asp-page-handler="Delete" asp-route-id="@product.Id">
-                            <button type="submit" onclick="return confirm('محصول حذف شود؟')">حذف</button>
+                            <button class="admin-action admin-action--danger" type="submit" title="حذف" onclick="return confirm('محصول حذف شود؟')">
+                                <svg><use href="#admin-icon-trash"></use></svg>
+                                <span class="visually-hidden">حذف</span>
+                            </button>
                         </form>
                     </td>
                 </tr>

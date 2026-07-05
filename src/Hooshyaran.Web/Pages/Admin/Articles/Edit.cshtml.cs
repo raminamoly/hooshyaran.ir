@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Hooshyaran.Web.Data;
 using Hooshyaran.Web.Models;
 using Hooshyaran.Web.Services;
+using Hooshyaran.Web.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,7 +34,7 @@ public class EditModel(
 
         if (id is null)
         {
-            Input.PublishedAt = DateTimeOffset.Now;
+            Input.PublishedAtPersian = PersianDateFormatter.ToPersianDateTimeInput(DateTimeOffset.UtcNow);
             Input.AdminUserId = CurrentUserId;
             Input.AuthorName = User.FindFirstValue("DisplayName") ?? "هوش‌یاران";
             return Page();
@@ -62,7 +63,7 @@ public class EditModel(
             ImagePath = article.ImagePath,
             AuthorName = article.AuthorName,
             AdminUserId = article.AdminUserId,
-            PublishedAt = article.PublishedAt,
+            PublishedAtPersian = PersianDateFormatter.ToPersianDateTimeInput(article.PublishedAt),
             IsPublished = article.IsPublished,
             SeoTitle = article.SeoTitle,
             SeoDescription = article.SeoDescription,
@@ -77,6 +78,11 @@ public class EditModel(
     {
         await LoadTagsAsync();
         await LoadAuthorsAsync();
+
+        if (!PersianDateFormatter.TryParsePersianDateTime(Input.PublishedAtPersian, out var publishedAt))
+        {
+            ModelState.AddModelError("Input.PublishedAtPersian", "زمان انتشار باید با فرمت ۱۴۰۳/۰۷/۱۵ ۱۴:۳۰ وارد شود.");
+        }
 
         if (!ModelState.IsValid)
         {
@@ -128,7 +134,7 @@ public class EditModel(
             article.AdminUserId = CurrentUserId;
             article.AuthorName = User.FindFirstValue("DisplayName") ?? Input.AuthorName;
         }
-        article.PublishedAt = Input.PublishedAt;
+        article.PublishedAt = publishedAt;
         article.IsPublished = Input.IsPublished;
         article.SeoTitle = Input.SeoTitle;
         article.SeoDescription = Input.SeoDescription;
@@ -219,8 +225,9 @@ public class EditModel(
         [Display(Name = "کاربر نویسنده")]
         public int? AdminUserId { get; set; }
 
+        [Required(ErrorMessage = "زمان انتشار الزامی است.")]
         [Display(Name = "زمان انتشار")]
-        public DateTimeOffset PublishedAt { get; set; }
+        public string PublishedAtPersian { get; set; } = string.Empty;
 
         public bool IsPublished { get; set; }
 

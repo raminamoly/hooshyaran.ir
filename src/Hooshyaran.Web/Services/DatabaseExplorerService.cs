@@ -1,29 +1,34 @@
+using System.Data.Common;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Hooshyaran.Web.ViewModels;
-using Microsoft.Data.Sqlite;
+using Microsoft.Data.SqlClient;
 
 namespace Hooshyaran.Web.Services;
 
 public class DatabaseExplorerService(IConfiguration configuration, IWebHostEnvironment environment) : IDatabaseExplorerService
 {
     private static readonly Regex UnsafeSqlPattern = new(
-        @"\b(drop|delete|update|insert|alter|create|replace|truncate|attach|detach|vacuum|reindex|pragma|grant|revoke)\b",
+        @"\b(drop|delete|update|insert|alter|create|replace|truncate|backup|restore|attach|detach|grant|revoke|merge|execute|exec)\b",
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-    private readonly string connectionString = configuration.GetConnectionString("HooshyaranDb") ?? "Data Source=App_Data/hooshyaran.db";
+    private readonly string connectionString = configuration.GetConnectionString("HooshyaranDb")
+        ?? throw new InvalidOperationException("ConnectionStrings:HooshyaranDb must be configured.");
 
-    public string DatabasePath => ResolveDatabasePath();
+    public bool CanRestoreDatabase =>
+        environment.IsDevelopment() || configuration.GetValue<bool>("Database:AllowAdminRestore");
+
+    public string DatabasePath => GetDatabaseDisplayName();
 
     public async Task<DatabaseOverview> GetOverviewAsync()
     {
         var tables = await GetTablesAsync();
-        var file = new FileInfo(DatabasePath);
+        var sizeInBytes = await GetDatabaseSizeInBytesAsync();
 
         return new DatabaseOverview(
-            Path.GetFileName(DatabasePath),
-            DatabasePath,
-            FormatBytes(file.Exists ? file.Length : 0),
+            GetDatabaseName(),
+            GetDatabaseDisplayName(),
+            FormatBytes(sizeInBytes),
             tables.Count,
             tables.Where(table => !table.IsSystemTable).Sum(table => table.RowCount));
     }
@@ -33,27 +38,24 @@ public class DatabaseExplorerService(IConfiguration configuration, IWebHostEnvir
         await using var connection = CreateConnection();
         await connection.OpenAsync();
 
-        var names = new List<string>();
-        await using (var command = connection.CreateCommand())
-        {
-            command.CommandText = """
-                SELECT name
-                FROM sqlite_master
-                WHERE type = 'table'
-                ORDER BY name;
-                """;
-
-            await using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                names.Add(reader.GetString(0));
-            }
-        }
+        await using var command = connection.CreateCommand();
+        command.CommandText = """
+            SELECT
+                QUOTENAME(s.name) + '.' + QUOTENAME(t.name) AS FullName,
+                COALESCE(SUM(p.rows), 0) AS RowCount
+            FROM sys.tables t
+            JOIN sys.schemas s ON s.schema_id = t.schema_id
+            LEFT JOIN sys.partitions p ON p.object_id = t.object_id AND p.index_id IN (0, 1)
+            GROUP BY s.name, t.name
+            ORDER BY s.name, t.name;
+            """;
 
         var tables = new List<DatabaseTableInfo>();
-        foreach (var name in names)
+        await using var reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
-            tables.Add(new DatabaseTableInfo(name, await CountRowsAsync(connection, name), IsSystemTable(name)));
+            var name = NormalizeBracketedName(reader.GetString(0));
+            tables.Add(new DatabaseTableInfo(name, reader.GetInt64(1), IsSystemTable(name)));
         }
 
         return tables;
@@ -68,22 +70,25 @@ public class DatabaseExplorerService(IConfiguration configuration, IWebHostEnvir
         await using var connection = CreateConnection();
         await connection.OpenAsync();
 
-        if (!await TableExistsAsync(connection, tableName))
+        var table = await ResolveTableAsync(connection, tableName);
+        if (table is null)
         {
             return new DatabaseGridResult([], [], 0, page, pageSize, searchTerm);
         }
 
-        var columns = await GetColumnsAsync(connection, tableName);
+        var columns = await GetColumnsAsync(connection, table.Value.Schema, table.Value.Name);
         var where = BuildSearchWhere(columns, searchTerm);
-        var totalRows = await CountRowsAsync(connection, tableName, where.Sql, where.Parameter);
+        var quotedTable = QuoteMultipartIdentifier(table.Value.Schema, table.Value.Name);
+        var totalRows = await CountRowsAsync(connection, quotedTable, where.Sql, where.Parameter);
         var rows = new List<IReadOnlyDictionary<string, string>>();
 
         await using var command = connection.CreateCommand();
         command.CommandText = $"""
             SELECT *
-            FROM {QuoteIdentifier(tableName)}
+            FROM {quotedTable}
             {where.Sql}
-            LIMIT @limit OFFSET @offset;
+            ORDER BY (SELECT 1)
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY;
             """;
         command.Parameters.AddWithValue("@limit", pageSize);
         command.Parameters.AddWithValue("@offset", (page - 1) * pageSize);
@@ -119,7 +124,7 @@ public class DatabaseExplorerService(IConfiguration configuration, IWebHostEnvir
             await connection.OpenAsync();
             await using var command = connection.CreateCommand();
             command.CommandText = query;
-            command.CommandTimeout = 20;
+            command.CommandTimeout = 30;
 
             await using var reader = await command.ExecuteReaderAsync();
             columns.AddRange(Enumerable.Range(0, reader.FieldCount).Select(reader.GetName));
@@ -141,14 +146,22 @@ public class DatabaseExplorerService(IConfiguration configuration, IWebHostEnvir
 
     public async Task<string> CreateBackupAsync()
     {
-        var backupDirectory = Path.Combine(environment.ContentRootPath, "App_Data", "backups");
+        var backupDirectory = await GetServerBackupDirectoryAsync();
         Directory.CreateDirectory(backupDirectory);
 
-        var backupPath = Path.Combine(backupDirectory, $"hooshyaran-backup-{DateTime.UtcNow:yyyyMMdd-HHmmss}.db");
-        await using var connection = CreateConnection();
+        var backupPath = Path.Combine(backupDirectory, $"hooshyaran-{GetDatabaseName()}-{DateTime.UtcNow:yyyyMMdd-HHmmss}.bak");
+        var databaseName = GetDatabaseName();
+
+        await using var connection = CreateMasterConnection();
         await connection.OpenAsync();
         await using var command = connection.CreateCommand();
-        command.CommandText = $"VACUUM INTO {QuoteSqlLiteral(backupPath)};";
+        command.CommandTimeout = 180;
+        command.CommandText = $"""
+            BACKUP DATABASE {QuoteIdentifier(databaseName)}
+            TO DISK = @backupPath
+            WITH INIT, COPY_ONLY, CHECKSUM, STATS = 10;
+            """;
+        command.Parameters.AddWithValue("@backupPath", backupPath);
         await command.ExecuteNonQueryAsync();
 
         return backupPath;
@@ -156,32 +169,30 @@ public class DatabaseExplorerService(IConfiguration configuration, IWebHostEnvir
 
     public async Task<DatabaseQueryResult> RestoreAsync(IFormFile backupFile)
     {
-        var extension = Path.GetExtension(backupFile.FileName);
-        var isSupportedFile = extension.Equals(".db", StringComparison.OrdinalIgnoreCase) ||
-            extension.Equals(".sqlite", StringComparison.OrdinalIgnoreCase) ||
-            extension.Equals(".sqlite3", StringComparison.OrdinalIgnoreCase);
-
-        if (backupFile.Length == 0 || !isSupportedFile)
+        if (!CanRestoreDatabase)
         {
-            return new DatabaseQueryResult([], [], 0, 0, "فایل ریستور باید یک فایل SQLite با پسوند db، sqlite یا sqlite3 باشد.");
+            return new DatabaseQueryResult([], [], 0, 0, "ریستور دیتابیس در محیط production غیرفعال است.");
         }
 
-        var tempPath = Path.Combine(Path.GetTempPath(), $"hooshyaran-restore-{Guid.NewGuid():N}.db");
-        await using (var stream = File.Create(tempPath))
+        if (backupFile.Length == 0 ||
+            !Path.GetExtension(backupFile.FileName).Equals(".bak", StringComparison.OrdinalIgnoreCase))
+        {
+            return new DatabaseQueryResult([], [], 0, 0, "فایل ریستور باید یک فایل bak معتبر SQL Server باشد.");
+        }
+
+        var restoreDirectory = await GetServerBackupDirectoryAsync();
+        Directory.CreateDirectory(restoreDirectory);
+
+        var restorePath = Path.Combine(restoreDirectory, $"restore-{Guid.NewGuid():N}.bak");
+        await using (var stream = File.Create(restorePath))
         {
             await backupFile.CopyToAsync(stream);
         }
 
         try
         {
-            await ValidateSqliteFileAsync(tempPath);
-
-            var currentPath = DatabasePath;
             var backupBeforeRestore = await CreateBackupAsync();
-
-            DeleteSqliteSidecarFiles(currentPath);
-            File.Copy(tempPath, currentPath, overwrite: true);
-            DeleteSqliteSidecarFiles(currentPath);
+            await RestoreDatabaseAsync(restorePath);
 
             return new DatabaseQueryResult([], [], 0, 0, $"ریستور انجام شد. بکاپ قبل از ریستور: {backupBeforeRestore}");
         }
@@ -191,68 +202,185 @@ public class DatabaseExplorerService(IConfiguration configuration, IWebHostEnvir
         }
         finally
         {
-            if (File.Exists(tempPath))
+            if (File.Exists(restorePath))
             {
-                File.Delete(tempPath);
+                File.Delete(restorePath);
             }
         }
     }
 
-    private SqliteConnection CreateConnection()
+    private async Task RestoreDatabaseAsync(string backupPath)
     {
-        var builder = new SqliteConnectionStringBuilder(connectionString)
+        var databaseName = GetDatabaseName();
+        SqlConnection.ClearAllPools();
+
+        await using var connection = CreateMasterConnection();
+        await connection.OpenAsync();
+
+        await ExecuteMasterCommandAsync(connection, $"""
+            ALTER DATABASE {QuoteIdentifier(databaseName)}
+            SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+            """);
+
+        try
         {
-            DataSource = DatabasePath
-        };
-
-        return new SqliteConnection(builder.ToString());
+            await using var restoreCommand = connection.CreateCommand();
+            restoreCommand.CommandTimeout = 300;
+            restoreCommand.CommandText = $"""
+                RESTORE DATABASE {QuoteIdentifier(databaseName)}
+                FROM DISK = @backupPath
+                WITH REPLACE, CHECKSUM, STATS = 10;
+                """;
+            restoreCommand.Parameters.AddWithValue("@backupPath", backupPath);
+            await restoreCommand.ExecuteNonQueryAsync();
+        }
+        finally
+        {
+            await ExecuteMasterCommandAsync(connection, $"""
+                ALTER DATABASE {QuoteIdentifier(databaseName)}
+                SET MULTI_USER;
+                """);
+        }
     }
 
-    private string ResolveDatabasePath()
+    private async Task<string> GetServerBackupDirectoryAsync()
     {
-        var builder = new SqliteConnectionStringBuilder(connectionString);
-        var dataSource = builder.DataSource;
+        try
+        {
+            await using var connection = CreateMasterConnection();
+            await connection.OpenAsync();
+            await using var command = connection.CreateCommand();
+            command.CommandText = "SELECT CAST(SERVERPROPERTY('InstanceDefaultBackupPath') AS nvarchar(4000));";
+            var value = Convert.ToString(await command.ExecuteScalarAsync());
 
-        return Path.GetFullPath(Path.IsPathRooted(dataSource)
-            ? dataSource
-            : Path.Combine(environment.ContentRootPath, dataSource));
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+        }
+        catch
+        {
+            // The fallback keeps the admin panel usable on older SQL Server versions.
+        }
+
+        return Path.Combine(environment.ContentRootPath, "App_Data", "backups");
     }
 
-    private static async Task<bool> TableExistsAsync(SqliteConnection connection, string tableName)
+    private static async Task ExecuteMasterCommandAsync(SqlConnection connection, string commandText)
     {
         await using var command = connection.CreateCommand();
-        command.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = @name;";
-        command.Parameters.AddWithValue("@name", tableName);
-
-        return Convert.ToInt64(await command.ExecuteScalarAsync()) > 0;
+        command.CommandTimeout = 120;
+        command.CommandText = commandText;
+        await command.ExecuteNonQueryAsync();
     }
 
-    private static async Task<IReadOnlyList<DatabaseColumnInfo>> GetColumnsAsync(SqliteConnection connection, string tableName)
+    private SqlConnection CreateConnection() => new(connectionString);
+
+    private SqlConnection CreateMasterConnection()
+    {
+        var builder = new SqlConnectionStringBuilder(connectionString)
+        {
+            InitialCatalog = "master",
+            MultipleActiveResultSets = false
+        };
+
+        return new SqlConnection(builder.ToString());
+    }
+
+    private string GetDatabaseName()
+    {
+        var builder = new SqlConnectionStringBuilder(connectionString);
+
+        return string.IsNullOrWhiteSpace(builder.InitialCatalog) ? "HooshyaranWebSite" : builder.InitialCatalog;
+    }
+
+    private string GetDatabaseDisplayName()
+    {
+        var builder = new SqlConnectionStringBuilder(connectionString);
+
+        return $"{builder.DataSource} / {GetDatabaseName()}";
+    }
+
+    private async Task<long> GetDatabaseSizeInBytesAsync()
+    {
+        await using var connection = CreateConnection();
+        await connection.OpenAsync();
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT COALESCE(SUM(size), 0) * 8 * 1024 FROM sys.database_files;";
+
+        return Convert.ToInt64(await command.ExecuteScalarAsync());
+    }
+
+    private static async Task<(string Schema, string Name)?> ResolveTableAsync(SqlConnection connection, string tableName)
+    {
+        var (schema, name) = SplitTableName(tableName);
+        await using var command = connection.CreateCommand();
+        command.CommandText = """
+            SELECT s.name, t.name
+            FROM sys.tables t
+            JOIN sys.schemas s ON s.schema_id = t.schema_id
+            WHERE s.name = @schema AND t.name = @name;
+            """;
+        command.Parameters.AddWithValue("@schema", schema);
+        command.Parameters.AddWithValue("@name", name);
+
+        await using var reader = await command.ExecuteReaderAsync();
+        if (!await reader.ReadAsync())
+        {
+            return null;
+        }
+
+        return (reader.GetString(0), reader.GetString(1));
+    }
+
+    private static async Task<IReadOnlyList<DatabaseColumnInfo>> GetColumnsAsync(SqlConnection connection, string schema, string tableName)
     {
         var columns = new List<DatabaseColumnInfo>();
         await using var command = connection.CreateCommand();
-        command.CommandText = $"PRAGMA table_info({QuoteIdentifier(tableName)});";
+        command.CommandText = """
+            SELECT
+                c.name,
+                CASE
+                    WHEN ty.name IN ('varchar', 'char', 'nvarchar', 'nchar')
+                        THEN ty.name + '(' + CASE WHEN c.max_length = -1 THEN 'max' ELSE CONVERT(varchar(12), CASE WHEN ty.name LIKE 'n%' THEN c.max_length / 2 ELSE c.max_length END) END + ')'
+                    WHEN ty.name IN ('decimal', 'numeric')
+                        THEN ty.name + '(' + CONVERT(varchar(12), c.precision) + ',' + CONVERT(varchar(12), c.scale) + ')'
+                    ELSE ty.name
+                END AS TypeName,
+                CASE WHEN pk.column_id IS NULL THEN CONVERT(bit, 0) ELSE CONVERT(bit, 1) END AS IsPrimaryKey
+            FROM sys.columns c
+            JOIN sys.tables t ON t.object_id = c.object_id
+            JOIN sys.schemas s ON s.schema_id = t.schema_id
+            JOIN sys.types ty ON ty.user_type_id = c.user_type_id
+            LEFT JOIN (
+                SELECT ic.object_id, ic.column_id
+                FROM sys.index_columns ic
+                JOIN sys.indexes i ON i.object_id = ic.object_id AND i.index_id = ic.index_id
+                WHERE i.is_primary_key = 1
+            ) pk ON pk.object_id = c.object_id AND pk.column_id = c.column_id
+            WHERE s.name = @schema AND t.name = @table
+            ORDER BY c.column_id;
+            """;
+        command.Parameters.AddWithValue("@schema", schema);
+        command.Parameters.AddWithValue("@table", tableName);
 
         await using var reader = await command.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
-            columns.Add(new DatabaseColumnInfo(
-                reader.GetString(1),
-                reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
-                reader.GetInt32(5) > 0));
+            columns.Add(new DatabaseColumnInfo(reader.GetString(0), reader.GetString(1), reader.GetBoolean(2)));
         }
 
         return columns;
     }
 
     private static async Task<long> CountRowsAsync(
-        SqliteConnection connection,
-        string tableName,
+        SqlConnection connection,
+        string quotedTableName,
         string whereSql = "",
         string? searchParameter = null)
     {
         await using var command = connection.CreateCommand();
-        command.CommandText = $"SELECT COUNT(*) FROM {QuoteIdentifier(tableName)} {whereSql};";
+        command.CommandText = $"SELECT COUNT_BIG(*) FROM {quotedTableName} {whereSql};";
         if (searchParameter is not null)
         {
             command.Parameters.AddWithValue("@search", searchParameter);
@@ -269,13 +397,13 @@ public class DatabaseExplorerService(IConfiguration configuration, IWebHostEnvir
         }
 
         var conditions = columns
-            .Select(column => $"CAST({QuoteIdentifier(column.Name)} AS TEXT) LIKE @search")
+            .Select(column => $"CAST({QuoteIdentifier(column.Name)} AS nvarchar(max)) LIKE @search")
             .ToList();
 
         return ($"WHERE {string.Join(" OR ", conditions)}", $"%{searchTerm}%");
     }
 
-    private static IReadOnlyDictionary<string, string> ReadRow(SqliteDataReader reader)
+    private static IReadOnlyDictionary<string, string> ReadRow(DbDataReader reader)
     {
         var row = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         for (var index = 0; index < reader.FieldCount; index++)
@@ -297,30 +425,23 @@ public class DatabaseExplorerService(IConfiguration configuration, IWebHostEnvir
             !UnsafeSqlPattern.IsMatch(normalized);
     }
 
-    private static async Task ValidateSqliteFileAsync(string path)
+    private static (string Schema, string Name) SplitTableName(string tableName)
     {
-        await using var connection = new SqliteConnection($"Data Source={path};Mode=ReadOnly");
-        await connection.OpenAsync();
-        await using var command = connection.CreateCommand();
-        command.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table';";
-        _ = await command.ExecuteScalarAsync();
+        var cleaned = tableName
+            .Replace("[", string.Empty, StringComparison.Ordinal)
+            .Replace("]", string.Empty, StringComparison.Ordinal)
+            .Trim();
+        var parts = cleaned.Split('.', 2, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        return parts.Length == 2 ? (parts[0], parts[1]) : ("dbo", cleaned);
     }
 
-    private static void DeleteSqliteSidecarFiles(string databasePath)
-    {
-        foreach (var suffix in new[] { "-wal", "-shm" })
-        {
-            var path = databasePath + suffix;
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
-    }
+    private static string NormalizeBracketedName(string name) =>
+        name.Replace("[", string.Empty, StringComparison.Ordinal).Replace("]", string.Empty, StringComparison.Ordinal);
 
     private static bool IsSystemTable(string name) =>
-        name.StartsWith("sqlite_", StringComparison.OrdinalIgnoreCase) ||
-        name.StartsWith("__EF", StringComparison.OrdinalIgnoreCase);
+        name.Contains("__EFMigrationsHistory", StringComparison.OrdinalIgnoreCase) ||
+        name.StartsWith("sys.", StringComparison.OrdinalIgnoreCase);
 
     private static int NormalizePageSize(int pageSize) => pageSize switch
     {
@@ -329,9 +450,9 @@ public class DatabaseExplorerService(IConfiguration configuration, IWebHostEnvir
         _ => 25
     };
 
-    private static string QuoteIdentifier(string value) => "\"" + value.Replace("\"", "\"\"") + "\"";
+    private static string QuoteMultipartIdentifier(string schema, string name) => $"{QuoteIdentifier(schema)}.{QuoteIdentifier(name)}";
 
-    private static string QuoteSqlLiteral(string value) => "'" + value.Replace("'", "''") + "'";
+    private static string QuoteIdentifier(string value) => "[" + value.Replace("]", "]]", StringComparison.Ordinal) + "]";
 
     private static string FormatBytes(long bytes)
     {

@@ -10,9 +10,21 @@ public static class DatabaseInitializer
 
         using var scope = services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<HooshyaranDbContext>();
+        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        var autoMigrate = environment.IsDevelopment() || configuration.GetValue<bool>("Database:AutoMigrate");
+        var seedOnStartup = environment.IsDevelopment() || configuration.GetValue<bool>("Database:SeedOnStartup");
 
-        await dbContext.Database.MigrateAsync();
-        await AdminSeedData.SeedAsync(scope.ServiceProvider, dbContext);
-        await CmsSeedData.SeedAsync(dbContext);
+        if (autoMigrate)
+        {
+            await dbContext.Database.MigrateAsync();
+        }
+
+        if (seedOnStartup)
+        {
+            await MediaSeedData.ImportExistingMediaAsync(dbContext, environment);
+            await AdminSeedData.SeedAsync(scope.ServiceProvider, dbContext);
+            await ProductSeedData.SeedAsync(dbContext);
+            await ArticleSeedData.SeedAsync(dbContext);
+        }
     }
 }

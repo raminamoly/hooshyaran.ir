@@ -1,10 +1,43 @@
 @using Microsoft.EntityFrameworkCore
+@using System.Text.Json
 @inject Hooshyaran.Web.Data.HooshyaranDbContext LayoutDbContext
 @{
     var pageTitle = ViewData["Title"] as string ?? "هوش‌یاران";
     var description = ViewData["Description"] as string ?? "هوش‌یاران راهکارهای AI خصوصی، کنترل‌شده و قابل اتصال به داده‌های داخلی سازمان را طراحی و پیاده‌سازی می‌کند.";
     var keywords = ViewData["Keywords"] as string ?? "هوش مصنوعی سازمانی, راهکار AI برای شرکت‌ها, اتوماسیون هوشمند سازمانی";
     var canonicalPath = ViewData["CanonicalPath"] as string ?? Context.Request.Path.Value ?? "/";
+    var siteSettings = await LayoutDbContext.SiteSettings.AsNoTracking().OrderBy(item => item.Id).FirstOrDefaultAsync();
+    var siteBaseUrl = siteSettings?.WebsiteUrl?.Trim().TrimEnd('/');
+    if (string.IsNullOrWhiteSpace(siteBaseUrl))
+    {
+        siteBaseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}".TrimEnd('/');
+    }
+
+    var canonicalUrl = canonicalPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+        canonicalPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+            ? canonicalPath
+            : $"{siteBaseUrl}/{canonicalPath.TrimStart('/')}";
+    var socialImagePath = ViewData["SocialImage"] as string ?? "/assets/content/home-enterprise-ai-hero.jpg";
+    var socialImageUrl = socialImagePath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+        socialImagePath.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+            ? socialImagePath
+            : $"{siteBaseUrl}/{socialImagePath.TrimStart('/')}";
+    var organizationJson = JsonSerializer.Serialize(new Dictionary<string, object?>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "Organization",
+        ["name"] = "هوش‌یاران",
+        ["url"] = siteBaseUrl,
+        ["logo"] = $"{siteBaseUrl}/assets/brand/hooshyaran-logo-small.png"
+    });
+    var websiteJson = JsonSerializer.Serialize(new Dictionary<string, object?>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "WebSite",
+        ["name"] = "هوش‌یاران",
+        ["url"] = siteBaseUrl,
+        ["inLanguage"] = "fa-IR"
+    });
     var footerProducts = await LayoutDbContext.Products
         .Where(product => product.IsActive)
         .OrderBy(product => product.SortOrder)
@@ -19,17 +52,27 @@
     <title>@pageTitle - هوش‌یاران</title>
     <meta name="description" content="@description" />
     <meta name="keywords" content="@keywords" />
-    <link rel="canonical" href="@canonicalPath" />
+    <link rel="canonical" href="@canonicalUrl" />
     <meta property="og:title" content="@pageTitle - هوش‌یاران" />
     <meta property="og:description" content="@description" />
+    <meta property="og:url" content="@canonicalUrl" />
+    <meta property="og:image" content="@socialImageUrl" />
+    <meta property="og:site_name" content="هوش‌یاران" />
     <meta property="og:type" content="website" />
-    <link rel="icon" type="image/svg+xml" href="~/assets/brand/favicon.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@pageTitle - هوش‌یاران" />
+    <meta name="twitter:description" content="@description" />
+    <meta name="twitter:image" content="@socialImageUrl" />
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" asp-append-version="true" />
     <link rel="preload" href="~/assets/fonts/iransansx-fa-num/IRANSansXFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="~/assets/fonts/iransansx-fa-num/IRANSansXFaNum-DemiBold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="~/assets/fonts/iransansx-fa-num/IRANSansXFaNum-Bold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="~/css/fonts.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Hooshyaran.Web.styles.css" asp-append-version="true" />
+    <script type="application/ld+json">@Html.Raw(organizationJson)</script>
+    <script type="application/ld+json">@Html.Raw(websiteJson)</script>
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <svg class="icon-sprite" aria-hidden="true" focusable="false">

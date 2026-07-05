@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Enterprise AI security control stack">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#111f35"/><stop offset="1" stop-color="#225e79"/></linearGradient></defs>
+  <rect width="1200" height="675" rx="42" fill="url(#bg)"/>
+  <g transform="translate(250 118)">
+    <rect width="700" height="90" rx="24" fill="#fff" opacity=".94"/><rect y="120" width="700" height="90" rx="24" fill="#fff" opacity=".9"/><rect y="240" width="700" height="90" rx="24" fill="#fff" opacity=".86"/><rect y="360" width="700" height="90" rx="24" fill="#fff" opacity=".82"/>
+    <g font-family="Arial" font-size="27" font-weight="700" fill="#123352" text-anchor="middle"><text x="350" y="58">Identity & Access</text><text x="350" y="178">Data Controls</text><text x="350" y="298">Prompt & Output Guardrails</text><text x="350" y="418">Monitoring & Incident Response</text></g>
+  </g>
+  <path d="M600 72l120 54v112c0 98-49 166-120 204-71-38-120-106-120-204V126z" fill="#16c8dc" opacity=".17"/>
+  <path d="M552 306l36 36 76-92" fill="none" stroke="#f6a23a" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

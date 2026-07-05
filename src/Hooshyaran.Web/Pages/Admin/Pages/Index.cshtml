@@ -28,10 +28,19 @@
                     <td><code>@staticPage.Slug</code></td>
                     <td>@(staticPage.IsPublished ? "منتشر شده" : "پیش‌نویس")</td>
                     <td class="admin-actions">
-                        <a href="@row.PublicUrl" target="_blank" rel="noopener">نمایش</a>
-                        <a href="/admin/pages/edit/@staticPage.Id">ویرایش</a>
+                        <a class="admin-action" href="@row.PublicUrl" target="_blank" rel="noopener" title="نمایش">
+                            <svg><use href="#admin-icon-eye"></use></svg>
+                            <span class="visually-hidden">نمایش</span>
+                        </a>
+                        <a class="admin-action" href="/admin/pages/edit/@staticPage.Id" title="ویرایش">
+                            <svg><use href="#admin-icon-edit"></use></svg>
+                            <span class="visually-hidden">ویرایش</span>
+                        </a>
                         <form method="post" asp-page-handler="Delete" asp-route-id="@staticPage.Id">
-                            <button type="submit" onclick="return confirm('حذف شود؟')">حذف</button>
+                            <button class="admin-action admin-action--danger" type="submit" title="حذف" onclick="return confirm('حذف شود؟')">
+                                <svg><use href="#admin-icon-trash"></use></svg>
+                                <span class="visually-hidden">حذف</span>
+                            </button>
                         </form>
                     </td>
                 </tr>

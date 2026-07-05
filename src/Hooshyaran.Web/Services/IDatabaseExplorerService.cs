@@ -4,6 +4,8 @@ namespace Hooshyaran.Web.Services;
 
 public interface IDatabaseExplorerService
 {
+    bool CanRestoreDatabase { get; }
+
     string DatabasePath { get; }
 
     Task<DatabaseOverview> GetOverviewAsync();

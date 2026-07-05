@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="RAG versus fine tuning decision map">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#09233a"/><stop offset="1" stop-color="#264d8f"/></linearGradient></defs>
+  <rect width="1200" height="675" rx="42" fill="url(#bg)"/>
+  <g fill="#fff" opacity=".95"><rect x="120" y="150" width="360" height="360" rx="34"/><rect x="720" y="150" width="360" height="360" rx="34"/></g>
+  <text x="300" y="230" fill="#123352" font-family="Arial" font-size="38" font-weight="700" text-anchor="middle">RAG</text>
+  <text x="900" y="230" fill="#123352" font-family="Arial" font-size="38" font-weight="700" text-anchor="middle">Fine-Tuning</text>
+  <g stroke="#123352" stroke-opacity=".18" stroke-width="14" stroke-linecap="round"><path d="M190 300h220M190 360h180M190 420h230"/><path d="M790 300h220M790 360h180M790 420h230"/></g>
+  <path d="M500 330h200" stroke="#16c8dc" stroke-width="16" stroke-linecap="round"/><path d="M660 290l44 40-44 40" fill="none" stroke="#16c8dc" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="300" cy="548" r="30" fill="#16c8dc"/><circle cx="900" cy="548" r="30" fill="#f6a23a"/>
+</svg>

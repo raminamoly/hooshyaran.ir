@@ -38,9 +38,15 @@
                         <span class="admin-tag-count">صفحه: @tag.StaticPageTags.Count</span>
                     </td>
                     <td class="admin-actions">
-                        <a href="/admin/tags/edit/@tag.Id">ویرایش</a>
+                        <a class="admin-action" href="/admin/tags/edit/@tag.Id" title="ویرایش">
+                            <svg><use href="#admin-icon-edit"></use></svg>
+                            <span class="visually-hidden">ویرایش</span>
+                        </a>
                         <form method="post" asp-page-handler="Delete" asp-route-id="@tag.Id">
-                            <button type="submit" onclick="return confirm('حذف شود؟ ارتباط این تگ با محتواها هم حذف می‌شود.')">حذف</button>
+                            <button class="admin-action admin-action--danger" type="submit" title="حذف" onclick="return confirm('حذف شود؟ ارتباط این تگ با محتواها هم حذف می‌شود.')">
+                                <svg><use href="#admin-icon-trash"></use></svg>
+                                <span class="visually-hidden">حذف</span>
+                            </button>
                         </form>
                     </td>
                 </tr>

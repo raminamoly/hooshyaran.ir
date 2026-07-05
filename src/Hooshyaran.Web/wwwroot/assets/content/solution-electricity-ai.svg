@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="AI electricity distribution grid">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#06243d"/><stop offset="1" stop-color="#144f9c"/></linearGradient></defs>
+  <rect width="960" height="540" rx="34" fill="url(#bg)"/>
+  <g stroke="#7de7f2" stroke-opacity=".18"><path d="M120 130h720M120 270h720M120 410h720"/><path d="M220 85v370M420 85v370M620 85v370"/></g>
+  <g fill="none" stroke="#f8fdff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" opacity=".92">
+    <path d="M214 396l86-260 86 260M250 292h100M270 226h60"/>
+    <path d="M574 396l86-260 86 260M610 292h100M630 226h60"/>
+    <path d="M386 220h188"/>
+  </g>
+  <g transform="translate(398 92)">
+    <rect width="164" height="112" rx="22" fill="#fff" opacity=".95"/>
+    <path d="M90 20 56 72h38l-22 38 58-66H92z" fill="#f6a23a"/>
+  </g>
+  <path d="M168 430c170-92 258 56 410-30 92-52 142-116 260-72" fill="none" stroke="#16c8dc" stroke-width="10" stroke-linecap="round"/>
+</svg>

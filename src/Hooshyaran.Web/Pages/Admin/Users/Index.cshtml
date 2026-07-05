@@ -41,11 +41,17 @@
                         </span>
                     </td>
                     <td class="admin-actions">
-                        <a href="/admin/users/edit/@user.Id">ویرایش</a>
+                        <a class="admin-action" href="/admin/users/edit/@user.Id" title="ویرایش">
+                            <svg><use href="#admin-icon-edit"></use></svg>
+                            <span class="visually-hidden">ویرایش</span>
+                        </a>
                         @if (user.Id != Model.CurrentUserId)
                         {
                             <form method="post" asp-page-handler="Toggle" asp-route-id="@user.Id">
-                                <button type="submit">@(user.IsActive ? "غیرفعال" : "فعال")</button>
+                                <button class="admin-action" type="submit" title="@(user.IsActive ? "غیرفعال کردن" : "فعال کردن")">
+                                    <svg><use href="#admin-icon-power"></use></svg>
+                                    <span class="visually-hidden">@(user.IsActive ? "غیرفعال کردن" : "فعال کردن")</span>
+                                </button>
                             </form>
                         }
                     </td>

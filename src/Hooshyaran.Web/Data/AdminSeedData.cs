@@ -16,13 +16,17 @@ public static class AdminSeedData
         var configuration = services.GetRequiredService<IConfiguration>();
         var passwordHasher = services.GetRequiredService<IPasswordHasher>();
         var userName = configuration["Admin:DefaultUserName"] ?? "admin";
-        var password = configuration["Admin:DefaultPassword"] ?? "Admin@12345!";
+        var password = configuration["Admin:DefaultPassword"];
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            throw new InvalidOperationException("Admin:DefaultPassword must be configured when admin seed is enabled.");
+        }
 
         dbContext.AdminUsers.Add(new AdminUser
         {
             UserName = userName,
             DisplayName = "مدیر سایت",
-            Email = configuration["Admin:DefaultEmail"] ?? "admin@hooshyaran.ir",
+            Email = configuration["Admin:DefaultEmail"] ?? "ramin.amoly@gmail.com",
             PasswordHash = passwordHasher.HashPassword(password),
             Role = AdminUserRoles.SuperAdmin,
             IsActive = true,

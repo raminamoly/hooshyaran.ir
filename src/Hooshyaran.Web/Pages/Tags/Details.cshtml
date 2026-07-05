@@ -37,7 +37,7 @@
                         <article class="article-card">
                             @if (!string.IsNullOrWhiteSpace(article.ImagePath))
                             {
-                                <img class="article-card__image" src="@AssetOptimizer.Image(article.ImagePath)" alt="@article.Title" width="1100" height="619" loading="lazy" decoding="async" />
+                                <img class="article-card__image" src="@AssetOptimizer.Thumbnail(article.ImagePath)" alt="@article.Title" width="1100" height="619" loading="lazy" decoding="async" />
                             }
                             <p>@PersianDateFormatter.ToPersianDate(article.PublishedAt)</p>
                             <h3>@article.Title</h3>

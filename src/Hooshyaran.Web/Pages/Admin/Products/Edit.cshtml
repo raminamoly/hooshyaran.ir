@@ -86,12 +86,42 @@
             <legend>رسانه و انتشار</legend>
             <div class="admin-form-grid">
                 <div>
-                    <label asp-for="Input.HeroImagePath"></label>
-                    <input asp-for="Input.HeroImagePath" dir="ltr" />
+                    <div class="media-field">
+                        <label asp-for="Input.HeroImagePath"></label>
+                        <div class="media-field__control">
+                            <input asp-for="Input.HeroImagePath" class="js-media-input" dir="ltr" />
+                            <button class="button button--secondary js-media-picker" type="button" data-media-target="#Input_HeroImagePath" data-media-type="images">انتخاب از رسانه‌ها</button>
+                        </div>
+                        <div class="media-field__preview js-media-preview">
+                            @if (!string.IsNullOrWhiteSpace(Model.Input.HeroImagePath))
+                            {
+                                <img src="@AssetOptimizer.Image(Model.Input.HeroImagePath)" alt="پیش‌نمایش تصویر محصول" loading="lazy" />
+                            }
+                            else
+                            {
+                                <span>تصویری انتخاب نشده است.</span>
+                            }
+                        </div>
+                    </div>
                 </div>
                 <div>
-                    <label asp-for="Input.LogoPath"></label>
-                    <input asp-for="Input.LogoPath" dir="ltr" />
+                    <div class="media-field">
+                        <label asp-for="Input.LogoPath"></label>
+                        <div class="media-field__control">
+                            <input asp-for="Input.LogoPath" class="js-media-input" dir="ltr" />
+                            <button class="button button--secondary js-media-picker" type="button" data-media-target="#Input_LogoPath" data-media-type="images">انتخاب از رسانه‌ها</button>
+                        </div>
+                        <div class="media-field__preview js-media-preview">
+                            @if (!string.IsNullOrWhiteSpace(Model.Input.LogoPath))
+                            {
+                                <img src="@AssetOptimizer.Image(Model.Input.LogoPath)" alt="پیش‌نمایش لوگو" loading="lazy" />
+                            }
+                            else
+                            {
+                                <span>تصویری انتخاب نشده است.</span>
+                            }
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label asp-for="Input.CtaText"></label>
@@ -127,6 +157,7 @@
             <a class="button button--secondary" href="/admin/products">انصراف</a>
         </div>
     </form>
+    <partial name="_MediaPicker" />
 </section>
 
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }

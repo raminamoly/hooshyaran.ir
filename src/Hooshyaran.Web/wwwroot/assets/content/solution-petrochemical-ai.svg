@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="AI petrochemical operations">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#102534"/><stop offset="1" stop-color="#75551d"/></linearGradient></defs>
+  <rect width="960" height="540" rx="34" fill="url(#bg)"/>
+  <g stroke="#ffe1a3" stroke-opacity=".17"><path d="M80 110h800M80 220h800M80 330h800M80 440h800"/><path d="M180 70v400M360 70v400M540 70v400M720 70v400"/></g>
+  <g transform="translate(104 122)" fill="#fff" opacity=".93">
+    <rect x="0" y="140" width="720" height="74" rx="22"/>
+    <rect x="66" y="40" width="70" height="174" rx="16"/><rect x="210" y="0" width="84" height="214" rx="18"/><rect x="382" y="70" width="76" height="144" rx="18"/>
+    <path d="M136 88c50-58 98-58 144 0s100 58 150 0 96-58 146 0" fill="none" stroke="#16c8dc" stroke-width="12" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(590 96)">
+    <rect width="250" height="170" rx="24" fill="#f8fdff" opacity=".94"/>
+    <path d="M40 118c34-76 74-10 108-56s54-18 74-36" fill="none" stroke="#d97904" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="196" cy="54" r="20" fill="#16c8dc"/>
+  </g>
+</svg>

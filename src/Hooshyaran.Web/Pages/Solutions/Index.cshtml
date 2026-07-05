@@ -1,39 +1,33 @@
 @page "/solutions"
+@model Hooshyaran.Web.Pages.Solutions.IndexModel
+@inject Hooshyaran.Web.Services.ICmsHtmlService CmsHtml
 @{
-    ViewData["Title"] = "راهکارها";
-    ViewData["Description"] = "جایگاه اولیه راهکارهای هوش مصنوعی سازمانی هوش‌یاران.";
-    ViewData["CanonicalPath"] = "/solutions";
+    ViewData["Title"] = Model.Seo?.Title ?? Model.PageContent?.SeoTitle ?? Model.PageContent?.Title ?? "راهکارها";
+    ViewData["Description"] = Model.Seo?.Description ?? Model.PageContent?.SeoDescription ?? Model.PageContent?.Summary ?? "راهکارهای هوش مصنوعی سازمانی برای صنایع مختلف.";
+    ViewData["Keywords"] = Model.Seo?.Keywords ?? Model.PageContent?.SeoKeywords ?? "";
+    ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/solutions";
 }
 
 @await Html.PartialAsync("_PageHero", new PageHeroViewModel(
     "راهکارها",
-    "راهکارهای AI برای نیازهای سازمانی",
-    "مسیرهای پیشنهادی برای ورود کنترل‌شده هوش مصنوعی به فرایندهای واقعی سازمان، از داده و امنیت تا اتوماسیون و تجربه کاربری.",
+    Model.PageContent?.Title ?? "راهکارهای AI برای صنایع مختلف",
+    Model.PageContent?.Summary ?? "مسیرهای پیشنهادی برای ورود کنترل‌شده هوش مصنوعی به فرایندهای واقعی سازمان، از داده و امنیت تا اتوماسیون و تجربه مشتری.",
     "درخواست مشاوره",
     "/contact"))
 
 <section class="content-band">
     <div class="container">
-        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
-            "مسیرهای راهکار",
-            "از ایده AI تا بهره‌برداری قابل مدیریت",
-            "هر مسیر می‌تواند با یک پروژه کوچک شروع شود و بعد به تدریج در سطح سازمان توسعه پیدا کند."))
-        <div class="feature-grid">
-            <article class="feature-item">
-                <span class="card-icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
-                <h3>AI خصوصی و امن</h3>
-                <p>طراحی سناریوهای هوش مصنوعی با کنترل دسترسی، جداسازی داده‌های حساس و سیاست‌های حاکمیتی روشن.</p>
-            </article>
-            <article class="feature-item">
-                <span class="card-icon" aria-hidden="true"><svg><use href="#icon-flow"></use></svg></span>
-                <h3>اتوماسیون فرایندها</h3>
-                <p>اتصال مدل‌های زبانی به فرم‌ها، گردش‌کارها، سیستم‌های داخلی و خروجی‌های قابل پیگیری.</p>
-            </article>
-            <article class="feature-item">
-                <span class="card-icon" aria-hidden="true"><svg><use href="#icon-chart"></use></svg></span>
-                <h3>پایش و بهبود خروجی</h3>
-                <p>تعریف شاخص‌های کیفیت، هزینه، ریسک و بهره‌وری برای اینکه AI از حالت آزمایشی خارج شود.</p>
-            </article>
-        </div>
+        <article class="solutions-content cms-content">
+            @Html.Raw(CmsHtml.ToSafeHtml(Model.PageContent?.Body ?? """
+                <h2>راهکارهای صنعتی هوش مصنوعی سازمانی</h2>
+                <p>محتوای این صفحه از پنل مدیریت و دیتابیس قابل تکمیل است.</p>
+                """))
+        </article>
+        @if (Model.PageContent?.StaticPageTags.Any() == true)
+        {
+            <div class="solutions-tags">
+                @await Html.PartialAsync("_TagChips", Model.PageContent.StaticPageTags.Select(item => item.Tag!).Where(tag => tag is not null))
+            </div>
+        }
     </div>
 </section>

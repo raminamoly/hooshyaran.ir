@@ -35,6 +35,8 @@ public class HooshyaranDbContext(DbContextOptions<HooshyaranDbContext> options) 
 
     public DbSet<SiteVisitLog> SiteVisitLogs => Set<SiteVisitLog>();
 
+    public DbSet<MediaAsset> MediaAssets => Set<MediaAsset>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -184,6 +186,17 @@ public class HooshyaranDbContext(DbContextOptions<HooshyaranDbContext> options) 
                 .WithMany()
                 .HasForeignKey(log => log.BlogArticleId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<MediaAsset>(entity =>
+        {
+            entity.HasIndex(asset => asset.Url).IsUnique();
+            entity.Property(asset => asset.Url).HasMaxLength(360).IsRequired();
+            entity.Property(asset => asset.Name).HasMaxLength(260);
+            entity.Property(asset => asset.AltText).HasMaxLength(220);
+            entity.Property(asset => asset.Title).HasMaxLength(220);
+            entity.Property(asset => asset.Description).HasMaxLength(700);
+            entity.Property(asset => asset.SeoDescription).HasMaxLength(320);
         });
 
         modelBuilder.Entity<Tag>(entity =>

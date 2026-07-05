@@ -23,6 +23,7 @@ public class DemoRequestEmailService(
         {
             EnableSsl = settings.EnableSsl
         };
+        SmtpClientConfigurator.SetClientDomain(client, settings.FromEmail, settings.WebsiteUrl);
 
         if (!string.IsNullOrWhiteSpace(settings.SmtpUserName))
         {

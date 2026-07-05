@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Enterprise AI assistant management dashboard">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#08131f"/>
+      <stop offset="100%" stop-color="#15283a"/>
+    </linearGradient>
+    <linearGradient id="card1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f2232"/>
+      <stop offset="100%" stop-color="#102a3f"/>
+    </linearGradient>
+    <linearGradient id="accent1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#57d0ff"/>
+      <stop offset="100%" stop-color="#8af5c2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg1)"/>
+  <circle cx="1240" cy="120" r="220" fill="#1f4b63" opacity=".18"/>
+  <circle cx="270" cy="760" r="250" fill="#16425b" opacity=".16"/>
+  <rect x="84" y="78" width="1432" height="744" rx="32" fill="#09111a" opacity=".82" stroke="#2a5368" stroke-width="2"/>
+  <rect x="124" y="118" width="330" height="664" rx="24" fill="url(#card1)" stroke="#2e5d74"/>
+  <rect x="490" y="118" width="986" height="286" rx="24" fill="url(#card1)" stroke="#2e5d74"/>
+  <rect x="490" y="436" width="470" height="346" rx="24" fill="url(#card1)" stroke="#2e5d74"/>
+  <rect x="1006" y="436" width="470" height="346" rx="24" fill="url(#card1)" stroke="#2e5d74"/>
+  <rect x="154" y="160" width="270" height="62" rx="18" fill="#102c42"/>
+  <rect x="154" y="248" width="270" height="118" rx="18" fill="#0d2235"/>
+  <rect x="154" y="388" width="270" height="118" rx="18" fill="#0d2235"/>
+  <rect x="154" y="528" width="270" height="118" rx="18" fill="#0d2235"/>
+  <rect x="154" y="668" width="270" height="74" rx="18" fill="#12344e"/>
+  <rect x="540" y="168" width="320" height="170" rx="20" fill="#0e2b42"/>
+  <rect x="884" y="168" width="248" height="170" rx="20" fill="#0e2b42"/>
+  <rect x="1156" y="168" width="270" height="170" rx="20" fill="#0e2b42"/>
+  <rect x="536" y="480" width="378" height="258" rx="20" fill="#0e2538"/>
+  <rect x="1048" y="480" width="380" height="258" rx="20" fill="#0e2538"/>
+  <path d="M580 620 C660 540 720 564 792 512 C850 474 882 494 914 456" fill="none" stroke="url(#accent1)" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="580" cy="620" r="11" fill="#8af5c2"/>
+  <circle cx="792" cy="512" r="11" fill="#57d0ff"/>
+  <circle cx="914" cy="456" r="11" fill="#8af5c2"/>
+  <rect x="1076" y="516" width="120" height="162" rx="14" fill="#173c56"/>
+  <rect x="1214" y="554" width="120" height="124" rx="14" fill="#1d5b6f"/>
+  <rect x="1352" y="474" width="48" height="204" rx="14" fill="#61e2d1"/>
+  <rect x="154" y="178" width="112" height="16" rx="8" fill="#8af5c2"/>
+  <rect x="182" y="280" width="92" height="12" rx="6" fill="#57d0ff"/>
+  <rect x="182" y="304" width="168" height="10" rx="5" fill="#3d6a82"/>
+  <rect x="182" y="328" width="130" height="10" rx="5" fill="#3d6a82"/>
+  <rect x="182" y="420" width="82" height="12" rx="6" fill="#ffd36a"/>
+  <rect x="182" y="444" width="184" height="10" rx="5" fill="#3d6a82"/>
+  <rect x="182" y="468" width="150" height="10" rx="5" fill="#3d6a82"/>
+  <rect x="182" y="560" width="104" height="12" rx="6" fill="#8af5c2"/>
+  <rect x="182" y="584" width="176" height="10" rx="5" fill="#3d6a82"/>
+  <rect x="182" y="608" width="140" height="10" rx="5" fill="#3d6a82"/>
+  <rect x="182" y="696" width="150" height="16" rx="8" fill="#57d0ff"/>
+</svg>

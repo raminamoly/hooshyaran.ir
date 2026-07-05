@@ -15,6 +15,16 @@
                 "workgraph-ai" => "/assets/content/article-ai-workflow-automation.jpg",
                 _ => "/assets/content/home-enterprise-ai-hero.jpg"
             };
+
+    static string CardSummary(string value, int maxLength = 92)
+    {
+        if (string.IsNullOrWhiteSpace(value) || value.Length <= maxLength)
+        {
+            return value;
+        }
+
+        return value[..maxLength].TrimEnd() + "…";
+    }
 }
 
 @await Html.PartialAsync("_PageHero", new PageHeroViewModel(
@@ -38,11 +48,11 @@
                 {
                     @await Html.PartialAsync("_ProductCard", new ProductCardViewModel(
                         product.PersianTitle,
-                        product.ShortDescription,
+                        CardSummary(product.ShortDescription),
                         category.Title,
                         $"/products/{product.Slug}",
                         "مشاهده جزئیات",
-                        product.Benefits.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(3).ToArray(),
+                        product.Benefits.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(1).ToArray(),
                         ProductImage(product)))
                 }
             }

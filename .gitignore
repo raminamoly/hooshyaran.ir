@@ -26,7 +26,13 @@ src/Hooshyaran.Web/wwwroot/lib/bootstrap/
 
 # Local Codex run logs
 .codex-run/
-hooshyaran-run.*.log
+.agents/
+design-previews/
+skills-lock.json
+*.log
+tmp-*.png
+tmp-*.jpg
+tmp-*.webp
 
 # OS files
 Thumbs.db

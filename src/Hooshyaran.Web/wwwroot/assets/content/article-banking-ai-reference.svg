@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Banking AI reference architecture">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#09213a"/><stop offset="1" stop-color="#135c89"/></linearGradient></defs>
+  <rect width="1200" height="675" rx="42" fill="url(#bg)"/>
+  <g fill="#fff" opacity=".94"><rect x="90" y="120" width="230" height="400" rx="28"/><rect x="470" y="95" width="260" height="450" rx="30"/><rect x="880" y="120" width="230" height="400" rx="28"/></g>
+  <g fill="#123352" font-family="Arial" font-size="24" font-weight="700" text-anchor="middle"><text x="205" y="174">Channels</text><text x="600" y="150">AI Decision Layer</text><text x="995" y="174">Management</text></g>
+  <g stroke="#123352" stroke-opacity=".22" stroke-width="13" stroke-linecap="round"><path d="M132 230h145M132 286h145M132 342h108"/><path d="M520 232h160M520 294h160M520 356h130"/><path d="M922 230h145M922 286h145M922 342h108"/></g>
+  <path d="M328 318h134M738 318h134" stroke="#16c8dc" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="600" cy="438" r="46" fill="#f6a23a" opacity=".86"/>
+</svg>

@@ -18,6 +18,7 @@
         <table class="admin-table">
             <thead>
                 <tr>
+                    <th>تصویر</th>
                     <th>عنوان</th>
                     <th>Slug</th>
                     <th>نویسنده</th>
@@ -30,18 +31,39 @@
             {
                 var article = row.Article;
                 <tr>
+                    <td>
+                        <span class="admin-thumb">
+                            @if (!string.IsNullOrWhiteSpace(article.ImagePath))
+                            {
+                                <img src="@AssetOptimizer.Image(article.ImagePath)" alt="@article.Title" loading="lazy" />
+                            }
+                            else
+                            {
+                                <span>بدون تصویر</span>
+                            }
+                        </span>
+                    </td>
                     <td>@article.Title</td>
                     <td><code>@article.Slug</code></td>
                     <td>@article.AuthorName</td>
                     <td>
                         <span>@(article.IsPublished ? "منتشر شده" : "پیش‌نویس")</span>
-                        <small>@PersianDateFormatter.ToPersianDate(article.PublishedAt)</small>
+                        <small>@PersianDateFormatter.ToPersianDateTime(article.PublishedAt)</small>
                     </td>
                     <td class="admin-actions">
-                        <a href="@row.PublicUrl" target="_blank" rel="noopener">نمایش</a>
-                        <a href="/admin/articles/edit/@article.Id">ویرایش</a>
+                        <a class="admin-action" href="@row.PublicUrl" target="_blank" rel="noopener" title="نمایش">
+                            <svg><use href="#admin-icon-eye"></use></svg>
+                            <span class="visually-hidden">نمایش</span>
+                        </a>
+                        <a class="admin-action" href="/admin/articles/edit/@article.Id" title="ویرایش">
+                            <svg><use href="#admin-icon-edit"></use></svg>
+                            <span class="visually-hidden">ویرایش</span>
+                        </a>
                         <form method="post" asp-page-handler="Delete" asp-route-id="@article.Id">
-                            <button type="submit" onclick="return confirm('حذف شود؟')">حذف</button>
+                            <button class="admin-action admin-action--danger" type="submit" title="حذف" onclick="return confirm('حذف شود؟')">
+                                <svg><use href="#admin-icon-trash"></use></svg>
+                                <span class="visually-hidden">حذف</span>
+                            </button>
                         </form>
                     </td>
                 </tr>

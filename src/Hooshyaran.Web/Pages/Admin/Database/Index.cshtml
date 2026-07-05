@@ -9,7 +9,7 @@
     <div class="admin-page__header database-admin__header">
         <div>
             <p class="eyebrow">مدیریت پایگاه داده</p>
-            <h1>مرور جدول‌ها، اجرای SELECT و بکاپ/ریستور SQLite</h1>
+            <h1>مرور جدول‌ها، اجرای SELECT و بکاپ SQL Server</h1>
             <p>این ابزار فقط برای SuperAdmin فعال است و اجرای Queryهای تغییر دهنده دیتابیس را مسدود می‌کند.</p>
         </div>
     </div>
@@ -38,7 +38,7 @@
         <article class="database-stat glass-surface">
             <span>حجم فایل</span>
             <strong>@Model.Overview.DatabaseSize</strong>
-            <small>فایل اصلی SQLite</small>
+            <small>حجم فایل‌های دیتابیس</small>
         </article>
     </div>
 
@@ -47,23 +47,35 @@
             @Html.AntiForgeryToken()
             <div>
                 <h2>بکاپ دیتابیس</h2>
-                <p>یک خروجی سازگار SQLite از دیتابیس فعال ساخته و دانلود می‌شود.</p>
+                <p>یک فایل bak استاندارد از دیتابیس فعال SQL Server ساخته و دانلود می‌شود.</p>
             </div>
             <button class="button button--primary" type="submit">دانلود بکاپ</button>
         </form>
 
-        <form method="post" asp-page-handler="Restore" enctype="multipart/form-data" class="database-tool glass-surface">
-            @Html.AntiForgeryToken()
-            <div>
-                <h2>ریستور دیتابیس</h2>
-                <p>فایل db معتبر جایگزین دیتابیس فعلی می‌شود و قبل از ریستور یک bak محلی ساخته می‌شود.</p>
-            </div>
-            <label class="database-file-input">
-                فایل بکاپ
-                <input asp-for="RestoreFile" accept=".db,.sqlite,.sqlite3" />
-            </label>
-            <button class="button button--primary" type="submit">ریستور</button>
-        </form>
+        @if (Model.CanRestoreDatabase)
+        {
+            <form method="post" asp-page-handler="Restore" enctype="multipart/form-data" class="database-tool glass-surface">
+                @Html.AntiForgeryToken()
+                <div>
+                    <h2>ریستور دیتابیس</h2>
+                    <p>فایل bak معتبر روی دیتابیس فعلی ریستور می‌شود و قبل از ریستور یک بکاپ محافظ ساخته می‌شود.</p>
+                </div>
+                <label class="database-file-input">
+                    فایل بکاپ
+                    <input asp-for="RestoreFile" accept=".bak" />
+                </label>
+                <button class="button button--primary" type="submit">ریستور</button>
+            </form>
+        }
+        else
+        {
+            <section class="database-tool glass-surface" aria-label="ریستور دیتابیس غیرفعال">
+                <div>
+                    <h2>ریستور دیتابیس</h2>
+                    <p>در production غیرفعال است. ریستور باید از مسیر کنترل‌شده SQL Server انجام شود.</p>
+                </div>
+            </section>
+        }
     </div>
 
     <div class="database-layout">

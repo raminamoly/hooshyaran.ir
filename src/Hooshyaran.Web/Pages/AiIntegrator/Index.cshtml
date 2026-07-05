@@ -1,0 +1,724 @@
+@page "/ai-integrator"
+@{
+    ViewData["Title"] = "هوشیار | یکپارچه‌ساز هوش مصنوعی سازمان";
+    ViewData["Description"] = "هوشیار پلتفرم هوش مصنوعی سازمان برای چت سازمانی، مدل‌های محلی و ابری، LLMOps، چت‌بات اختصاصی، دانشنامه، ایجنت و داشبورد مدیریتی است.";
+    ViewData["Keywords"] = "هوشیار, یکپارچه‌ساز هوش مصنوعی, پلتفرم هوش مصنوعی سازمان, LLMOps سازمانی, چت سازمانی, مدل محلی, چت‌بات اختصاصی";
+    ViewData["CanonicalPath"] = "/ai-integrator";
+    ViewData["SocialImage"] = "/landing-pages/ai-integrator/screenshots/home-clean.webp";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/landing-pages/ai-integrator/ai-integrator.css" asp-append-version="true" />
+}
+
+<div class="ai-integrator-page">
+<svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="ai-icon-grid" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"></path></symbol>
+    <symbol id="ai-icon-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-2.8 8-7 10-4.2-2-7-5.5-7-10V6z"></path><path d="M9 12l2 2 4-5"></path></symbol>
+    <symbol id="ai-icon-server" viewBox="0 0 24 24"><path d="M5 4h14v6H5zM5 14h14v6H5z"></path><path d="M8 7h.01M8 17h.01M12 7h4M12 17h4"></path></symbol>
+    <symbol id="ai-icon-user" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path><path d="M4 21a8 8 0 0 1 16 0"></path></symbol>
+    <symbol id="ai-icon-users" viewBox="0 0 24 24"><path d="M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 21a6.5 6.5 0 0 1 13 0"></path><path d="M17 10a3 3 0 1 0 0-6M16 15.5a5.5 5.5 0 0 1 5.5 5.5"></path></symbol>
+    <symbol id="ai-icon-lock" viewBox="0 0 24 24"><path d="M6 10h12v10H6z"></path><path d="M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10"></path><path d="M12 14v3"></path></symbol>
+    <symbol id="ai-icon-cloud" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 1-7.9A6 6 0 0 0 6.1 12 3 3 0 0 0 7 18z"></path></symbol>
+    <symbol id="ai-icon-database" viewBox="0 0 24 24"><path d="M5 6c0-1.7 3.1-3 7-3s7 1.3 7 3-3.1 3-7 3-7-1.3-7-3z"></path><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></symbol>
+    <symbol id="ai-icon-file" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"></path><path d="M14 3v5h4M10 13h5M10 17h5"></path></symbol>
+    <symbol id="ai-icon-dashboard" viewBox="0 0 24 24"><path d="M4 5h16v14H4z"></path><path d="M8 15v-4M12 15V8M16 15v-6"></path></symbol>
+    <symbol id="ai-icon-agent" viewBox="0 0 24 24"><path d="M12 4v4M12 16v4M4 12h4M16 12h4M8.5 8.5l-3-3M15.5 8.5l3-3M8.5 15.5l-3 3M15.5 15.5l3 3"></path><circle cx="12" cy="12" r="4"></circle></symbol>
+    <symbol id="ai-icon-chat" viewBox="0 0 24 24"><path d="M5 5h14a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-7l-5 4v-4H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3z"></path></symbol>
+    <symbol id="ai-icon-analytics" viewBox="0 0 24 24"><path d="M4 19h16"></path><path d="M7 16l3-4 3 2 4-7"></path><circle cx="7" cy="16" r="1"></circle><circle cx="10" cy="12" r="1"></circle><circle cx="13" cy="14" r="1"></circle><circle cx="17" cy="7" r="1"></circle></symbol>
+    <symbol id="ai-icon-gpu" viewBox="0 0 24 24"><path d="M5 7h12v10H5zM17 10h3v4h-3"></path><path d="M8 4v3M12 4v3M8 17v3M12 17v3M3 10h2M3 14h2"></path><path d="M9 10h4v4H9z"></path></symbol>
+    <symbol id="ai-icon-briefcase" viewBox="0 0 24 24"><path d="M4 8h16v11H4z"></path><path d="M9 8V5h6v3M4 12h16"></path></symbol>
+  </svg>
+    <div class="page">
+        <div class="ai-integrator-main">
+<section class="hero" aria-labelledby="hero-title">
+        <div class="container hero-grid">
+          <div class="hero-showcase" aria-label="نمای تصویری پلتفرم هوشیار">
+            <div class="glass-stage">
+              <div class="hero-orbit-scene" aria-hidden="true">
+                <svg class="hero-link-svg" viewBox="0 0 400 400" preserveAspectRatio="none">
+                  <path class="hero-link" d="M200 200 C200 150 200 98 200 56"></path>
+                  <path class="hero-link" d="M200 200 C244 178 286 148 325 128"></path>
+                  <path class="hero-link" d="M200 200 C244 222 286 252 325 272"></path>
+                  <path class="hero-link" d="M200 200 C200 250 200 302 200 344"></path>
+                  <path class="hero-link" d="M200 200 C156 222 114 252 75 272"></path>
+                  <path class="hero-link" d="M200 200 C156 178 114 148 75 128"></path>
+                </svg>
+                <span class="hero-ring one"></span>
+                <span class="hero-ring two"></span>
+                <span class="hero-ring three"></span>
+                <span class="hero-particle p1"></span>
+                <span class="hero-particle p2"></span>
+                <span class="hero-particle p3"></span>
+                <span class="hero-particle p4"></span>
+                <div class="hero-core">
+                  <span class="core-symbol"></span>
+                  <strong>هوشیار</strong>
+                  <span>ارکستراسیون هوش مصنوعی</span>
+                </div>
+                <div class="hero-node node-models"><i></i><strong>مدل‌ها</strong><span>ابری و GPU</span></div>
+                <div class="hero-node node-chatbot"><i></i><strong>چت‌بات</strong><span>سازمان‌محور</span></div>
+                <div class="hero-node node-agent"><i></i><strong>ایجنت‌ها</strong><span>متصل به داده</span></div>
+                <div class="hero-node node-dashboard"><i></i><strong>داشبورد</strong><span>تحلیل مدیریتی</span></div>
+                <div class="hero-node node-knowledge"><i></i><strong>دانشنامه</strong><span>اسناد و RAG</span></div>
+                <div class="hero-node node-data"><i></i><strong>داده‌ها</strong><span>فروش، مالی، منابع</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-copy">
+            <h1 id="hero-title">هوشیار</h1>
+            <p class="hero-subtitle">پلتفرم هوش مصنوعی سازمان</p>
+            <p class="hero-lead">
+              استفاده امن، کنترل‌شده و یکپارچه از هوش مصنوعی در سازمان.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="/request-demo">درخواست جلسه دمو</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <nav class="module-nav" aria-label="فهرست ماژول‌ها">
+        <div class="container module-strip">
+          <a href="#module-control">کنترل مرکزی</a>
+          <a href="#module-chat">چت سازمانی</a>
+          <a href="#module-local">مدل‌های محلی</a>
+          <a href="#module-cloud">مدل‌های ابری</a>
+          <a href="#module-llmops">LLMOps</a>
+          <a href="#module-rag">دانشنامه</a>
+          <a href="#module-agents">ایجنت‌ها</a>
+          <a href="#module-chatbot">چت‌بات‌ساز</a>
+          <a href="#module-dashboard">داشبوردساز</a>
+          <a href="#module-usage">مصرف و هزینه</a>
+          <a href="#module-access">دسترسی‌ها</a>
+        </div>
+      </nav>
+
+      <section id="modules" class="modules">
+        <div class="container">
+          <article id="module-control" class="module-section">
+            <div class="module-visual">
+              <div class="browser-frame">
+                <img src="~/landing-pages/ai-integrator/screenshots/home-clean.webp" alt="محیط یکپارچه سازمانی هوشیار" decoding="async" fetchpriority="high">
+                <span class="frame-caption">محیط یکپارچه سازمانی</span>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۱</span>
+              <h2>کنترل متمرکز هوش مصنوعی در سازمان</h2>
+              <p>هوشیار نقطه ورود واحد برای استفاده سازمان از هوش مصنوعی است. مدیران می‌توانند وضعیت سامانه، کاربران، مدل‌ها، مصرف، سلامت زیرساخت و مسیرهای اصلی محصول را از یک پنل دنبال کنند.</p>
+              <ul class="module-list">
+                <li>نمای مدیریتی سلامت سرویس‌ها، منابع و فعالیت کاربران</li>
+                <li>مسیر واحد برای مدل، چت، دانشنامه، ایجنت و داشبورد</li>
+                <li>مناسب نصب روی زیردامنه سازمان مانند `ai.company.ir`</li>
+                <li>کاهش پراکندگی ابزارها و حساب‌های هوش مصنوعی در سازمان</li>
+              </ul>
+            </div>
+          </article>
+
+          <article id="module-chat" class="module-section reverse">
+            <div class="module-visual">
+              <div class="concept-frame">
+                <div class="chat-mock" role="img" aria-label="موکاپ محیط چت سازمانی هوشیار با انتخاب مدل و مکالمه">
+                  <div class="chat-mock-top">
+                    <div class="chat-models">
+                      <span class="active">مدل محلی GPU</span>
+                      <span>Claude</span>
+                      <span>DeepSeek</span>
+                    </div>
+                    <span class="chat-status">دسترسی: مدیر فروش</span>
+                  </div>
+                  <div class="chat-body">
+                    <aside class="chat-sidebar">
+                      <strong>گفت‌وگوها</strong>
+                      <div class="chat-history">
+                        <span>تحلیل فروش ماه</span>
+                        <span>گزارش منابع انسانی</span>
+                        <span>خلاصه آیین‌نامه</span>
+                        <span>پرسش از داشبورد</span>
+                      </div>
+                    </aside>
+                    <div class="chat-thread">
+                      <div class="chat-question">
+                        <div class="chat-message-head">
+                          <span class="chat-avatar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+                          </span>
+                          <span class="chat-speaker">مدیر فروش</span>
+                        </div>
+                        <p>روند فروش سه ماه اخیر را با بودجه مقایسه کن.</p>
+                      </div>
+                      <div class="chat-answer">
+                        <div class="chat-message-head">
+                          <span class="chat-avatar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M12 3v3"></path><path d="M12 18v3"></path><path d="M3 12h3"></path><path d="M18 12h3"></path><path d="M7 7l2 2"></path><path d="M15 15l2 2"></path><path d="M17 7l-2 2"></path><path d="M9 15l-2 2"></path><circle cx="12" cy="12" r="4"></circle></svg>
+                          </span>
+                          <span class="chat-speaker">هوشیار · مدل محلی GPU</span>
+                        </div>
+                        <p>فروش در خرداد ۱۸٪ بالاتر از بودجه است. بیشترین رشد مربوط به کانال سازمانی و تمدید قراردادهاست.</p>
+                        <div class="chat-answer-meta">
+                          <b>دیتابیس فروش</b>
+                          <b>داشبورد مالی</b>
+                        </div>
+                      </div>
+                      <div class="chat-question">
+                        <div class="chat-message-head">
+                          <span class="chat-avatar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+                          </span>
+                          <span class="chat-speaker">مدیر فروش</span>
+                        </div>
+                        <p>سه ریسک اصلی ماه بعد را هم خلاصه کن.</p>
+                      </div>
+                      <div class="chat-answer">
+                        <div class="chat-message-head">
+                          <span class="chat-avatar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M12 3v3"></path><path d="M12 18v3"></path><path d="M3 12h3"></path><path d="M18 12h3"></path><path d="M7 7l2 2"></path><path d="M15 15l2 2"></path><path d="M17 7l-2 2"></path><path d="M9 15l-2 2"></path><circle cx="12" cy="12" r="4"></circle></svg>
+                          </span>
+                          <span class="chat-speaker">هوشیار · دسترسی کنترل‌شده</span>
+                        </div>
+                        <p>افت نرخ تبدیل، تأخیر چند پرداخت بزرگ، و کاهش موجودی یک گروه محصول نیاز به پیگیری دارد.</p>
+                      </div>
+                      <div class="chat-input-row">
+                        <span>سؤال بعدی را از داده‌های مجاز سازمان بپرسید...</span>
+                        <i class="chat-send-dot"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۲</span>
+              <h2>چت سازمانی کارکنان و مدیران</h2>
+              <p>به جای خرید و مدیریت حساب‌های پراکنده، سازمان یک محیط چت داخلی دارد که دسترسی به مدل‌ها و داده‌ها را مطابق نقش هر کاربر کنترل می‌کند.</p>
+              <ul class="module-list">
+                <li>تعریف کاربران و نقش‌ها برای مدل‌ها و چت‌بات‌ها</li>
+                <li>امکان استفاده از مدل‌های محلی برای داده‌های حساس</li>
+                <li>امکان اتصال به مدل‌های ابری برای نیازهای کم‌ریسک‌تر</li>
+                <li>حفظ مسیر استفاده از هوش مصنوعی داخل چارچوب سازمان</li>
+              </ul>
+            </div>
+          </article>
+
+          <article id="module-local" class="module-section">
+            <div class="module-visual">
+              <div class="concept-frame">
+                <div class="software-mock" role="img" aria-label="موکاپ مدیریت مدل‌های محلی و GPU">
+                  <div class="mock-topbar">
+                    <span class="mock-title">مدیریت مدل‌های محلی و GPU</span>
+                    <div class="mock-actions"><span class="mock-status ok">GPU آماده</span><span class="mock-pill">سیاست مدل</span></div>
+                  </div>
+                  <div class="mock-body">
+                    <aside class="mock-sidebar">
+                      <strong>زیرساخت</strong>
+                      <span class="mock-nav-item active">مدل‌های محلی</span>
+                      <span class="mock-nav-item">GPU داخلی</span>
+                      <span class="mock-nav-item">GPU ابری</span>
+                      <span class="mock-nav-item">دسترسی</span>
+                    </aside>
+                    <div class="mock-content">
+                      <div class="mock-grid">
+                        <div class="mock-kpi"><strong>مدل‌های نصب‌شده</strong><span>متن‌باز و سازمانی</span><b>۱۲</b></div>
+                        <div class="mock-kpi"><strong>ظرفیت GPU</strong><span>داخلی یا اجاره‌ای</span><b>۶۸٪</b></div>
+                        <div class="mock-kpi"><strong>سیاست فعال</strong><span>داده حساس</span><b>محلی</b></div>
+                      </div>
+                      <div class="mock-table">
+                        <div class="mock-row head"><span>مدل</span><span>مسیر اجرا</span><span>وضعیت</span></div>
+                        <div class="mock-row"><span>Qwen 2.5</span><span>GPU داخلی</span><span class="mock-status ok">آماده</span></div>
+                        <div class="mock-row"><span>GPT-OSS</span><span>GPU ابری داخلی</span><span class="mock-status ok">آماده</span></div>
+                        <div class="mock-row"><span>DeepSeek</span><span>ظرفیت رزرو</span><span class="mock-status warn">در انتظار</span></div>
+                      </div>
+                      <div class="mock-split">
+                        <div class="mock-panel"><strong>Readiness</strong><span>endpoint، حافظه و پاسخ آزمایشی بررسی شده‌اند.</span><div class="mock-progress"><i style="width:86%"></i></div></div>
+                        <div class="mock-panel"><strong>کنترل خروج داده</strong><span>داده‌های حساس فقط به مسیر محلی ارسال می‌شوند.</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۳</span>
+              <h2>مدل‌های محلی و GPU داخلی</h2>
+              <p>هوشیار به سازمان اجازه می‌دهد مدل‌های متن‌باز و محلی را روی GPU داخلی یا ظرفیت GPU ابری داخلی اجرا کند؛ بدون اینکه داده حساس الزاماً از محیط کنترل‌شده خارج شود.</p>
+              <ul class="module-list">
+                <li>مدیریت نصب، readiness و endpoint مدل‌ها</li>
+                <li>پشتیبانی از GPU داخلی یا GPU اجاره‌ای</li>
+                <li>قابل استفاده برای داده‌های حساس، محرمانه و عملیاتی</li>
+                <li>امکان تعریف سیاست دسترسی برای هر مدل و هر گروه کاربری</li>
+              </ul>
+            </div>
+          </article>
+
+          <article id="module-cloud" class="module-section reverse">
+            <div class="module-visual">
+              <div class="concept-frame">
+                <div class="software-mock" role="img" aria-label="موکاپ تنظیمات دروازه مدل‌های ابری">
+                  <div class="mock-topbar">
+                    <span class="mock-title">دروازه مدل‌های ابری</span>
+                    <div class="mock-actions"><span class="mock-status ok">کنترل‌شده</span><span class="mock-pill">سیاست دسترسی</span></div>
+                  </div>
+                  <div class="mock-body">
+                    <aside class="mock-sidebar">
+                      <strong>مدل‌ها</strong>
+                      <span class="mock-nav-item active">مدل‌های ابری</span>
+                      <span class="mock-nav-item">کلیدها</span>
+                      <span class="mock-nav-item">Routing</span>
+                      <span class="mock-nav-item">مصرف</span>
+                    </aside>
+                    <div class="mock-content">
+                      <div class="mock-grid">
+                        <div class="mock-card"><strong>ChatGPT</strong><span>فعال برای داده غیرحساس</span><span class="mock-status ok">Online</span></div>
+                        <div class="mock-card"><strong>Claude</strong><span>تحلیل متنی و اسناد</span><span class="mock-status ok">Online</span></div>
+                        <div class="mock-card"><strong>Gemini</strong><span>سناریوهای عمومی</span><span class="mock-status warn">محدود</span></div>
+                        <div class="mock-card"><strong>Grok</strong><span>پاسخ سریع</span><span class="mock-status ok">Online</span></div>
+                        <div class="mock-card"><strong>DeepSeek</strong><span>مدل اقتصادی</span><span class="mock-status ok">Online</span></div>
+                        <div class="mock-card"><strong>Qwen</strong><span>پشتیبان ابری</span><span class="mock-status ok">Online</span></div>
+                      </div>
+                      <div class="mock-table">
+                        <div class="mock-row head"><span>مسیر</span><span>سیاست</span><span>وضعیت</span></div>
+                        <div class="mock-row"><span>پرسش عمومی</span><span>Cloud first</span><span class="mock-status ok">مجاز</span></div>
+                        <div class="mock-row"><span>داده محرمانه</span><span>Local only</span><span class="mock-status warn">مسدود</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۴</span>
+              <h2>اتصال به مدل‌های ابری</h2>
+              <p>برای داده‌های غیرحساس یا سناریوهایی که کیفیت و سرعت مدل‌های ابری اهمیت دارد، هوشیار اتصال به مدل‌های شناخته‌شده را از طریق یک لایه قابل کنترل فراهم می‌کند.</p>
+              <ul class="module-list">
+                <li>تعریف endpoint ابری و مدیریت دسترسی کاربران</li>
+                <li>استفاده همزمان از مدل‌های ابری در کنار مدل‌های محلی</li>
+                <li>امکان تفکیک داده حساس و غیرحساس در سیاست استفاده</li>
+                <li>کاهش نیاز به حساب‌های پراکنده و غیرقابل کنترل</li>
+              </ul>
+            </div>
+          </article>
+
+          <article id="module-llmops" class="module-section">
+            <div class="module-visual">
+              <div class="concept-frame">
+                <div class="software-mock" role="img" aria-label="موکاپ کنسول LLMOps و سلامت مدل‌ها">
+                  <div class="mock-topbar">
+                    <span class="mock-title">کنسول LLMOps</span>
+                    <div class="mock-actions"><span class="mock-status ok">Stack healthy</span><span class="mock-pill">آخرین ۵ دقیقه</span></div>
+                  </div>
+                  <div class="mock-body">
+                    <aside class="mock-sidebar">
+                      <strong>عملیات</strong>
+                      <span class="mock-nav-item active">سلامت مدل‌ها</span>
+                      <span class="mock-nav-item">Logs</span>
+                      <span class="mock-nav-item">Runtime</span>
+                      <span class="mock-nav-item">Registry</span>
+                    </aside>
+                    <div class="mock-content">
+                      <div class="mock-grid">
+                        <div class="mock-kpi"><strong>Latency</strong><span>میانگین پاسخ</span><b>۱.۲s</b></div>
+                        <div class="mock-kpi"><strong>Error rate</strong><span>درخواست ناموفق</span><b>۰.۴٪</b></div>
+                        <div class="mock-kpi"><strong>GPU Load</strong><span>مصرف لحظه‌ای</span><b>۶۸٪</b></div>
+                      </div>
+                      <div class="mock-split">
+                        <div class="mock-chart"><svg viewBox="0 0 240 100"><path d="M10 72 C45 46 64 82 94 54 S150 42 178 62 214 38 232 30" fill="none" stroke="#0fa394" stroke-width="5" stroke-linecap="round"></path></svg></div>
+                        <div class="mock-table">
+                          <div class="mock-row"><span>Gateway</span><span>فعال</span><span class="mock-status ok">OK</span></div>
+                          <div class="mock-row"><span>Runtime</span><span>vLLM</span><span class="mock-status ok">OK</span></div>
+                          <div class="mock-row"><span>Registry</span><span>۱۲ مدل</span><span class="mock-status ok">OK</span></div>
+                        </div>
+                      </div>
+                      <div class="mock-panel"><strong>لاگ زنده</strong><span>درخواست‌های مدل با خطا، زمان پاسخ و مسیر gateway ثبت می‌شوند.</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۵</span>
+              <h2>LLMOps و مدیریت مدل‌ها</h2>
+              <p>ماژول LLMOps برای تیم فنی کمک می‌کند وضعیت مدل‌ها، سرویس‌ها، endpointها، لاگ‌ها و سلامت اجرای هوش مصنوعی در سازمان قابل مشاهده و قابل پیگیری باشد.</p>
+              <ul class="module-list">
+                <li>نمای عملیاتی stack، gateway و runtime</li>
+                <li>کمک به پایش سلامت، خطا، latency و مسیرهای مصرف مدل</li>
+                <li>جداسازی ابزار مدیریتی از ابزارهای خام زیرساخت</li>
+                <li>مناسب برای تیم IT که باید سرویس AI را پایدار نگه دارد</li>
+              </ul>
+            </div>
+          </article>
+
+          <article id="module-rag" class="module-section reverse">
+            <div class="module-visual">
+              <div class="concept-frame">
+                <div class="software-mock" role="img" aria-label="موکاپ مدیریت دانشنامه و بازیابی دانش">
+                  <div class="mock-topbar">
+                    <span class="mock-title">مدیریت دانشنامه سازمانی</span>
+                    <div class="mock-actions"><span class="mock-status ok">Index آماده</span><span class="mock-pill">افزودن سند</span></div>
+                  </div>
+                  <div class="mock-body">
+                    <aside class="mock-sidebar">
+                      <strong>دانشنامه</strong>
+                      <span class="mock-nav-item active">اسناد</span>
+                      <span class="mock-nav-item">پردازش</span>
+                      <span class="mock-nav-item">تست جستجو</span>
+                      <span class="mock-nav-item">دسترسی</span>
+                    </aside>
+                    <div class="mock-content">
+                      <div class="mock-table">
+                        <div class="mock-row head"><span>سند</span><span>وضعیت</span><span>دسترسی</span></div>
+                        <div class="mock-row"><span>آیین‌نامه منابع انسانی</span><span>پردازش شد</span><span class="mock-status ok">عمومی</span></div>
+                        <div class="mock-row"><span>قراردادهای فروش</span><span>در حال index</span><span class="mock-status warn">مدیران</span></div>
+                        <div class="mock-row"><span>دستورالعمل مالی</span><span>پردازش شد</span><span class="mock-status ok">مالی</span></div>
+                      </div>
+                      <div class="mock-split">
+                        <div class="mock-panel"><strong>سلامت RAG</strong><span>۹۸٪ اسناد قابل بازیابی</span><div class="mock-progress"><i style="width:98%"></i></div></div>
+                        <div class="mock-panel"><strong>تست پرسش</strong><span>«مرخصی استعلاجی چگونه ثبت می‌شود؟»</span><span class="mock-status ok">پاسخ با منبع</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۶</span>
+              <h2>دانشنامه و بازیابی دانش</h2>
+              <p>اسناد، دستورالعمل‌ها، آیین‌نامه‌ها و فایل‌های داخلی می‌توانند وارد دانشنامه شوند تا چت‌بات‌ها و کاربران بر اساس منبع معتبر سازمانی پاسخ بگیرند.</p>
+              <ul class="module-list">
+                <li>اتصال پاسخ‌های هوش مصنوعی به اسناد معتبر و قابل کنترل</li>
+                <li>امکان تفکیک دانش عمومی سازمان از دانش محدود به واحدها</li>
+                <li>کاهش پاسخ‌های حدسی و افزایش اتکا به منابع واقعی</li>
+                <li>مناسب آیین‌نامه، قرارداد و مستندات داخلی</li>
+              </ul>
+            </div>
+          </article>
+
+          <article id="module-agents" class="module-section">
+            <div class="module-visual">
+              <div class="concept-frame">
+                <div class="software-mock" role="img" aria-label="موکاپ ایجنت‌ها و اتصال به منابع داده">
+                  <div class="mock-topbar">
+                    <span class="mock-title">Agent Builder</span>
+                    <div class="mock-actions"><span class="mock-status ok">۴ ایجنت فعال</span><span class="mock-pill">تست اجرا</span></div>
+                  </div>
+                  <div class="mock-body">
+                    <aside class="mock-sidebar">
+                      <strong>ایجنت‌ها</strong>
+                      <span class="mock-nav-item active">فروش</span>
+                      <span class="mock-nav-item">مالی</span>
+                      <span class="mock-nav-item">منابع انسانی</span>
+                      <span class="mock-nav-item">دانش</span>
+                    </aside>
+                    <div class="mock-content">
+                      <div class="mock-grid two">
+                        <div class="mock-card"><strong>ایجنت فروش</strong><span>اتصال به دیتابیس فروش و قراردادها</span><span class="mock-status ok">آماده</span></div>
+                        <div class="mock-card"><strong>ایجنت مالی</strong><span>بودجه، پرداخت و گزارش هزینه</span><span class="mock-status ok">آماده</span></div>
+                        <div class="mock-card"><strong>ایجنت منابع انسانی</strong><span>کارکنان، حضور و آیین‌نامه</span><span class="mock-status ok">آماده</span></div>
+                        <div class="mock-card"><strong>ایجنت دانش</strong><span>اسناد و دستورالعمل‌ها</span><span class="mock-status ok">آماده</span></div>
+                      </div>
+                      <div class="mock-panel"><strong>خروجی تست</strong><span>سؤال مدیریتی به ایجنت فروش و مالی ارسال شد؛ پاسخ تجمیع شده آماده است.</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۷</span>
+              <h2>ایجنت‌ها و منابع داده</h2>
+              <p>ایجنت‌ها نقش اتصال هوش مصنوعی به بخش‌های واقعی سازمان را دارند؛ مثل پایگاه داده فروش، منابع انسانی، مالی، اینترنت یا دانشنامه داخلی.</p>
+              <ul class="module-list">
+                <li>تعریف ایجنت‌های تخصصی برای واحدهای مختلف سازمان</li>
+                <li>اتصال کنترل‌شده به دیتابیس، فایل و سرویس</li>
+                <li>ترکیب چند منبع داده برای پاسخ‌های مدیریتی و عملیاتی</li>
+                <li>کاهش نیاز به توسعه اختصاصی برای هر سناریوی جدید</li>
+              </ul>
+            </div>
+          </article>
+
+          <article id="module-chatbot" class="module-section reverse">
+            <div class="module-visual">
+              <div class="concept-frame">
+                <div class="software-mock" role="img" aria-label="موکاپ چت‌بات‌ساز اختصاصی">
+                  <div class="mock-topbar">
+                    <span class="mock-title">چت‌بات‌ساز اختصاصی</span>
+                    <div class="mock-actions"><span class="mock-status ok">آماده انتشار</span><span class="mock-pill">پیش‌نمایش</span></div>
+                  </div>
+                  <div class="mock-body">
+                    <aside class="mock-sidebar">
+                      <strong>مراحل</strong>
+                      <span class="mock-nav-item active">تعریف هدف</span>
+                      <span class="mock-nav-item">ایجنت‌ها</span>
+                      <span class="mock-nav-item">دسترسی</span>
+                      <span class="mock-nav-item">انتشار</span>
+                    </aside>
+                    <div class="mock-content">
+                      <div class="mock-split">
+                        <div class="mock-panel">
+                          <strong>چت‌بات هیئت‌مدیره</strong>
+                          <span>پاسخ از فروش، مالی، منابع انسانی و دانشنامه</span>
+                          <div class="mock-chip-row"><span class="mock-chip active">ایجنت فروش</span><span class="mock-chip active">ایجنت مالی</span><span class="mock-chip">اسناد</span></div>
+                        </div>
+                        <div class="mock-panel">
+                          <strong>تنظیمات پاسخ</strong>
+                          <div class="mock-checklist">
+                            <span class="mock-check">برنامه‌ریزی فعال</span>
+                            <span class="mock-check">رتبه‌بندی منابع</span>
+                            <span class="mock-check">کنترل نقش کاربر</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mock-table">
+                        <div class="mock-row"><span>مدیرعامل</span><span>همه منابع</span><span class="mock-status ok">مجاز</span></div>
+                        <div class="mock-row"><span>مدیر فروش</span><span>فروش و داشبورد</span><span class="mock-status ok">مجاز</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۸</span>
+              <h2>چت‌بات‌ساز اختصاصی</h2>
+              <p>در هوشیار، هر نیاز جدید الزاماً یک پروژه نرم‌افزاری تازه نیست. تیم فناوری اطلاعات می‌تواند چت‌بات‌های اختصاصی را بسازد، ایجنت‌ها و منابع داده را به آن متصل کند و دسترسی هر گروه را مدیریت کند.</p>
+              <ul class="module-list">
+                <li>ساخت چت‌بات مالی، فروش و منابع انسانی</li>
+                <li>اتصال چت‌بات به چند ایجنت و چند منبع داده</li>
+                <li>تعریف دسترسی کاربران به چت‌بات‌های مجاز</li>
+                <li>پاسخ تجمیعی از داده، سند و مدل</li>
+              </ul>
+            </div>
+          </article>
+
+          <article id="module-dashboard" class="module-section">
+            <div class="module-visual">
+              <div class="concept-frame">
+                <div class="software-mock" role="img" aria-label="موکاپ داشبوردساز و تحلیل داده">
+                  <div class="mock-topbar">
+                    <span class="mock-title">داشبوردساز مدیریتی</span>
+                    <div class="mock-actions"><span class="mock-status ok">۳ داشبورد ساخته شد</span><span class="mock-pill">اشتراک‌گذاری</span></div>
+                  </div>
+                  <div class="mock-body">
+                    <aside class="mock-sidebar">
+                      <strong>گزارش‌ها</strong>
+                      <span class="mock-nav-item active">فروش</span>
+                      <span class="mock-nav-item">مالی</span>
+                      <span class="mock-nav-item">منابع انسانی</span>
+                      <span class="mock-nav-item">عملیات</span>
+                    </aside>
+                    <div class="mock-content">
+                      <div class="mock-tabs"><span class="mock-tab active">فروش</span><span class="mock-tab">مالی</span><span class="mock-tab">منابع انسانی</span></div>
+                      <div class="mock-grid">
+                        <div class="mock-kpi"><strong>درآمد ماه</strong><span>نسبت به بودجه</span><b>۱۲.۸B</b></div>
+                        <div class="mock-kpi"><strong>هزینه</strong><span>کنترل مالی</span><b>۴.۲B</b></div>
+                        <div class="mock-kpi"><strong>کارکنان</strong><span>نیروی فعال</span><b>۴۶۹۲</b></div>
+                      </div>
+                      <div class="mock-split">
+                        <div class="mock-chart"><svg viewBox="0 0 240 100"><path d="M10 70 C42 44 74 68 108 40 S176 44 230 24" fill="none" stroke="#2367f0" stroke-width="5" stroke-linecap="round"></path></svg></div>
+                        <div class="mock-bars"><i style="height:48%"></i><i style="height:72%"></i><i style="height:56%"></i><i style="height:86%"></i><i style="height:64%"></i></div>
+                      </div>
+                      <div class="mock-table">
+                        <div class="mock-row"><span>داشبورد مالی</span><span>هزینه و بودجه</span><span class="mock-status ok">منتشر شد</span></div>
+                        <div class="mock-row"><span>داشبورد منابع انسانی</span><span>کارکنان و جذب</span><span class="mock-status ok">منتشر شد</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۹</span>
+              <h2>داشبوردساز و تحلیل داده</h2>
+              <p>هوشیار می‌تواند مسیر ساخت داشبوردهای مدیریتی را ساده‌تر کند؛ مدیر یا کارشناس سؤال تحلیلی را مطرح می‌کند و سیستم مسیر اتصال به داده، ساخت گزارش و اشتراک‌گذاری داشبورد را مدیریت می‌کند.</p>
+              <ul class="module-list">
+                <li>ساخت داشبورد فروش، مالی و منابع انسانی</li>
+                <li>کمک به تبدیل سؤال مدیریتی به گزارش قابل مشاهده</li>
+                <li>امکان اشتراک‌گذاری داشبورد با کاربران و مدیران مجاز</li>
+                <li>کاهش فاصله بین داده خام سازمان و تصمیم مدیریتی</li>
+              </ul>
+            </div>
+          </article>
+
+          <article id="module-usage" class="module-section reverse">
+            <div class="module-visual">
+              <div class="concept-frame">
+                <div class="software-mock" role="img" aria-label="موکاپ مصرف هزینه و گزارش مدیریتی">
+                  <div class="mock-topbar">
+                    <span class="mock-title">مصرف، هزینه و گزارش مدیریتی</span>
+                    <div class="mock-actions"><span class="mock-status ok">گزارش امروز</span><span class="mock-pill">خروجی CSV</span></div>
+                  </div>
+                  <div class="mock-body">
+                    <aside class="mock-sidebar">
+                      <strong>گزارش‌ها</strong>
+                      <span class="mock-nav-item active">مصرف مدل‌ها</span>
+                      <span class="mock-nav-item">هزینه</span>
+                      <span class="mock-nav-item">واحدها</span>
+                      <span class="mock-nav-item">کیفیت پاسخ</span>
+                    </aside>
+                    <div class="mock-content">
+                      <div class="mock-grid">
+                        <div class="mock-kpi"><strong>درخواست‌ها</strong><span>امروز</span><b>۱٬۰۵۹</b></div>
+                        <div class="mock-kpi"><strong>توکن‌ها</strong><span>مصرف ثبت‌شده</span><b>۲۱M</b></div>
+                        <div class="mock-kpi"><strong>میانگین پاسخ</strong><span>سرعت سرویس</span><b>۱.۹s</b></div>
+                      </div>
+                      <div class="mock-split">
+                        <div class="mock-chart"><svg viewBox="0 0 240 100"><path d="M10 74 C42 58 62 70 88 42 S142 44 166 64 204 52 232 26" fill="none" stroke="#0fa394" stroke-width="5" stroke-linecap="round"></path></svg></div>
+                        <div class="mock-panel">
+                          <strong>سهم مدل‌ها</strong>
+                          <div class="mock-checklist">
+                            <span class="mock-check">مدل محلی: ۶۲٪</span>
+                            <span class="mock-check">مدل ابری: ۳۸٪</span>
+                            <span class="mock-check">خطا: ۰.۴٪</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mock-table">
+                        <div class="mock-row head"><span>واحد</span><span>مصرف</span><span>وضعیت</span></div>
+                        <div class="mock-row"><span>فروش</span><span>۳۹٪</span><span class="mock-status ok">طبیعی</span></div>
+                        <div class="mock-row"><span>مالی</span><span>۲۴٪</span><span class="mock-status ok">طبیعی</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۱۰</span>
+              <h2>مصرف، هزینه و گزارش</h2>
+              <p>برای استفاده سازمانی از هوش مصنوعی، کنترل مصرف مهم است. هوشیار کمک می‌کند درخواست‌ها، توکن‌ها، سهم مدل‌های محلی و ابری، سرعت پاسخ و وضعیت هزینه قابل مشاهده باشد.</p>
+              <ul class="module-list">
+                <li>نمای مصرف مدل‌های محلی و ابری</li>
+                <li>کمک به تحلیل هزینه، سرعت پاسخ، خطا و کیفیت استفاده</li>
+                <li>گزارش مدیریتی برای تصمیم درباره مدل‌ها و ظرفیت GPU</li>
+                <li>مبنای بهتر برای سیاست‌گذاری مصرف AI</li>
+              </ul>
+            </div>
+          </article>
+
+          <article id="module-access" class="module-section">
+            <div class="module-visual">
+              <div class="concept-frame">
+                <div class="software-mock" role="img" aria-label="موکاپ کاربران نقش‌ها و کنترل دسترسی">
+                  <div class="mock-topbar">
+                    <span class="mock-title">کاربران، نقش‌ها و دسترسی</span>
+                    <div class="mock-actions"><span class="mock-status ok">امن</span><span class="mock-pill">RBAC</span></div>
+                  </div>
+                  <div class="mock-body">
+                    <aside class="mock-sidebar">
+                      <strong>امنیت</strong>
+                      <span class="mock-nav-item active">کاربران</span>
+                      <span class="mock-nav-item">نقش‌ها</span>
+                      <span class="mock-nav-item">مدل‌ها</span>
+                      <span class="mock-nav-item">داده‌ها</span>
+                    </aside>
+                    <div class="mock-content">
+                      <div class="mock-table">
+                        <div class="mock-row head"><span>کاربر</span><span>نقش</span><span>دسترسی</span></div>
+                        <div class="mock-row"><span>مدیر فروش</span><span>Sales Admin</span><span class="mock-status ok">چت‌بات فروش</span></div>
+                        <div class="mock-row"><span>کارشناس مالی</span><span>Finance</span><span class="mock-status ok">داشبورد مالی</span></div>
+                        <div class="mock-row"><span>کاربر عمومی</span><span>Staff</span><span class="mock-status warn">مدل عمومی</span></div>
+                      </div>
+                      <div class="mock-grid two">
+                        <div class="mock-panel"><strong>ماتریس مجوز</strong><span>مدل‌ها، داده‌ها، چت‌بات‌ها و داشبوردها</span></div>
+                        <div class="mock-panel"><strong>ریسک داده حساس</strong><span>دسترسی خارج از نقش مسدود می‌شود</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="module-copy">
+              <span class="module-index">۱۱</span>
+              <h2>کاربران، نقش‌ها و دسترسی</h2>
+              <p>هوشیار برای استفاده سازمانی طراحی شده است؛ یعنی مدیر سیستم باید بداند هر شخص به چه مدل، چه چت‌بات، چه داشبورد و چه منبع داده‌ای دسترسی دارد.</p>
+              <ul class="module-list">
+                <li>تعریف نقش‌ها برای کارکنان، کارشناسان و مدیران</li>
+                <li>کنترل دسترسی به مدل‌ها و چت‌بات‌های اختصاصی</li>
+                <li>کاهش ریسک استفاده غیرمجاز از داده‌های حساس سازمان</li>
+                <li>قابل توسعه برای سیاست‌های امنیتی سازمان</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="architecture" class="architecture-band" aria-labelledby="architecture-title">
+        <div class="container architecture-grid">
+          <div class="architecture-card">
+            <div class="architecture-visual" aria-hidden="true">
+              <div class="software-mock" role="img" aria-label="موکاپ ویزارد نصب on-premise هوشیار">
+                <div class="mock-topbar">
+                  <span class="mock-title">ویزارد نصب on-premise</span>
+                  <div class="mock-actions"><span class="mock-status ok">ai.company.ir</span></div>
+                </div>
+                <div class="mock-content">
+                  <div class="wizard-steps">
+                    <div class="wizard-step"><b>۱</b><div><strong>دامنه و SSL</strong><span>اتصال زیردامنه سازمان</span></div><span class="mock-status ok">OK</span></div>
+                    <div class="wizard-step"><b>۲</b><div><strong>سرور سازمان</strong><span>نصب سرویس‌ها و پایگاه داده</span></div><span class="mock-status ok">OK</span></div>
+                    <div class="wizard-step"><b>۳</b><div><strong>GPU داخلی یا ابری</strong><span>آماده‌سازی مدل‌های محلی</span></div><span class="mock-status warn">در حال تنظیم</span></div>
+                    <div class="wizard-step"><b>۴</b><div><strong>کاربران و نقش‌ها</strong><span>فعال‌سازی دسترسی واحدها</span></div><span class="mock-status ok">OK</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span class="section-kicker">مسیر استقرار</span>
+            <h2 id="architecture-title">نصب on-premise در سازمان</h2>
+            <p>هوشیار برای مشتریان سازمانی به‌صورت قابل نصب روی زیرساخت خود سازمان طراحی می‌شود. مدل‌های حساس می‌توانند محلی اجرا شوند و مدل‌های ابری در مسیرهای کنترل‌شده استفاده شوند.</p>
+          </div>
+          <div class="architecture-card architecture-steps">
+            <div class="step"><span><svg class="ui-icon"><use href="#ai-icon-analytics"></use></svg></span><div><strong>تحلیل نیاز و داده</strong><p>سناریوهای سازمان، سطح محرمانگی داده و منابع قابل اتصال بررسی می‌شود.</p></div></div>
+            <div class="step"><span><svg class="ui-icon"><use href="#ai-icon-server"></use></svg></span><div><strong>راه‌اندازی زیرساخت</strong><p>سامانه روی سرور سازمان، GPU داخلی یا ظرفیت GPU ابری داخلی آماده می‌شود.</p></div></div>
+            <div class="step"><span><svg class="ui-icon"><use href="#ai-icon-grid"></use></svg></span><div><strong>تعریف کاربران و ماژول‌ها</strong><p>مدل‌ها، چت‌بات‌ها، ایجنت‌ها، دانشنامه و داشبوردها مطابق نیاز سازمان فعال می‌شوند.</p></div></div>
+            <div class="step"><span><svg class="ui-icon"><use href="#ai-icon-shield"></use></svg></span><div><strong>تحویل و کنترل مدیریتی</strong><p>تیم فناوری اطلاعات از یک پنل واحد، مصرف، دسترسی و سلامت سامانه را مدیریت می‌کند.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="seo-faq" aria-labelledby="faq-title">
+        <div class="container faq-grid">
+          <div class="faq-copy">
+            <span class="section-kicker">سوالات متداول</span>
+            <h2 id="faq-title">پرسش‌های رایج مدیران فناوری اطلاعات</h2>
+            <p>این بخش برای پاسخ سریع به سوالات اصلی درباره نصب، امنیت داده، مدل‌های محلی و ابری، چت‌بات‌ساز و کاربرد سازمانی هوشیار اضافه شده است.</p>
+          </div>
+          <div class="faq-list">
+            <article class="faq-item">
+              <h3>هوشیار برای چه سازمان‌هایی مناسب است؟</h3>
+              <p>هوشیار برای سازمان‌هایی مناسب است که می‌خواهند استفاده کارکنان و مدیران از هوش مصنوعی را امن، قابل مدیریت و متصل به داده‌های داخلی کنند.</p>
+            </article>
+            <article class="faq-item">
+              <h3>آیا هوشیار داخل سازمان نصب می‌شود؟</h3>
+              <p>بله. هوشیار می‌تواند به‌صورت on-premise روی زیرساخت سازمان و زیردامنه‌ای مانند ai.company.ir نصب شود.</p>
+            </article>
+            <article class="faq-item">
+              <h3>آیا امکان استفاده از مدل‌های محلی و ابری وجود دارد؟</h3>
+              <p>بله. سازمان می‌تواند برای داده‌های حساس از مدل‌های محلی یا GPU داخلی و برای سناریوهای کم‌ریسک‌تر از مدل‌های ابری کنترل‌شده استفاده کند.</p>
+            </article>
+            <article class="faq-item">
+              <h3>چت‌بات‌ساز اختصاصی چه کمکی می‌کند؟</h3>
+              <p>چت‌بات‌ساز هوشیار کمک می‌کند بدون تعریف پروژه جداگانه برای هر نیاز، چت‌بات‌های متصل به داده، اسناد، ایجنت‌ها و مدل‌های مجاز ساخته شوند.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="demo" class="final-cta" aria-labelledby="demo-title">
+        <div class="container">
+          <div class="cta-panel">
+            <div>
+              <h2 id="demo-title">برای بررسی نصب هوشیار در سازمان خودتان جلسه دمو رزرو کنید</h2>
+              <p>در جلسه دمو، سناریوهای واقعی سازمان، سطح محرمانگی داده‌ها، منابع قابل اتصال، ظرفیت GPU و مسیر راه‌اندازی روی زیردامنه سازمان بررسی می‌شود.</p>
+            </div>
+            <div class="cta-actions">
+              <a class="button button-primary" href="/request-demo">درخواست جلسه دمو</a>
+            </div>
+          </div>
+        </div>
+      </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/landing-pages/ai-integrator/ai-integrator.js" asp-append-version="true" defer></script>
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="AI integration reference architecture">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#092434"/><stop offset="1" stop-color="#116178"/></linearGradient></defs>
+  <rect width="1200" height="675" rx="42" fill="url(#bg)"/>
+  <rect x="430" y="238" width="340" height="190" rx="30" fill="#fff" opacity=".95"/>
+  <text x="600" y="326" fill="#123352" font-family="Arial" font-size="30" font-weight="700" text-anchor="middle">AI Gateway</text>
+  <text x="600" y="365" fill="#547792" font-family="Arial" font-size="20" text-anchor="middle">Policy · RAG · LLMOps</text>
+  <g fill="#fff" opacity=".94"><rect x="90" y="110" width="210" height="110" rx="24"/><rect x="90" y="455" width="210" height="110" rx="24"/><rect x="900" y="110" width="210" height="110" rx="24"/><rect x="900" y="455" width="210" height="110" rx="24"/></g>
+  <g fill="#123352" font-family="Arial" font-size="24" font-weight="700" text-anchor="middle"><text x="195" y="175">ERP</text><text x="195" y="520">CRM</text><text x="1005" y="175">DMS</text><text x="1005" y="520">Ticketing</text></g>
+  <g stroke="#16c8dc" stroke-width="12" stroke-linecap="round"><path d="M304 166l116 118"/><path d="M304 510l116-118"/><path d="M780 284l112-118"/><path d="M780 392l112 118"/></g>
+</svg>

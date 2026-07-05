@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Private AI governance operating model">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#071d33"/><stop offset="1" stop-color="#0b6b80"/></linearGradient></defs>
+  <rect width="1200" height="675" rx="42" fill="url(#bg)"/>
+  <g stroke="#7de7f2" stroke-opacity=".16"><path d="M120 130h960M120 260h960M120 390h960M120 520h960"/><path d="M250 88v500M475 88v500M700 88v500M925 88v500"/></g>
+  <circle cx="600" cy="338" r="112" fill="#e9fbff" opacity=".12"/><circle cx="600" cy="338" r="72" fill="#16c8dc" opacity=".22"/>
+  <rect x="494" y="284" width="212" height="108" rx="24" fill="#fff" opacity=".94"/>
+  <text x="600" y="334" fill="#123352" font-family="Arial" font-size="28" text-anchor="middle" font-weight="700">Private AI</text>
+  <text x="600" y="366" fill="#547792" font-family="Arial" font-size="18" text-anchor="middle">Governed Core</text>
+  <g fill="#fff" opacity=".94">
+    <rect x="110" y="120" width="250" height="104" rx="22"/><rect x="110" y="454" width="250" height="104" rx="22"/>
+    <rect x="840" y="120" width="250" height="104" rx="22"/><rect x="840" y="454" width="250" height="104" rx="22"/>
+  </g>
+  <g font-family="Arial" font-size="22" font-weight="700" fill="#123352" text-anchor="middle">
+    <text x="235" y="172">Data Governance</text><text x="235" y="506">Access Policy</text><text x="965" y="172">LLMOps</text><text x="965" y="506">Audit & Risk</text>
+  </g>
+  <g stroke="#16c8dc" stroke-width="10" stroke-linecap="round"><path d="M360 172h120"/><path d="M720 172h120"/><path d="M360 506h120"/><path d="M720 506h120"/></g>
+</svg>
