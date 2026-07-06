@@ -2,8 +2,8 @@
 @model IndexModel
 @{
     ViewData["Title"] = "خانه";
-    ViewData["Description"] = Model.Seo?.Description ?? "هوش‌یاران راهکارهای AI خصوصی و قابل کنترل را روی زیرساخت سازمانی برای مدیریت مدل‌های زبانی، اتوماسیون هوشمند و امنیت داده پیاده‌سازی می‌کند.";
-    ViewData["Keywords"] = Model.Seo?.Keywords ?? "هوش مصنوعی سازمانی, راهکار هوش مصنوعی برای سازمان‌ها, اتوماسیون هوشمند سازمانی, LLMOPS فارسی, WorkGraph AI";
+    ViewData["Description"] = Model.Seo?.Description ?? "هوش‌یاران پلتفرم هوش مصنوعی سازمانی را روی زیرساخت شما پیاده‌سازی می‌کند؛ از مدل‌های زبانی و چت سازمانی تا دانشنامه، ایجنت، داشبورد و کنترل مصرف.";
+    ViewData["Keywords"] = Model.Seo?.Keywords ?? "هوش مصنوعی سازمانی, پلتفرم هوش مصنوعی سازمانی, یکپارچه ساز هوش مصنوعی, AI خصوصی, LLMOPS فارسی";
     ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/";
 
     static string ProductImage(Hooshyaran.Web.Models.Product product) =>
@@ -28,13 +28,13 @@
 }
 
 @await Html.PartialAsync("_PageHero", new PageHeroViewModel(
-    "",
-    "هوش مصنوعی سازمانی، امن و قابل کنترل",
-    "استقرار AI خصوصی روی زیرساخت سازمان، با کنترل داده، پایش مصرف و اتصال امن به فرایندهای داخلی.",
+    "هوش مصنوعی سازمانی",
+    "استقرار هوش مصنوعی روی زیرساخت شما",
+    "مدل‌های زبانی، چت سازمانی، دانشنامه، ایجنت‌ها و کنترل مصرف را امن و قابل مدیریت به داده‌های داخلی وصل کنید.",
     "درخواست جلسه معرفی",
     "/request-demo",
-    "مشاهده محصولات",
-    "/products",
+    "مشاهده پلتفرم",
+    "/ai-integrator",
     "/assets/content/home-enterprise-ai-hero.jpg",
     "نمای تصویری از لایه هماهنگ‌سازی هوش مصنوعی سازمانی، داده‌ها و جریان‌های کاری",
     CssClass: "page-hero--home"))
@@ -43,18 +43,23 @@
     <div class="container home-signal-grid">
         <div class="home-signal glass-surface">
             <span class="home-signal__icon" aria-hidden="true"><svg><use href="#icon-server"></use></svg></span>
-            <strong>استقرار لوکال AI</strong>
-            <span>مدل‌ها و ابزارها روی سرورها و شبکه داخلی سازمان اجرا می‌شوند.</span>
+            <strong>نصب On-Premise</strong>
+            <span>اجرا روی سرورها، شبکه و دامنه داخلی سازمان.</span>
         </div>
         <div class="home-signal glass-surface">
             <span class="home-signal__icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
-            <strong>کنترل و مانیتورینگ</strong>
-            <span>دسترسی، لاگ، مصرف و کیفیت خروجی AI قابل پایش و مدیریت است.</span>
+            <strong>کنترل نقش و دسترسی</strong>
+            <span>مدیریت کاربران، سطح دسترسی، لاگ و سیاست استفاده.</span>
         </div>
         <div class="home-signal glass-surface">
-            <span class="home-signal__icon" aria-hidden="true"><svg><use href="#icon-cpu"></use></svg></span>
-            <strong>LLM Apps سازمانی</strong>
-            <span>دستیارها و اپلیکیشن‌های هوشمند متصل به داده‌ها و فرایندهای واقعی.</span>
+            <span class="home-signal__icon" aria-hidden="true"><svg><use href="#icon-flow"></use></svg></span>
+            <strong>اتصال به ERP و API</strong>
+            <span>اتصال کنترل‌شده به داده‌ها و سامانه‌های عملیاتی.</span>
+        </div>
+        <div class="home-signal glass-surface">
+            <span class="home-signal__icon" aria-hidden="true"><svg><use href="#icon-chart"></use></svg></span>
+            <strong>گزارش مصرف و هزینه</strong>
+            <span>پایش درخواست‌ها، مصرف مدل‌ها، هزینه و کیفیت پاسخ.</span>
         </div>
     </div>
 </section>
@@ -65,19 +70,18 @@
             <div class="home-product-spotlight__grid">
                 <div class="home-product-spotlight__copy">
                     <span class="home-product-spotlight__eyebrow">محصول ویژه</span>
-                    <h2 id="home-product-spotlight-title">یکپارچه‌ساز هوش مصنوعی سازمان</h2>
+                    <h2 id="home-product-spotlight-title">هوش‌یاران؛ یکپارچه‌ساز هوش مصنوعی سازمان</h2>
                     <p>
-                        یک نقطه ورود واحد برای مدل، چت، دانشنامه، ایجنت، داشبورد و اتصال امن به داده‌های سازمان؛
-                        برای تیم‌هایی که می‌خواهند هوش مصنوعی را کنترل‌شده، یکپارچه و قابل توسعه در دل سازمان اجرا کنند.
+                        هوش‌یاران استفاده از مدل‌های محلی و ابری، چت سازمانی، دانشنامه، ایجنت‌ها، داشبورد و کنترل مصرف را
+                        از یک پنل واحد به داده‌ها و فرایندهای داخلی سازمان وصل می‌کند.
                     </p>
                     <ul class="home-product-spotlight__list">
-                        <li>مسیر واحد برای استفاده از AI در سازمان</li>
-                        <li>اتصال کنترل‌شده به داده‌ها و سامانه‌های داخلی</li>
-                        <li>مدیریت مدل‌های محلی و ابری از یک پنل</li>
-                        <li>مناسب استقرار روی زیرساخت و دامنه داخلی سازمان</li>
+                        <li>یک مسیر واحد برای کارکنان، مدیران و تیم فناوری اطلاعات</li>
+                        <li>کنترل مدل‌ها، داده‌ها، نقش‌ها و مصرف در سطح سازمان</li>
+                        <li>استقرار روی زیرساخت یا زیردامنه داخلی سازمان</li>
                     </ul>
                     <div class="home-product-spotlight__actions">
-                        <a class="button button--primary" href="/ai-integrator">جزئیات بیشتر</a>
+                        <a class="button button--primary" href="/ai-integrator">مشاهده صفحه هوش‌یاران</a>
                         <a class="text-link text-link--icon" href="/request-demo">
                             درخواست جلسه معرفی
                             <svg aria-hidden="true"><use href="#icon-arrow-left"></use></svg>

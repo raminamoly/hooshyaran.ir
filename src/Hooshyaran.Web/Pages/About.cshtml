@@ -2,10 +2,21 @@
 @model Hooshyaran.Web.Pages.AboutModel
 @inject Hooshyaran.Web.Services.ICmsHtmlService CmsHtml
 @{
-    ViewData["Title"] = Model.PageContent?.Title ?? "درباره ما";
+    ViewData["Title"] = Model.Seo?.Title ?? Model.PageContent?.SeoTitle ?? Model.PageContent?.Title ?? "درباره ما";
     ViewData["Description"] = Model.Seo?.Description ?? Model.PageContent?.SeoDescription ?? "درباره شرکت داده‌پردازان کوشای پاسارگاد و تجربه آن در توسعه سامانه‌های سازمانی و هوش مصنوعی.";
     ViewData["Keywords"] = Model.Seo?.Keywords ?? Model.PageContent?.SeoKeywords ?? "";
     ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/about";
+
+    var licenses = new[]
+    {
+        new { Title = "مجوز انتشار نرم‌افزار جریان", Authority = "وزارت فرهنگ و ارشاد اسلامی", ImagePath = "/assets/content/about-license-culture-ministry.jpg", Alt = "مجوز انتشار نرم افزار جریان وزارت فرهنگ و ارشاد اسلامی" },
+        new { Title = "تاییدیه فنی نرم‌افزار جریان", Authority = "وزارت ارتباطات و فناوری اطلاعات", ImagePath = "/assets/content/about-license-technical-approval.jpg", Alt = "مجوز تاییدیه فنی نرم افزار جریان وزارت ارتباطات و فناوری اطلاعات" },
+        new { Title = "عضویت نظام صنفی رایانه‌ای", Authority = "سازمان نظام صنفی رایانه‌ای استان تهران", ImagePath = "/assets/content/about-license-nezam-senfi.jpg", Alt = "مجوز نظام صنفی رایانه ای استان تهران" },
+        new { Title = "رتبه‌بندی شورای عالی انفورماتیک", Authority = "سازمان برنامه و بودجه", ImagePath = "/assets/content/about-license-informatics-ranking.jpg", Alt = "گواهی رتبه بندی شورای عالی انفورماتیک" },
+        new { Title = "تاییدیه دانش‌بنیان", Authority = "معاونت علمی و فناوری ریاست جمهوری", ImagePath = "/assets/content/about-license-knowledge-based.jpg", Alt = "مجوز دانش بنیان شرکت داده پردازان کوشای پاسارگاد" },
+        new { Title = "گواهی امنیتی افتا", Authority = "سازمان فناوری اطلاعات", ImagePath = "/assets/content/about-license-afta-security.jpg", Alt = "گواهی امنیتی افتا" },
+        new { Title = "پروانه بهره‌برداری تولید نرم‌افزار", Authority = "وزارت صنعت معدن و تجارت", ImagePath = "/assets/content/about-license-software-production.jpg", Alt = "پروانه بهره برداری تولید نرم افزار" }
+    };
 }
 
 @await Html.PartialAsync("_PageHero", new PageHeroViewModel(
@@ -16,46 +27,59 @@
     "/contact"))
 
 <section class="content-band">
-    <div class="container about-story-grid">
-        <figure class="about-team-photo glass-surface">
-            <img src="/assets/content/about-iranian-ai-team.jpg" alt="تیم ایرانی هوش‌یاران در حال همکاری روی راهکارهای هوش مصنوعی سازمانی" width="1536" height="864" loading="lazy" decoding="async" />
+    <div class="container about-overview-grid">
+        <figure class="about-company-photo glass-surface">
+            <img src="/assets/content/about-company-office-jaryansoft.jpg" alt="شرکت داده پردازان کوشای پاسارگاد" width="1024" height="656" loading="lazy" decoding="async" />
             <figcaption>
                 <img src="/assets/brand/hooshyaran-logo-small.png" alt="" width="88" height="49" />
-                <span>تیم محصول، داده و اتوماسیون سازمانی</span>
+                <span>طراحی، تحلیل و توسعه سامانه‌های نرم‌افزاری سازمانی</span>
             </figcaption>
         </figure>
 
-        <article class="about-panel glass-surface about-panel--story">
-            <span class="card-icon" aria-hidden="true">
-                <svg><use href="#icon-spark"></use></svg>
-            </span>
-            <div class="cms-content">
-                @Html.Raw(CmsHtml.ToSafeHtml(Model.PageContent?.Body ?? string.Empty))
-                @if (Model.PageContent is not null)
-                {
-                    @await Html.PartialAsync("_TagChips", Model.PageContent.StaticPageTags.Select(item => item.Tag!).Where(tag => tag is not null))
-                }
+        <article class="about-panel glass-surface about-panel--company">
+            <div class="about-panel__header">
+                <span class="card-icon" aria-hidden="true">
+                    <svg><use href="#icon-spark"></use></svg>
+                </span>
+                <div>
+                    <h2>شرکت داده‌پردازان کوشای پاسارگاد</h2>
+                    <p>شرکت دانش‌بنیان فعال در تحلیل، توسعه و مکانیزاسیون فرایندهای سازمانی</p>
+                </div>
             </div>
+
+            <div class="cms-content about-company-copy">
+                @Html.Raw(CmsHtml.ToSafeHtml(Model.PageContent?.Body ?? string.Empty))
+            </div>
+
+            @if (Model.PageContent is not null)
+            {
+                @await Html.PartialAsync("_TagChips", Model.PageContent.StaticPageTags.Select(item => item.Tag!).Where(tag => tag is not null))
+            }
         </article>
     </div>
 </section>
 
 <section class="content-band content-band--alt">
-    <div class="container feature-grid">
-        <article class="feature-item">
+    <div class="container about-licenses-section">
+        <div class="about-section-heading">
             <span class="card-icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
-            <h3>تمرکز بر اعتماد سازمانی</h3>
-            <p>طراحی راهکارها با توجه به امنیت داده، کنترل دسترسی و قابلیت استقرار مرحله‌ای در سازمان انجام می‌شود.</p>
-        </article>
-        <article class="feature-item">
-            <span class="card-icon" aria-hidden="true"><svg><use href="#icon-flow"></use></svg></span>
-            <h3>تجربه فرایندمحور</h3>
-            <p>راهکارها فقط مدل زبانی نیستند؛ به فرایند، داده، مسئولیت‌پذیری و خروجی قابل پیگیری وصل می‌شوند.</p>
-        </article>
-        <article class="feature-item">
-            <span class="card-icon" aria-hidden="true"><svg><use href="#icon-database"></use></svg></span>
-            <h3>شناخت نیاز فارسی‌زبان</h3>
-            <p>تجربه کاربری، محتوا و سناریوها برای سازمان‌های فارسی‌زبان و نیازهای عملیاتی واقعی طراحی شده‌اند.</p>
-        </article>
+            <div>
+                <h2>مجوزها و گواهی‌های شرکت</h2>
+                <p>سوابق ثبتی، فنی و امنیتی شرکت داده‌پردازان کوشای پاسارگاد در این بخش قابل مشاهده است.</p>
+            </div>
+        </div>
+
+        <div class="about-license-grid">
+            @foreach (var item in licenses)
+            {
+                <article class="about-license-card glass-surface">
+                    <img src="@item.ImagePath" alt="@item.Alt" width="700" height="1024" loading="lazy" decoding="async" />
+                    <div class="about-license-card__body">
+                        <h3>@item.Title</h3>
+                        <p>@item.Authority</p>
+                    </div>
+                </article>
+            }
+        </div>
     </div>
 </section>

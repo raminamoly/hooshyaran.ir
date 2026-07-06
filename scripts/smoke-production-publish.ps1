@@ -8,7 +8,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 if ([string]::IsNullOrWhiteSpace($ConnectionString)) {
-    $ConnectionString = "Server=.\SQL2019;Database=HooshyaranDev;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
+    $ConnectionString = "Server=.\SQL2019;Database=HooshyaranWebSite;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
 }
 
 function Assert-True {
@@ -60,6 +60,7 @@ try {
 
     $paths = @(
         "/",
+        "/about",
         "/products",
         "/blog",
         "/ai-integrator",
