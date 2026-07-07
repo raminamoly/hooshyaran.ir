@@ -43,8 +43,10 @@ public class EditModel(HooshyaranDbContext dbContext, IPasswordHasher passwordHa
             UserName = user.UserName,
             DisplayName = user.DisplayName,
             Email = user.Email,
+            MobileNumber = user.MobileNumber,
             Role = user.Role,
-            IsActive = user.IsActive
+            IsActive = user.IsActive,
+            ReceiveDemoRequestNotifications = user.ReceiveDemoRequestNotifications
         };
 
         return Page();
@@ -68,6 +70,18 @@ public class EditModel(HooshyaranDbContext dbContext, IPasswordHasher passwordHa
             return Page();
         }
 
+        if (Input.ReceiveDemoRequestNotifications && string.IsNullOrWhiteSpace(Input.Email))
+        {
+            ModelState.AddModelError("Input.Email", "برای دریافت نوتیفیکیشن درخواست دمو، ایمیل کاربر باید وارد شود.");
+            return Page();
+        }
+
+        if (Input.ReceiveDemoRequestNotifications && string.IsNullOrWhiteSpace(Input.MobileNumber))
+        {
+            ModelState.AddModelError("Input.MobileNumber", "برای دریافت نوتیفیکیشن درخواست دمو، شماره موبایل کاربر باید وارد شود.");
+            return Page();
+        }
+
         if (await dbContext.AdminUsers.AnyAsync(user => user.UserName == Input.UserName && user.Id != Input.Id))
         {
             ModelState.AddModelError("Input.UserName", "این نام کاربری قبلا استفاده شده است.");
@@ -85,9 +99,11 @@ public class EditModel(HooshyaranDbContext dbContext, IPasswordHasher passwordHa
 
         userEntity.UserName = Input.UserName.Trim();
         userEntity.DisplayName = Input.DisplayName.Trim();
-        userEntity.Email = Input.Email.Trim();
+        userEntity.Email = (Input.Email ?? string.Empty).Trim();
+        userEntity.MobileNumber = (Input.MobileNumber ?? string.Empty).Trim();
         userEntity.Role = Input.Role;
         userEntity.IsActive = Input.IsActive;
+        userEntity.ReceiveDemoRequestNotifications = Input.ReceiveDemoRequestNotifications;
         userEntity.UpdatedAt = DateTimeOffset.UtcNow;
 
         if (!string.IsNullOrWhiteSpace(Input.Password))
@@ -119,16 +135,22 @@ public class EditModel(HooshyaranDbContext dbContext, IPasswordHasher passwordHa
 
         [EmailAddress(ErrorMessage = "ایمیل معتبر نیست.")]
         [Display(Name = "ایمیل")]
-        public string Email { get; set; } = string.Empty;
+        public string? Email { get; set; } = string.Empty;
+
+        [RegularExpression("^09\\d{9}$", ErrorMessage = "شماره موبایل باید با فرمت 09123456789 وارد شود.")]
+        [Display(Name = "شماره موبایل")]
+        public string? MobileNumber { get; set; } = string.Empty;
 
         [DataType(DataType.Password)]
         [Display(Name = "رمز عبور")]
-        public string Password { get; set; } = string.Empty;
+        public string? Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "نقش الزامی است.")]
         [Display(Name = "نقش")]
         public string Role { get; set; } = AdminUserRoles.Author;
 
         public bool IsActive { get; set; } = true;
+
+        public bool ReceiveDemoRequestNotifications { get; set; }
     }
 }

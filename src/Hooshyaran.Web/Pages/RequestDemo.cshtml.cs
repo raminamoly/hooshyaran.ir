@@ -4,12 +4,13 @@ using Hooshyaran.Web.Models;
 using Hooshyaran.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hooshyaran.Web.Pages;
 
 public class RequestDemoModel(
     HooshyaranDbContext dbContext,
-    IDemoRequestEmailService demoRequestEmailService,
+    IDemoRequestNotificationService demoRequestNotificationService,
     ISiteVisitLogger visitLogger) : PageModel
 {
     [BindProperty]
@@ -17,14 +18,18 @@ public class RequestDemoModel(
 
     public bool Submitted { get; private set; }
 
-    public void OnGet()
+    public StaticPage? PageContent { get; private set; }
+
+    public async Task OnGetAsync()
     {
+        await LoadContentAsync();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)
         {
+            await LoadContentAsync();
             return Page();
         }
 
@@ -32,12 +37,12 @@ public class RequestDemoModel(
         {
             FullName = Input.FullName.Trim(),
             OrganizationName = Input.OrganizationName.Trim(),
-            JobTitle = Input.JobTitle.Trim(),
+            JobTitle = (Input.JobTitle ?? string.Empty).Trim(),
             PhoneNumber = Input.PhoneNumber.Trim(),
-            Email = Input.Email.Trim(),
-            NeedArea = Input.NeedArea.Trim(),
-            PreferredTime = Input.PreferredTime.Trim(),
-            Notes = Input.Notes.Trim(),
+            Email = (Input.Email ?? string.Empty).Trim(),
+            NeedArea = (Input.NeedArea ?? string.Empty).Trim(),
+            PreferredTime = (Input.PreferredTime ?? string.Empty).Trim(),
+            Notes = (Input.Notes ?? string.Empty).Trim(),
             Status = DemoRequestStatuses.New,
             CreatedAt = DateTimeOffset.UtcNow,
             UpdatedAt = DateTimeOffset.UtcNow
@@ -46,12 +51,20 @@ public class RequestDemoModel(
         dbContext.DemoRequests.Add(demoRequest);
         await dbContext.SaveChangesAsync();
         await visitLogger.LogAsync(HttpContext, SiteVisitEventTypes.DemoSubmit, "ثبت فرم درخواست دمو");
-        await demoRequestEmailService.NotifyAsync(demoRequest);
+        await demoRequestNotificationService.NotifyAsync(demoRequest);
 
         ModelState.Clear();
         Input = new DemoInput();
         Submitted = true;
+        await LoadContentAsync();
         return Page();
+    }
+
+    private async Task LoadContentAsync()
+    {
+        PageContent = await dbContext.StaticPages
+            .AsNoTracking()
+            .SingleOrDefaultAsync(page => page.Key == "request-demo" && page.IsPublished);
     }
 
     public class DemoInput
@@ -61,11 +74,11 @@ public class RequestDemoModel(
         public string FullName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "نام سازمان یا شرکت الزامی است.")]
-        [Display(Name = "نام سازمان/شرکت")]
+        [Display(Name = "نام سازمان یا شرکت")]
         public string OrganizationName { get; set; } = string.Empty;
 
-        [Display(Name = "سمت")]
-        public string JobTitle { get; set; } = string.Empty;
+        [Display(Name = "سمت سازمانی")]
+        public string? JobTitle { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "شماره تماس الزامی است.")]
         [Display(Name = "شماره تماس")]
@@ -73,15 +86,15 @@ public class RequestDemoModel(
 
         [EmailAddress(ErrorMessage = "ایمیل معتبر نیست.")]
         [Display(Name = "ایمیل کاری")]
-        public string Email { get; set; } = string.Empty;
+        public string? Email { get; set; } = string.Empty;
 
-        [Display(Name = "حوزه نیاز")]
-        public string NeedArea { get; set; } = string.Empty;
+        [Display(Name = "موضوع مورد نظر برای جلسه")]
+        public string? NeedArea { get; set; } = string.Empty;
 
         [Display(Name = "زمان پیشنهادی جلسه")]
-        public string PreferredTime { get; set; } = string.Empty;
+        public string? PreferredTime { get; set; } = string.Empty;
 
-        [Display(Name = "توضیحات")]
-        public string Notes { get; set; } = string.Empty;
+        [Display(Name = "توضیح کوتاه")]
+        public string? Notes { get; set; } = string.Empty;
     }
 }

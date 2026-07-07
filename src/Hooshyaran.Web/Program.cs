@@ -20,10 +20,12 @@ builder.Services.AddDbContext<HooshyaranDbContext>(options =>
 builder.Services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddScoped<ISiteSettingsService, SiteSettingsService>();
 builder.Services.AddScoped<IPublicUrlBuilder, PublicUrlBuilder>();
-builder.Services.AddScoped<IDemoRequestEmailService, DemoRequestEmailService>();
+builder.Services.AddScoped<IDemoRequestNotificationService, DemoRequestNotificationService>();
 builder.Services.AddScoped<ISiteVisitLogger, SiteVisitLogger>();
 builder.Services.AddScoped<IDatabaseExplorerService, DatabaseExplorerService>();
 builder.Services.AddScoped<IMediaFileService, MediaFileService>();
+builder.Services.AddScoped<ISitemapService, SitemapService>();
+builder.Services.AddHttpClient<ISmsSender, SmsIrSmsSender>();
 builder.Services.AddSingleton<ICmsHtmlService, CmsHtmlService>();
 builder.Services.AddScoped<IClaimsTransformation, AdminClaimsTransformation>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

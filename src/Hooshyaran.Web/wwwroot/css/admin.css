@@ -556,6 +556,8 @@
 
 #settings-general:checked ~ .admin-tab-list label[for="settings-general"],
 #settings-email:checked ~ .admin-tab-list label[for="settings-email"],
+#settings-sms:checked ~ .admin-tab-list label[for="settings-sms"],
+#settings-sitemap:checked ~ .admin-tab-list label[for="settings-sitemap"],
 #settings-database:checked ~ .admin-tab-list label[for="settings-database"] {
   border-color: rgba(8, 191, 211, 0.38);
   background:
@@ -566,8 +568,124 @@
 
 #settings-general:checked ~ .admin-tab-panel--general,
 #settings-email:checked ~ .admin-tab-panel--email,
+#settings-sms:checked ~ .admin-tab-panel--sms,
+#settings-sitemap:checked ~ .admin-tab-panel--sitemap,
 #settings-database:checked ~ .admin-tab-panel--database {
   display: block;
+}
+
+.sms-test-tool {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid rgba(43, 110, 159, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.34);
+  padding: 1rem;
+}
+
+.sms-test-tool h2,
+.sms-test-tool p {
+  margin: 0;
+}
+
+.sms-test-tool p {
+  color: var(--color-text-muted);
+}
+
+.sms-test-tool .admin-form-actions {
+  margin-top: 0.25rem;
+  padding-top: 0.25rem;
+}
+
+.admin-test-button {
+  min-width: 220px;
+  border-color: rgba(5, 77, 83, 0.34);
+  background:
+    linear-gradient(135deg, #055860, #009d9b 58%, #0fc4c0);
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(0, 126, 132, 0.24);
+  font-weight: var(--font-weight-display);
+}
+
+.admin-test-button:hover {
+  border-color: rgba(5, 77, 83, 0.42);
+  background:
+    linear-gradient(135deg, #044b52, #008b8d 58%, #0eb5b2);
+  color: #ffffff;
+  box-shadow: 0 18px 36px rgba(0, 126, 132, 0.30);
+}
+
+.admin-test-button:focus-visible {
+  outline: 3px solid rgba(0, 184, 169, 0.26);
+  outline-offset: 3px;
+}
+
+.admin-test-button:active {
+  transform: translateY(0);
+  box-shadow: 0 9px 18px rgba(0, 126, 132, 0.22);
+}
+
+.sitemap-tool {
+  display: grid;
+  gap: 1rem;
+}
+
+.sitemap-tool__summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.sitemap-tool__summary > div,
+.sitemap-tool__action {
+  border: 1px solid rgba(43, 110, 159, 0.16);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(238, 249, 252, 0.62)),
+    rgba(255, 255, 255, 0.56);
+  padding: 1rem;
+  box-shadow: 0 16px 34px rgba(22, 50, 77, 0.08);
+}
+
+.sitemap-tool__summary > div {
+  display: grid;
+  align-content: start;
+  gap: 0.38rem;
+  min-height: 108px;
+}
+
+.sitemap-tool__summary span {
+  color: var(--color-muted);
+  font-size: 0.84rem;
+  font-weight: var(--font-weight-heading);
+}
+
+.sitemap-tool__summary strong,
+.sitemap-tool__summary a {
+  color: var(--color-primary);
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-display);
+  overflow-wrap: anywhere;
+}
+
+.sitemap-tool__action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sitemap-tool__action h2 {
+  margin: 0 0 0.35rem;
+  color: var(--color-primary);
+  font-size: 1.12rem;
+}
+
+.sitemap-tool__action p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.8;
 }
 
 .admin-toggle-row,
@@ -1415,6 +1533,10 @@
     grid-template-columns: 1fr;
   }
 
+  .sitemap-tool__summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .database-tables {
     position: static;
     max-height: none;
@@ -1466,6 +1588,19 @@
   .database-grid-filters select,
   .database-grid-filters button,
   .database-tool button {
+    width: 100%;
+  }
+
+  .sitemap-tool__summary {
+    grid-template-columns: 1fr;
+  }
+
+  .sitemap-tool__action {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sitemap-tool__action button {
     width: 100%;
   }
 

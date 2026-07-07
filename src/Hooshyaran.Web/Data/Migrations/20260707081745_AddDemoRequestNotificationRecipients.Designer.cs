@@ -4,6 +4,7 @@ using Hooshyaran.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hooshyaran.Web.Data.Migrations
 {
     [DbContext(typeof(HooshyaranDbContext))]
-    partial class HooshyaranDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260707081745_AddDemoRequestNotificationRecipients")]
+    partial class AddDemoRequestNotificationRecipients
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -595,9 +598,6 @@ namespace Hooshyaran.Web.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(180)
                         .HasColumnType("nvarchar(180)");
-
-                    b.Property<bool>("IgnoreInvalidTlsCertificate")
-                        .HasColumnType("bit");
 
                     b.Property<string>("SmsApiKey")
                         .IsRequired()

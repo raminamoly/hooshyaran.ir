@@ -4,6 +4,7 @@ using Hooshyaran.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hooshyaran.Web.Data.Migrations
 {
     [DbContext(typeof(HooshyaranDbContext))]
-    partial class HooshyaranDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260707071612_AddSmsSettings")]
+    partial class AddSmsSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,18 +49,10 @@ namespace Hooshyaran.Web.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("MobileNumber")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("ReceiveDemoRequestNotifications")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -595,9 +590,6 @@ namespace Hooshyaran.Web.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(180)
                         .HasColumnType("nvarchar(180)");
-
-                    b.Property<bool>("IgnoreInvalidTlsCertificate")
-                        .HasColumnType("bit");
 
                     b.Property<string>("SmsApiKey")
                         .IsRequired()
