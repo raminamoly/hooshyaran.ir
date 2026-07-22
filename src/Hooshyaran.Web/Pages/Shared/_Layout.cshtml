@@ -38,6 +38,15 @@
         ["url"] = siteBaseUrl,
         ["inLanguage"] = "fa-IR"
     });
+    var structuredDataJson = new List<string> { organizationJson, websiteJson };
+    if (ViewData["StructuredDataJson"] is string structuredDataItem && !string.IsNullOrWhiteSpace(structuredDataItem))
+    {
+        structuredDataJson.Add(structuredDataItem);
+    }
+    else if (ViewData["StructuredDataJson"] is IEnumerable<string> structuredDataItems)
+    {
+        structuredDataJson.AddRange(structuredDataItems.Where(item => !string.IsNullOrWhiteSpace(item)));
+    }
     var footerProducts = await LayoutDbContext.Products
         .Where(product => product.IsActive)
         .OrderBy(product => product.SortOrder)
@@ -70,8 +79,12 @@
     <link rel="stylesheet" href="~/css/fonts.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Hooshyaran.Web.styles.css" asp-append-version="true" />
-    <script type="application/ld+json">@Html.Raw(organizationJson)</script>
-    <script type="application/ld+json">@Html.Raw(websiteJson)</script>
+    @foreach (var structuredData in structuredDataJson)
+    {
+        @Html.Raw("<script type=\"application/ld+json\">")
+        @Html.Raw(structuredData)
+        @Html.Raw("</script>")
+    }
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -214,6 +227,10 @@
             <section aria-labelledby="footer-solutions-title">
                 <h2 id="footer-solutions-title"><svg aria-hidden="true"><use href="#icon-flow"></use></svg>راهکارها</h2>
                 <a href="/solutions">هوش مصنوعی سازمانی</a>
+                <a href="/enterprise-ai-implementation">راه اندازی هوش مصنوعی سازمانی</a>
+                <a href="/enterprise-ai-chatbot">چت بات سازمانی</a>
+                <a href="/ai-knowledge-base">پایگاه دانش هوشمند سازمانی</a>
+                <a href="/private-enterprise-ai">هوش مصنوعی خصوصی برای سازمان</a>
                 <a href="/use-cases">کاربردها</a>
                 <a href="/request-demo">درخواست دمو</a>
             </section>

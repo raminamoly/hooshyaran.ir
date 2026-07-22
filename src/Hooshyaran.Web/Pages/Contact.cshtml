@@ -1,7 +1,7 @@
 @page "/contact"
 @model Hooshyaran.Web.Pages.ContactModel
 @{
-    ViewData["Title"] = Model.PageContent?.Title ?? "تماس با ما";
+    ViewData["Title"] = Model.Seo?.Title ?? Model.PageContent?.SeoTitle ?? Model.PageContent?.Title ?? "تماس با ما";
     ViewData["Description"] = Model.Seo?.Description ?? Model.PageContent?.SeoDescription ?? "راه‌های تماس با هوش‌یاران برای درخواست دمو، مشاوره و بررسی نیازهای سازمانی.";
     ViewData["Keywords"] = Model.Seo?.Keywords ?? Model.PageContent?.SeoKeywords ?? "";
     ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/contact";

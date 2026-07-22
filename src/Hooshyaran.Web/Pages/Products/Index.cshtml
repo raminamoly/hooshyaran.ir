@@ -1,9 +1,9 @@
 @page "/products"
 @model Hooshyaran.Web.Pages.Products.IndexModel
 @{
-    ViewData["Title"] = "محصولات";
-    ViewData["Description"] = Model.Seo?.Description ?? "فهرست محصولات هوش‌یاران برای راهکارهای هوش مصنوعی سازمانی.";
-    ViewData["Keywords"] = Model.Seo?.Keywords ?? "محصولات هوش مصنوعی, LLMOPS فارسی, WorkGraph AI";
+    ViewData["Title"] = Model.Seo?.Title ?? "محصولات و نرم افزار هوش مصنوعی سازمانی";
+    ViewData["Description"] = Model.Seo?.Description ?? "فهرست محصولات و نرم افزار هوش مصنوعی سازمانی هوش‌یاران برای مدیریت AI، چت بات سازمانی، پایگاه دانش، پایش مدل‌های زبانی و تحلیل داده.";
+    ViewData["Keywords"] = Model.Seo?.Keywords ?? "نرم افزار هوش مصنوعی سازمانی, سیستم هوش مصنوعی سازمانی, محصولات هوش مصنوعی, چت بات سازمانی, LLMOPS فارسی";
     ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/products";
 
     static string ProductImage(Hooshyaran.Web.Models.Product product) =>
@@ -29,8 +29,8 @@
 
 @await Html.PartialAsync("_PageHero", new PageHeroViewModel(
     "محصولات",
-    "کاتالوگ محصولات هوش مصنوعی سازمانی",
-    "محصولات هوش‌یاران برای مدیریت مدل‌های زبانی، اتوماسیون فرایندها و توسعه کنترل‌شده کاربردهای AI در سازمان طراحی شده‌اند.",
+    "کاتالوگ نرم افزار هوش مصنوعی سازمانی",
+    "محصولات هوش‌یاران برای مدیریت مدل‌های زبانی، چت بات سازمانی، پایگاه دانش، اتوماسیون فرایندها و توسعه کنترل‌شده کاربردهای AI در سازمان طراحی شده‌اند.",
     "درخواست دمو",
     "/request-demo",
     CssClass: "page-hero--galaxy"))
@@ -39,8 +39,8 @@
     <div class="container">
         @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
             "زیرساخت و عملیات هوش مصنوعی",
-            "محصولات آماده رشد در کنار هم",
-            "هر محصول یک مسیر مشخص برای مدیریت، پایش، اتوماسیون یا استانداردسازی استفاده سازمانی از هوش مصنوعی را پوشش می‌دهد."))
+            "سیستم هوش مصنوعی سازمانی برای مسیرهای متفاوت اجرا",
+            "هر محصول یک مسیر مشخص برای مدیریت، پایش، چت سازمانی، پایگاه دانش، اتوماسیون یا استانداردسازی استفاده سازمانی از هوش مصنوعی را پوشش می‌دهد."))
         <div class="product-grid product-grid--catalog">
             @foreach (var category in Model.Categories.Where(category => category.Products.Any()))
             {

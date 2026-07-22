@@ -34,19 +34,19 @@ public static class ArticleSeedData
     {
         var definitions = new[]
         {
-            new TagDefinition("هوش مصنوعی سازمانی", "enterprise-ai", "محتواهای مرتبط با کاربردهای سازمانی هوش مصنوعی."),
+            new TagDefinition("هوش مصنوعی سازمانی", "enterprise-ai", "راهنماها، محصولات و سناریوهای عملی برای طراحی، استقرار و مدیریت هوش مصنوعی در سازمان‌های ایرانی."),
             new TagDefinition("چتبات سازمانی", "enterprise-chatbot", "ساخت و مدیریت چتبات‌های اختصاصی برای سازمان‌ها و شرکت‌ها."),
             new TagDefinition("دانش سازمانی", "enterprise-knowledge", "RAG، پایگاه دانش، جست‌وجوی هوشمند و دستیار سازمانی فارسی."),
             new TagDefinition("مدیران فناوری اطلاعات", "it-management", "راهنماهای تصمیم‌گیری، معماری، هزینه و اجرای AI برای مدیران IT."),
-            new TagDefinition("مدل زبانی", "language-models", "سناریوها و محصولات مبتنی بر مدل‌های زبانی."),
-            new TagDefinition("LLMOps", "llmops", "مدیریت، پایش و بهره‌برداری از مدل‌های زبانی."),
+            new TagDefinition("مدل زبانی", "language-models", "مقاله‌ها و راهکارهای مرتبط با انتخاب، استقرار، ارزیابی و بهره‌برداری از مدل‌های زبانی در محیط سازمانی."),
+            new TagDefinition("LLMOps", "llmops", "مدیریت عملیاتی مدل‌های زبانی شامل پایش کیفیت، کنترل هزینه، لاگ، ارزیابی، امنیت و آماده‌سازی سرویس پایدار سازمانی."),
             new TagDefinition("امنیت هوش مصنوعی", "ai-security", "امنیت داده، استقرار داخلی، کنترل دسترسی و ریسک‌های AI سازمانی."),
-            new TagDefinition("AI خصوصی", "private-ai", "استقرار و کنترل هوش مصنوعی در مرز داده و سیاست‌های سازمان."),
+            new TagDefinition("AI خصوصی", "private-ai", "استقرار کنترل‌شده هوش مصنوعی در زیرساخت اختصاصی سازمان با تمرکز بر حریم داده، دسترسی، امنیت و بهره‌برداری قابل اعتماد."),
             new TagDefinition("دولت هوشمند", "smart-government", "هوشمندسازی خدمات عمومی، شهرداری‌ها و سازمان‌های دولتی."),
             new TagDefinition("خدمات هوشمند", "smart-services", "هوشمندسازی پاسخ‌گویی، خدمات عمومی و فرآیندهای مشتری‌محور."),
-            new TagDefinition("صدای مشتری", "voice-of-customer", "تحلیل بازخورد، شکایت و تجربه مشتریان و شهروندان."),
-            new TagDefinition("حاکمیت داده", "data-governance", "امنیت، کنترل دسترسی و اعتماد سازمانی."),
-            new TagDefinition("اتوماسیون هوشمند", "intelligent-automation", "فرایندها و جریان‌های کاری هوشمند.")
+            new TagDefinition("صدای مشتری", "voice-of-customer", "تحلیل شکایت، بازخورد و تجربه مشتریان با هوش مصنوعی برای ریشه‌یابی مسئله، پایش SLA و بهبود خدمات."),
+            new TagDefinition("حاکمیت داده", "data-governance", "موضوعات مرتبط با امنیت داده، کنترل دسترسی، اعتماد سازمانی، audit و سیاست‌گذاری استفاده از AI در سازمان."),
+            new TagDefinition("اتوماسیون هوشمند", "intelligent-automation", "طراحی و اجرای جریان‌های کاری هوشمند برای کاهش کار دستی، اتصال سیستم‌ها و افزایش سرعت عملیات سازمانی.")
         };
 
         var result = new Dictionary<string, Tag>(StringComparer.OrdinalIgnoreCase);
@@ -69,7 +69,7 @@ public static class ArticleSeedData
             else
             {
                 tag.Name = string.IsNullOrWhiteSpace(tag.Name) ? definition.Name : tag.Name;
-                tag.Description = string.IsNullOrWhiteSpace(tag.Description) ? definition.Description : tag.Description;
+                tag.Description = string.IsNullOrWhiteSpace(tag.Description) || tag.Description.Length < 50 ? definition.Description : tag.Description;
                 tag.UpdatedAt = now;
             }
 

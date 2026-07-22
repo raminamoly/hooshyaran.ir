@@ -1,15 +1,16 @@
 @page "/request-demo"
 @model Hooshyaran.Web.Pages.RequestDemoModel
 @{
-    ViewData["Title"] = "درخواست دمو";
-    ViewData["Description"] = "درخواست جلسه معرفی یا دمو برای راهکارهای هوش مصنوعی سازمانی هوش‌یاران.";
+    ViewData["Title"] = Model.PageContent?.SeoTitle ?? Model.PageContent?.Title ?? "درخواست جلسه دمو";
+    ViewData["Description"] = Model.PageContent?.SeoDescription ?? Model.PageContent?.Summary ?? "درخواست جلسه دمو برای بررسی نیاز سازمانی و آشنایی با راهکارهای هوش مصنوعی هوش‌یاران.";
+    ViewData["Keywords"] = Model.PageContent?.SeoKeywords ?? "درخواست دمو هوش مصنوعی سازمانی, راه اندازی هوش مصنوعی سازمانی";
     ViewData["CanonicalPath"] = "/request-demo";
 }
 
 @await Html.PartialAsync("_PageHero", new PageHeroViewModel(
-    "درخواست دمو",
-    "درخواست جلسه معرفی هوش‌یاران",
-    "چند دقیقه زمان بگذارید تا نیاز سازمان شما را بهتر بشناسیم و جلسه‌ای دقیق‌تر و کاربردی‌تر هماهنگ کنیم.",
+    "درخواست جلسه دمو",
+    Model.PageContent?.Title ?? "جلسه‌ای برای بررسی نیاز واقعی سازمان شما",
+    Model.PageContent?.Summary ?? "فرم کوتاه زیر به تیم فروش هوش‌یاران کمک می‌کند جلسه را متناسب با صنعت، اولویت‌ها و سطح آمادگی سازمان شما آماده کند.",
     "تماس با ما",
     "/contact"))
 
@@ -18,19 +19,27 @@
         <aside class="demo-request-aside glass-surface">
             <span class="card-icon" aria-hidden="true"><svg><use href="#icon-flow"></use></svg></span>
             <h2>بعد از ثبت چه اتفاقی می‌افتد؟</h2>
-            <p>درخواست شما در پنل ادمین ثبت می‌شود و تیم هوش‌یاران برای هماهنگی زمان جلسه و بررسی سناریوی مناسب با شما تماس می‌گیرد.</p>
+            <p>درخواست شما بررسی می‌شود و تیم فروش هوش‌یاران برای هماهنگی زمان جلسه با شما تماس می‌گیرد.</p>
             <ul class="trust-list">
-                <li>بررسی نیاز سازمانی و سطح آمادگی داده</li>
-                <li>پیشنهاد مسیر مناسب برای شروع</li>
-                <li>معرفی محصولات مرتبط با سناریوی شما</li>
+                <li>شناخت نیاز سازمانی، صنعت و اولویت‌های شما</li>
+                <li>هماهنگی زمان مناسب برای جلسه معرفی</li>
+                <li>پیشنهاد مسیر شروع متناسب با سناریوی شما</li>
             </ul>
         </aside>
 
         <form method="post" class="demo-request-form glass-surface">
             @if (Model.Submitted)
             {
-                <div class="form-alert form-alert--success">درخواست شما ثبت شد. برای هماهنگی جلسه با شما تماس می‌گیریم.</div>
+                <div class="form-alert form-alert--success" role="status">
+                    <strong>سپاسگزاریم؛ درخواست شما ثبت شد.</strong>
+                    <span>تیم فروش هوش‌یاران در اسرع وقت با شما تماس می‌گیرد و برای برگزاری جلسه دمو هماهنگ می‌کند.</span>
+                </div>
             }
+
+            <div class="demo-request-form__intro">
+                <h2>اطلاعات جلسه</h2>
+                <p>لطفاً اطلاعات تماس و موضوع کلی نیازتان را وارد کنید تا جلسه با آمادگی بیشتری برگزار شود.</p>
+            </div>
 
             <div asp-validation-summary="ModelOnly" class="form-validation"></div>
 
@@ -61,17 +70,17 @@
                 </div>
                 <div>
                     <label asp-for="Input.PreferredTime"></label>
-                    <input asp-for="Input.PreferredTime" placeholder="مثلاً شنبه صبح یا سه‌شنبه بعدازظهر" />
+                    <input asp-for="Input.PreferredTime" placeholder="مثلاً شنبه صبح یا سه‌شنبه بعدازظهر" autocomplete="off" />
                 </div>
             </div>
 
             <label asp-for="Input.NeedArea"></label>
-            <input asp-for="Input.NeedArea" placeholder="مثلاً LLMOps، اتوماسیون فرایند، دستیار سازمانی" />
+            <input asp-for="Input.NeedArea" placeholder="مثلاً دستیار سازمانی، اتوماسیون فرایند، تحلیل داده یا استقرار داخلی هوش مصنوعی" />
 
             <label asp-for="Input.Notes"></label>
-            <textarea asp-for="Input.Notes" rows="5" placeholder="چالش، تعداد کاربران، نوع داده یا انتظارتان از جلسه را کوتاه بنویسید."></textarea>
+            <textarea asp-for="Input.Notes" rows="5" placeholder="اگر توضیح کوتاهی درباره چالش، تعداد کاربران، نوع داده یا هدف جلسه دارید، اینجا بنویسید."></textarea>
 
-            <button class="button button--primary" type="submit">ثبت درخواست دمو</button>
+            <button class="button button--primary" type="submit">ثبت و هماهنگی جلسه</button>
         </form>
     </div>
 </section>

@@ -13,6 +13,14 @@
         ? "/assets/content/home-enterprise-ai-hero.jpg"
         : Model.Product.HeroImagePath;
     ViewData["SocialImage"] = AssetOptimizer.Image(productHeroImage);
+    const string siteBaseUrl = "https://hooshyaran.ir";
+    Func<string, string> absoluteUrl = value =>
+        value.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+        value.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+            ? value
+            : $"{siteBaseUrl}/{value.TrimStart('/')}";
+    var canonicalUrl = absoluteUrl($"/products/{Model.Product.Slug}");
+    var productImageUrl = absoluteUrl(AssetOptimizer.Image(productHeroImage));
     var audienceItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.TargetAudience);
     var problemItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.ProblemsSolved);
     var benefitItems = Hooshyaran.Web.Pages.Products.DetailsModel.Lines(Model.Product.Benefits);
@@ -46,6 +54,61 @@
         "chatbot-builder" => "پاسخ دقیق، سریع، قابل کنترل",
         _ => "بینش مدیریتی"
     };
+    var structuredData = new List<string>
+    {
+        System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "Service",
+            ["name"] = Model.Product.PersianTitle,
+            ["description"] = string.IsNullOrWhiteSpace(Model.Product.SeoDescription) ? Model.Product.ShortDescription : Model.Product.SeoDescription,
+            ["url"] = canonicalUrl,
+            ["image"] = productImageUrl,
+            ["serviceType"] = Model.Product.ProductCategory?.Title ?? "هوش مصنوعی سازمانی",
+            ["provider"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "Organization",
+                ["name"] = "هوش‌یاران",
+                ["url"] = siteBaseUrl,
+                ["logo"] = $"{siteBaseUrl}/assets/brand/hooshyaran-logo-small.png"
+            },
+            ["areaServed"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "Country",
+                ["name"] = "ایران"
+            }
+        }),
+        System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "BreadcrumbList",
+            ["itemListElement"] = new object[]
+            {
+                new Dictionary<string, object?> { ["@type"] = "ListItem", ["position"] = 1, ["name"] = "خانه", ["item"] = siteBaseUrl },
+                new Dictionary<string, object?> { ["@type"] = "ListItem", ["position"] = 2, ["name"] = "محصولات", ["item"] = $"{siteBaseUrl}/products" },
+                new Dictionary<string, object?> { ["@type"] = "ListItem", ["position"] = 3, ["name"] = Model.Product.PersianTitle, ["item"] = canonicalUrl }
+            }
+        })
+    };
+    if (Model.Faqs.Any())
+    {
+        structuredData.Add(System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "FAQPage",
+            ["mainEntity"] = Model.Faqs.Select(faq => new Dictionary<string, object?>
+            {
+                ["@type"] = "Question",
+                ["name"] = faq.Question,
+                ["acceptedAnswer"] = new Dictionary<string, object?>
+                {
+                    ["@type"] = "Answer",
+                    ["text"] = faq.Answer
+                }
+            }).ToArray()
+        }));
+    }
+    ViewData["StructuredDataJson"] = structuredData;
 }
 
 @await Html.PartialAsync("_PageHero", new PageHeroViewModel(

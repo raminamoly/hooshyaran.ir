@@ -1,9 +1,9 @@
 @page
 @model IndexModel
 @{
-    ViewData["Title"] = "خانه";
-    ViewData["Description"] = Model.Seo?.Description ?? "هوش‌یاران پلتفرم هوش مصنوعی سازمانی را روی زیرساخت شما پیاده‌سازی می‌کند؛ از مدل‌های زبانی و چت سازمانی تا دانشنامه، ایجنت، داشبورد و کنترل مصرف.";
-    ViewData["Keywords"] = Model.Seo?.Keywords ?? "هوش مصنوعی سازمانی, پلتفرم هوش مصنوعی سازمانی, یکپارچه ساز هوش مصنوعی, AI خصوصی, LLMOPS فارسی";
+    ViewData["Title"] = Model.Seo?.Title ?? "هوش مصنوعی سازمانی برای شرکت‌ها";
+    ViewData["Description"] = Model.Seo?.Description ?? "هوش‌یاران پلتفرم هوش مصنوعی سازمانی را روی زیرساخت شما راه اندازی می‌کند؛ از چت بات سازمانی و پایگاه دانش هوشمند تا مدل‌های زبانی، ایجنت و کنترل مصرف.";
+    ViewData["Keywords"] = Model.Seo?.Keywords ?? "هوش مصنوعی سازمانی, پلتفرم هوش مصنوعی سازمانی, راه اندازی هوش مصنوعی سازمانی, چت بات سازمانی, پایگاه دانش هوشمند سازمانی";
     ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/";
 
     static string ProductImage(Hooshyaran.Web.Models.Product product) =>
@@ -29,11 +29,11 @@
 
 @await Html.PartialAsync("_PageHero", new PageHeroViewModel(
     "هوش مصنوعی سازمانی",
-    "استقرار هوش مصنوعی روی زیرساخت شما",
-    "مدل‌های زبانی، چت سازمانی، دانشنامه، ایجنت‌ها و کنترل مصرف را امن و قابل مدیریت به داده‌های داخلی وصل کنید.",
+    "پلتفرم هوش مصنوعی سازمانی برای استفاده امن در شرکت‌ها",
+    "چت بات سازمانی، پایگاه دانش هوشمند، مدل‌های زبانی، ایجنت‌ها و کنترل مصرف را روی زیرساخت سازمان خود راه اندازی کنید.",
     "درخواست جلسه معرفی",
     "/request-demo",
-    "مشاهده پلتفرم",
+    "مشاهده پلتفرم هوش مصنوعی سازمانی",
     "/ai-integrator",
     "/assets/content/home-enterprise-ai-hero.jpg",
     "نمای تصویری از لایه هماهنگ‌سازی هوش مصنوعی سازمانی، داده‌ها و جریان‌های کاری",
@@ -70,10 +70,10 @@
             <div class="home-product-spotlight__grid">
                 <div class="home-product-spotlight__copy">
                     <span class="home-product-spotlight__eyebrow">محصول ویژه</span>
-                    <h2 id="home-product-spotlight-title">هوش‌یاران؛ یکپارچه‌ساز هوش مصنوعی سازمان</h2>
+                    <h2 id="home-product-spotlight-title">هوش‌یاران؛ پلتفرم هوش مصنوعی سازمانی</h2>
                     <p>
-                        هوش‌یاران استفاده از مدل‌های محلی و ابری، چت سازمانی، دانشنامه، ایجنت‌ها، داشبورد و کنترل مصرف را
-                        از یک پنل واحد به داده‌ها و فرایندهای داخلی سازمان وصل می‌کند.
+                        هوش‌یاران استفاده از مدل‌های محلی و ابری، چت سازمانی، پایگاه دانش هوشمند، چت بات سازمانی، ایجنت‌ها،
+                        داشبورد و کنترل مصرف را از یک پنل واحد به داده‌ها و فرایندهای داخلی سازمان وصل می‌کند.
                     </p>
                     <ul class="home-product-spotlight__list">
                         <li>یک مسیر واحد برای کارکنان، مدیران و تیم فناوری اطلاعات</li>
@@ -81,7 +81,7 @@
                         <li>استقرار روی زیرساخت یا زیردامنه داخلی سازمان</li>
                     </ul>
                     <div class="home-product-spotlight__actions">
-                        <a class="button button--primary" href="/ai-integrator">مشاهده صفحه هوش‌یاران</a>
+                        <a class="button button--primary" href="/ai-integrator">مشاهده پلتفرم</a>
                         <a class="text-link text-link--icon" href="/request-demo">
                             درخواست جلسه معرفی
                             <svg aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
@@ -108,8 +108,8 @@
     <div class="container">
         @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
             "محصولات",
-            "راهکارهای هوش مصنوعی برای سازمان‌ها",
-            "محصولات هوش‌یاران برای ساخت اپلیکیشن‌های LLM، اتوماسیون فرایندها و مدیریت امن مدل‌ها طراحی شده‌اند."))
+            "نرم افزار هوش مصنوعی سازمانی برای نیازهای واقعی شرکت‌ها",
+            "محصولات هوش‌یاران برای چت بات سازمانی، پایگاه دانش، مدیریت مدل‌های زبانی، اتوماسیون فرایندها و استفاده امن از AI طراحی شده‌اند."))
         <div class="product-grid">
             @foreach (var product in Model.FeaturedProducts)
             {
@@ -131,7 +131,7 @@
         @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
             "بانک دانش",
             "بانک دانش هوش مصنوعی سازمانی",
-            "یادداشت‌های کوتاه برای انتخاب، استقرار و مدیریت AI خصوصی در سازمان‌ها."))
+            "راهنماهایی برای پیاده سازی هوش مصنوعی در سازمان، چت با اسناد سازمانی، AI خصوصی و مدیریت مدل‌های زبانی."))
         <div class="article-grid">
             @foreach (var article in Model.LatestArticles)
             {
@@ -162,10 +162,10 @@
     <div class="container">
         @await Html.PartialAsync("_CtaSection", new CtaSectionViewModel(
             "مسیر AI خصوصی سازمانتان را دقیق شروع کنید",
-            "در جلسه معرفی، داده‌ها، سطح حساسیت، سناریوهای کاربردی و مسیر استقرار لوکال AI برای سازمان شما بررسی می‌شود.",
+            "در جلسه معرفی، داده‌ها، سطح حساسیت، سناریوهای کاربردی و مسیر راه اندازی هوش مصنوعی سازمانی برای شما بررسی می‌شود.",
             "درخواست جلسه معرفی",
             "/request-demo",
-            "تماس با ما",
-            "/contact"))
+            "صفحه راه‌اندازی",
+            "/enterprise-ai-implementation"))
     </div>
 </section>
