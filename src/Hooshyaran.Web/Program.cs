@@ -14,16 +14,26 @@ if (string.IsNullOrWhiteSpace(databaseConnectionString))
     throw new InvalidOperationException("ConnectionStrings:HooshyaranDb must be configured before the application starts.");
 }
 
+var enableHttpsRedirection = builder.Configuration.GetValue("Security:EnableHttpsRedirection", true);
+var enableHsts = builder.Configuration.GetValue("Security:EnableHsts", true);
+var canonicalHostEnabled = builder.Configuration.GetValue("CanonicalHost:Enabled", true);
+var canonicalSourceHost = builder.Configuration["CanonicalHost:SourceHost"];
+var canonicalTargetHost = builder.Configuration["CanonicalHost:TargetHost"];
+var canonicalScheme = builder.Configuration["CanonicalHost:Scheme"] ?? "https";
+var canonicalRedirectPermanent = builder.Configuration.GetValue("CanonicalHost:Permanent", true);
+
 // Add services to the container.
 builder.Services.AddDbContext<HooshyaranDbContext>(options =>
     options.UseSqlServer(databaseConnectionString));
 builder.Services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddScoped<ISiteSettingsService, SiteSettingsService>();
 builder.Services.AddScoped<IPublicUrlBuilder, PublicUrlBuilder>();
-builder.Services.AddScoped<IDemoRequestEmailService, DemoRequestEmailService>();
+builder.Services.AddScoped<IDemoRequestNotificationService, DemoRequestNotificationService>();
 builder.Services.AddScoped<ISiteVisitLogger, SiteVisitLogger>();
 builder.Services.AddScoped<IDatabaseExplorerService, DatabaseExplorerService>();
 builder.Services.AddScoped<IMediaFileService, MediaFileService>();
+builder.Services.AddScoped<ISitemapService, SitemapService>();
+builder.Services.AddHttpClient<ISmsSender, SmsIrSmsSender>();
 builder.Services.AddSingleton<ICmsHtmlService, CmsHtmlService>();
 builder.Services.AddScoped<IClaimsTransformation, AdminClaimsTransformation>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -61,6 +71,10 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options =>
 {
     options.Level = CompressionLevel.Fastest;
 });
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = StatusCodes.Status301MovedPermanently;
+});
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -69,23 +83,35 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    app.UseHsts();
+    if (enableHsts)
+    {
+        app.UseHsts();
+    }
 }
 
-app.UseHttpsRedirection();
+if (enableHttpsRedirection)
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseResponseCompression();
 
 app.Use(async (context, next) =>
 {
-    if (string.Equals(context.Request.Host.Host, "www.hooshyaran.ir", StringComparison.OrdinalIgnoreCase))
+    if (canonicalHostEnabled
+        && !string.IsNullOrWhiteSpace(canonicalSourceHost)
+        && !string.IsNullOrWhiteSpace(canonicalTargetHost)
+        && string.Equals(context.Request.Host.Host, canonicalSourceHost, StringComparison.OrdinalIgnoreCase))
     {
+        var targetHost = new HostString(canonicalTargetHost).ToUriComponent();
         var target = string.Concat(
-            "https://hooshyaran.ir",
+            canonicalScheme,
+            "://",
+            targetHost,
             context.Request.PathBase.ToUriComponent(),
             context.Request.Path.ToUriComponent(),
             context.Request.QueryString.ToUriComponent());
-        context.Response.Redirect(target, permanent: true);
+        context.Response.Redirect(target, permanent: canonicalRedirectPermanent);
         return;
     }
 

@@ -212,6 +212,60 @@ const initHeroNetwork = () => {
 
 initHeroNetwork();
 
+const initResponsiveTables = () => {
+  const tables = document.querySelectorAll('.cms-content table');
+
+  tables.forEach((table) => {
+    if (!(table instanceof HTMLTableElement) || table.dataset.tableEnhanced === 'true') {
+      return;
+    }
+
+    const headCells = Array.from(table.querySelectorAll('thead th'));
+    const hasHead = headCells.length > 0;
+    const firstRow = table.rows[0] ?? null;
+    const fallbackHeaders = !hasHead && firstRow
+      ? Array.from(firstRow.cells).map((cell) => cell.textContent?.trim() ?? '')
+      : [];
+    const headers = hasHead
+      ? headCells.map((cell) => cell.textContent?.trim() ?? '')
+      : fallbackHeaders;
+
+    if (!headers.length) {
+      table.dataset.tableEnhanced = 'true';
+      return;
+    }
+
+    const bodyRows = Array.from(table.rows).filter((row, index) => {
+      if (hasHead && row.parentElement?.tagName === 'THEAD') {
+        return false;
+      }
+
+      return !(index === 0 && !hasHead);
+    });
+
+    bodyRows.forEach((row) => {
+      Array.from(row.cells).forEach((cell, index) => {
+        if (!(cell instanceof HTMLTableCellElement) || cell.tagName === 'TH') {
+          return;
+        }
+
+        const label = headers[index] || headers[headers.length - 1] || '';
+        if (label) {
+          cell.setAttribute('data-label', label);
+        }
+      });
+    });
+
+    if (bodyRows.length) {
+      table.classList.add('is-responsive-table');
+    }
+
+    table.dataset.tableEnhanced = 'true';
+  });
+};
+
+initResponsiveTables();
+
 const revealTargets = document.querySelectorAll(
   '.page-hero__content, .page-hero__visual, .page-hero__dashboard, .home-signal, .section-title, .home-product-spotlight__copy, .home-product-spotlight__media, .feature-item, .product-card, .article-card, .cta-section, .employee-process__step, .employee-architecture__figure, .employee-indicators-card, .employee-privacy-card'
 );

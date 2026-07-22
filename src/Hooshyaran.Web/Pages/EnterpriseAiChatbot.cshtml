@@ -1,0 +1,159 @@
+@page "/enterprise-ai-chatbot"
+@using System.Text.Json
+@{
+    ViewData["Title"] = "چت بات سازمانی و دستیار هوش مصنوعی برای شرکت‌ها";
+    ViewData["Description"] = "چت بات سازمانی متصل به اسناد، داده‌ها و نقش‌های کاربری؛ مناسب پاسخ‌گویی داخلی، پشتیبانی مشتری، منابع انسانی و فروش با کنترل مدیریتی.";
+    ViewData["Keywords"] = "چت بات سازمانی, چت‌بات سازمانی, چتبات سازمانی, دستیار هوش مصنوعی سازمانی, چت بات هوش مصنوعی سازمانی, چتبات اختصاصی سازمانی";
+    ViewData["CanonicalPath"] = "/enterprise-ai-chatbot";
+    ViewData["SocialImage"] = "/uploads/media/imported/content/chatbot-builder-agentic-architecture-hero-v2.png";
+
+    var scenarios = new[]
+    {
+        new { Title = "چت بات داخلی کارکنان", Text = "پاسخ به پرسش‌های منابع انسانی، فناوری اطلاعات، آیین‌نامه‌ها، فرایندها و سامانه‌های داخلی با رعایت سطح دسترسی." },
+        new { Title = "چت بات پشتیبانی مشتری", Text = "پاسخ اولیه به مشتریان بر اساس مستندات محصول، سوابق خدمات، SLA و پرسش‌های پرتکرار." },
+        new { Title = "دستیار فروش و بازاریابی", Text = "پاسخ به سوالات محصول، آماده‌سازی متن پیشنهادی، راهنمای شرایط همکاری و هدایت سرنخ به تیم فروش." },
+        new { Title = "دستیار مدیریتی", Text = "اتصال کنترل‌شده به گزارش‌ها و داده‌های مجاز برای خلاصه‌سازی، تحلیل اولیه و پاسخ به سوالات مدیریتی." }
+    };
+
+    var faqs = new[]
+    {
+        new { Question = "چت بات سازمانی چه تفاوتی با چت‌بات ساده دارد؟", Answer = "چت بات سازمانی فقط یک پنجره گفت‌وگو نیست. این چت بات به اسناد، داده‌ها، نقش‌های کاربری، مدل‌های مجاز و گزارش مصرف متصل می‌شود و برای استفاده واقعی در شرکت طراحی می‌شود." },
+        new { Question = "آیا چت بات هوش مصنوعی سازمانی به اسناد داخلی وصل می‌شود؟", Answer = "بله. با معماری RAG می‌توان چت بات را به آیین‌نامه‌ها، فایل‌ها، دستورالعمل‌ها، قراردادها و پایگاه دانش سازمان وصل کرد." },
+        new { Question = "آیا دسترسی کاربران در چت بات قابل کنترل است؟", Answer = "بله. هر کاربر فقط باید از منابعی پاسخ بگیرد که در سازمان مجاز به مشاهده آن‌هاست. کنترل نقش و ثبت لاگ برای همین موضوع ضروری است." },
+        new { Question = "چت بات سازمانی برای مشتریان هم قابل استفاده است؟", Answer = "بله. چت بات می‌تواند در وب‌سایت، پورتال مشتریان یا سامانه‌های داخلی قرار بگیرد و در صورت نیاز درخواست را به کارشناس انسانی ارجاع دهد." },
+        new { Question = "اگر پاسخ چت بات اشتباه باشد چه اتفاقی می‌افتد؟", Answer = "در طراحی سازمانی، پاسخ‌ها باید بازخورد، گزارش خطا و مسیر ارجاع به کارشناس داشته باشند تا کیفیت پاسخ در طول زمان اصلاح شود و تصمیم‌های حساس بدون تایید انسانی انجام نشوند." }
+    };
+
+    var faqSchema = JsonSerializer.Serialize(new Dictionary<string, object?>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "FAQPage",
+        ["mainEntity"] = faqs.Select(item => new Dictionary<string, object?>
+        {
+            ["@type"] = "Question",
+            ["name"] = item.Question,
+            ["acceptedAnswer"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "Answer",
+                ["text"] = item.Answer
+            }
+        }).ToArray()
+    });
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "چت‌بات و دستیار",
+    "چت بات سازمانی متصل به دانش، داده و نقش‌های کاربری",
+    "چت بات هوش مصنوعی سازمانی برای پاسخ‌گویی داخلی و بیرونی؛ متصل به اسناد، پایگاه دانش، دیتابیس، ایجنت‌ها و کنترل دسترسی.",
+    "درخواست دمو چت بات",
+    "/request-demo",
+    "مشاهده چتبات‌ساز",
+    "/products/chatbot-builder"))
+
+<section class="content-band seo-landing-intro">
+    <div class="container seo-landing-grid">
+        <article class="about-panel glass-surface">
+            <h2>چت بات سازمانی باید به کار واقعی سازمان وصل باشد</h2>
+            <p>بسیاری از چت‌بات‌ها فقط چند پاسخ ثابت یا یک مدل عمومی را پشت پنجره گفت‌وگو قرار می‌دهند. اما در سازمان، پاسخ باید به منبع معتبر، سطح دسترسی، داده داخلی، تاریخ اعتبار سند و مسیر ارجاع به انسان وابسته باشد.</p>
+            <p>چت بات سازمانی هوش‌یاران برای همین نیاز طراحی می‌شود: ساخت دستیار هوش مصنوعی سازمانی که بتواند از اسناد، دیتابیس، قوانین داخلی و ایجنت‌های تخصصی پاسخ قابل کنترل تولید کند.</p>
+        </article>
+        <aside class="seo-landing-panel glass-surface">
+            <h2>قابلیت‌های کلیدی</h2>
+            <ul class="trust-list">
+                <li>اتصال به اسناد و پایگاه دانش سازمانی</li>
+                <li>تعریف چت بات اختصاصی برای هر واحد</li>
+                <li>کنترل مدل، نقش کاربر و منابع پاسخ</li>
+                <li>انتشار در پورتال داخلی، وب‌سایت یا سامانه‌های دیگر</li>
+            </ul>
+        </aside>
+    </div>
+</section>
+
+<section class="content-band content-band--alt">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "سناریوها",
+            "چت بات سازمانی در کجا بیشترین اثر را دارد؟",
+            "این سناریوها نقطه‌های شروع رایج برای شرکت‌هایی هستند که می‌خواهند پاسخ‌گویی را سریع‌تر، دقیق‌تر و قابل کنترل‌تر کنند."))
+        <div class="use-case-grid">
+            @foreach (var scenario in scenarios)
+            {
+                <article class="use-case-card">
+                    <span class="use-case-card__icon" aria-hidden="true"><svg><use href="#icon-users"></use></svg></span>
+                    <h3>@scenario.Title</h3>
+                    <p>@scenario.Text</p>
+                </article>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="content-band">
+    <div class="container product-summary-grid">
+        <article class="product-summary-card product-summary-card--problems">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-database"></use></svg></span>
+            <h2>منابع پاسخ</h2>
+            <ul>
+                <li>آیین‌نامه‌ها، دستورالعمل‌ها و فایل‌های داخلی</li>
+                <li>FAQ و مستندات محصول یا خدمت</li>
+                <li>دیتابیس‌ها و گزارش‌های مجاز سازمان</li>
+                <li>سوابق تیکت، شکایت، فروش یا پشتیبانی</li>
+            </ul>
+        </article>
+        <article class="product-summary-card product-summary-card--benefits">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-flow"></use></svg></span>
+            <h2>مسیر پاسخ‌دهی</h2>
+            <ul>
+                <li>تحلیل سوال و تشخیص نیت کاربر</li>
+                <li>انتخاب ایجنت مناسب برای سند، داده یا جست‌وجو</li>
+                <li>ترکیب و رتبه‌بندی پاسخ‌ها</li>
+                <li>نمایش پاسخ نهایی با منبع و محدودیت دسترسی</li>
+            </ul>
+        </article>
+        <article class="product-summary-card product-summary-card--features">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-chart"></use></svg></span>
+            <h2>نتیجه مدیریتی</h2>
+            <ul>
+                <li>کاهش سوالات تکراری کارکنان و مشتریان</li>
+                <li>یکدست شدن پاسخ‌ها در واحدهای مختلف</li>
+                <li>مشاهده مصرف، خطا و کیفیت پاسخ</li>
+                <li>کاهش وابستگی به افراد کلیدی برای دانش داخلی</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<section class="content-band content-band--alt seo-faq-band">
+    <div class="container faq-shell">
+        <div>
+            <p class="eyebrow">سوالات متداول</p>
+            <h2>پرسش‌های رایج درباره چت بات سازمانی</h2>
+            <p>این پاسخ‌ها برای سازمان‌هایی نوشته شده‌اند که چت بات را به عنوان بخشی از زیرساخت پاسخ‌گویی، نه فقط ابزار گفت‌وگو، بررسی می‌کنند.</p>
+        </div>
+        <div class="faq-list">
+            @foreach (var faq in faqs)
+            {
+                <details>
+                    <summary>@faq.Question</summary>
+                    <p>@faq.Answer</p>
+                </details>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="content-band product-cta-band">
+    <div class="container">
+        @await Html.PartialAsync("_CtaSection", new CtaSectionViewModel(
+            "چت بات سازمانی خود را با داده واقعی طراحی کنید",
+            "در جلسه دمو، منابع دانش، کاربران، سناریوهای پاسخ‌گویی و مسیر انتشار چت بات برای سازمان شما بررسی می‌شود.",
+            "درخواست دمو چت بات",
+            "/request-demo",
+            "مشاهده محصول",
+            "/products/chatbot-builder"))
+    </div>
+</section>
+
+@section Scripts {
+    <script type="application/ld+json">@Html.Raw(faqSchema)</script>
+}

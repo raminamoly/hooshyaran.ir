@@ -20,7 +20,9 @@
                 <tr>
                     <th>کاربر</th>
                     <th>ایمیل</th>
+                    <th>موبایل</th>
                     <th>نقش</th>
+                    <th>اعلان دمو</th>
                     <th>وضعیت</th>
                     <th>عملیات</th>
                 </tr>
@@ -34,7 +36,13 @@
                         <small dir="ltr">@user.UserName</small>
                     </td>
                     <td dir="ltr">@user.Email</td>
+                    <td dir="ltr">@(string.IsNullOrWhiteSpace(user.MobileNumber) ? "—" : user.MobileNumber)</td>
                     <td>@(user.Role == AdminUserRoles.SuperAdmin ? "SuperAdmin" : "نویسنده")</td>
+                    <td>
+                        <span class="admin-status @(user.ReceiveDemoRequestNotifications ? "admin-status--live" : "admin-status--draft")">
+                            @(user.ReceiveDemoRequestNotifications ? "دریافت می‌کند" : "غیرفعال")
+                        </span>
+                    </td>
                     <td>
                         <span class="admin-status @(user.IsActive ? "admin-status--live" : "admin-status--draft")">
                             @(user.IsActive ? "فعال" : "غیرفعال")

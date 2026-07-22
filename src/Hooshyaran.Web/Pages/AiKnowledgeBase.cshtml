@@ -1,0 +1,168 @@
+@page "/ai-knowledge-base"
+@using System.Text.Json
+@{
+    ViewData["Title"] = "پایگاه دانش هوشمند سازمانی برای چت با اسناد داخلی";
+    ViewData["Description"] = "پایگاه دانش هوشمند سازمانی برای تبدیل اسناد، آیین‌نامه‌ها، قراردادها و فایل‌های داخلی به پاسخ‌های قابل جست‌وجو، منبع‌دار و امن.";
+    ViewData["Keywords"] = "پایگاه دانش هوشمند سازمانی, چت با اسناد سازمانی, جستجوی هوشمند اسناد, RAG سازمانی, دانش سازمانی, چت با اسناد داخلی";
+    ViewData["CanonicalPath"] = "/ai-knowledge-base";
+    ViewData["SocialImage"] = "/assets/content/article-rag-finetuning-decision-map.svg";
+
+    var sources = new[]
+    {
+        "آیین‌نامه‌ها و دستورالعمل‌های داخلی",
+        "قراردادها، مکاتبات و صورت‌جلسه‌ها",
+        "فایل‌های PDF، Word، Excel و صفحات دانش",
+        "مستندات محصول، خدمات و پشتیبانی",
+        "راهنماهای فنی، عملیاتی، حقوقی و منابع انسانی"
+    };
+
+    var flow = new[]
+    {
+        new { Title = "آماده‌سازی منابع", Text = "اسناد معتبر، مالک محتوا، نسخه سند و سطح محرمانگی مشخص می‌شود." },
+        new { Title = "نمایه‌سازی و بازیابی", Text = "اسناد به قطعات قابل بازیابی تبدیل می‌شوند تا جستجوی هوشمند اسناد با دقت بیشتری انجام شود." },
+        new { Title = "پاسخ با منبع", Text = "کاربر سوال می‌پرسد و سیستم پاسخ را بر اساس منابع سازمانی و همراه با ارجاع تولید می‌کند." },
+        new { Title = "کنترل و بهبود", Text = "پاسخ‌ها، منابع، خطاها و بازخورد کاربران پایش می‌شود تا کیفیت پایگاه دانش بهتر شود." }
+    };
+
+    var faqs = new[]
+    {
+        new { Question = "پایگاه دانش هوشمند سازمانی چیست؟", Answer = "پایگاه دانش هوشمند سازمانی مجموعه‌ای کنترل‌شده از اسناد، فایل‌ها و دانش داخلی است که با مدل زبانی و بازیابی معنایی، امکان پرسش و پاسخ روی منابع سازمان را فراهم می‌کند." },
+        new { Question = "چت با اسناد سازمانی چطور انجام می‌شود؟", Answer = "اسناد ابتدا آماده‌سازی، قطعه‌بندی و نمایه‌سازی می‌شوند. سپس سوال کاربر به نزدیک‌ترین منابع مرتبط وصل می‌شود و پاسخ با اتکا به همان منابع تولید می‌شود." },
+        new { Question = "آیا پاسخ‌ها منبع دارند؟", Answer = "در طراحی سازمانی، پاسخ بدون منبع ریسک دارد. بنابراین باید ارجاع به سند، بخش یا منبع پاسخ در تجربه کاربر و لاگ سیستم دیده شود." },
+        new { Question = "آیا همه کاربران به همه اسناد دسترسی دارند؟", Answer = "خیر. سطح دسترسی باید در مرحله بازیابی و پاسخ‌دهی اعمال شود تا هر کاربر فقط از منابع مجاز خودش پاسخ بگیرد." },
+        new { Question = "چه اسنادی برای پایلوت پایگاه دانش مناسب‌ترند؟", Answer = "اسنادی مناسب‌اند که معتبر، پرتکرار، دارای مالک مشخص و نسبتاً به‌روز باشند؛ مثل آیین‌نامه منابع انسانی، راهنمای خدمات، FAQ پشتیبانی یا مستندات فنی یک محصول." }
+    };
+
+    var faqSchema = JsonSerializer.Serialize(new Dictionary<string, object?>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "FAQPage",
+        ["mainEntity"] = faqs.Select(item => new Dictionary<string, object?>
+        {
+            ["@type"] = "Question",
+            ["name"] = item.Question,
+            ["acceptedAnswer"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "Answer",
+                ["text"] = item.Answer
+            }
+        }).ToArray()
+    });
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "دانش و اسناد",
+    "پایگاه دانش هوشمند سازمانی برای چت با اسناد داخلی",
+    "اسناد، آیین‌نامه‌ها، فایل‌ها و دانش داخلی سازمان را به منبع پاسخ‌گویی قابل جست‌وجو، منبع‌دار و قابل اتصال به چت بات تبدیل کنید.",
+    "درخواست دموی پایگاه دانش",
+    "/request-demo",
+    "مطالعه درباره RAG",
+    "/blog/rag-vs-fine-tuning-persian-enterprise-ai"))
+
+<section class="content-band seo-landing-intro">
+    <div class="container seo-landing-grid">
+        <article class="about-panel glass-surface">
+            <h2>چت با اسناد سازمانی یعنی پاسخ از دانش معتبر داخلی</h2>
+            <p>در بسیاری از شرکت‌ها، پاسخ درست در فایل‌ها، قراردادها، آیین‌نامه‌ها، ایمیل‌ها یا تجربه افراد پنهان است. پایگاه دانش هوشمند سازمانی این منابع را به یک لایه قابل پرسش تبدیل می‌کند تا کاربر به جای جست‌وجوی دستی، سوال خود را به زبان طبیعی بپرسد.</p>
+            <p>هدف فقط سرعت نیست. در محیط سازمانی، پاسخ باید قابل اتکا، محدود به دسترسی کاربر و قابل ردیابی به منبع باشد.</p>
+        </article>
+        <aside class="seo-landing-panel glass-surface">
+            <h2>منابع قابل استفاده</h2>
+            <ul class="trust-list">
+                @foreach (var source in sources)
+                {
+                    <li>@source</li>
+                }
+            </ul>
+        </aside>
+    </div>
+</section>
+
+<section class="content-band content-band--alt">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "مسیر ساخت",
+            "از فایل‌های پراکنده تا جستجوی هوشمند اسناد",
+            "برای اینکه چت با اسناد سازمانی قابل اعتماد باشد، منابع باید مالک، نسخه، سطح دسترسی و ارزیابی کیفیت داشته باشند."))
+        <div class="seo-process-grid">
+            @for (var index = 0; index < flow.Length; index++)
+            {
+                <article class="seo-process-card">
+                    <span>@(index + 1)</span>
+                    <h2>@flow[index].Title</h2>
+                    <p>@flow[index].Text</p>
+                </article>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="content-band">
+    <div class="container product-summary-grid">
+        <article class="product-summary-card product-summary-card--problems">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-book"></use></svg></span>
+            <h2>کاربردهای رایج</h2>
+            <ul>
+                <li>پرسش و پاسخ از آیین‌نامه‌های منابع انسانی</li>
+                <li>جست‌وجوی قراردادها و تعهدات پروژه</li>
+                <li>پاسخ به سوالات پشتیبانی بر اساس مستندات محصول</li>
+                <li>راهنمای فنی برای عملیات، تعمیرات و آموزش</li>
+            </ul>
+        </article>
+        <article class="product-summary-card product-summary-card--benefits">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
+            <h2>ریسک‌هایی که کنترل می‌شود</h2>
+            <ul>
+                <li>پاسخ بدون منبع یا ناهماهنگ با سند رسمی</li>
+                <li>نمایش اطلاعات محرمانه به کاربر غیرمجاز</li>
+                <li>استفاده از نسخه قدیمی یا متناقض اسناد</li>
+                <li>وابستگی پاسخ‌گویی به افراد کلیدی سازمان</li>
+            </ul>
+        </article>
+        <article class="product-summary-card product-summary-card--features">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-chart"></use></svg></span>
+            <h2>شاخص‌های کیفیت</h2>
+            <ul>
+                <li>درصد پاسخ‌های دارای منبع معتبر</li>
+                <li>دقت بازیابی سند مرتبط</li>
+                <li>نرخ پذیرش پاسخ توسط کاربر یا کارشناس</li>
+                <li>کاهش زمان پیدا کردن پاسخ در سازمان</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<section class="content-band content-band--alt seo-faq-band">
+    <div class="container faq-shell">
+        <div>
+            <p class="eyebrow">سوالات متداول</p>
+            <h2>پرسش‌های رایج درباره پایگاه دانش هوشمند سازمانی</h2>
+            <p>این بخش برای مدیرانی است که می‌خواهند RAG سازمانی را از دمو به استفاده واقعی و امن برسانند.</p>
+        </div>
+        <div class="faq-list">
+            @foreach (var faq in faqs)
+            {
+                <details>
+                    <summary>@faq.Question</summary>
+                    <p>@faq.Answer</p>
+                </details>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="content-band product-cta-band">
+    <div class="container">
+        @await Html.PartialAsync("_CtaSection", new CtaSectionViewModel(
+            "پایگاه دانش هوشمند سازمانی خود را با اسناد واقعی بسنجید",
+            "در جلسه دمو، یک سناریوی چت با اسناد سازمانی، منابع قابل اتصال و معیارهای کیفیت بازیابی برای سازمان شما بررسی می‌شود.",
+            "درخواست دموی پایگاه دانش",
+            "/request-demo",
+            "مشاهده چتبات‌ساز",
+            "/products/chatbot-builder"))
+    </div>
+</section>
+
+@section Scripts {
+    <script type="application/ld+json">@Html.Raw(faqSchema)</script>
+}

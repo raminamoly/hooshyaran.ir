@@ -34,6 +34,11 @@
                 <span asp-validation-for="Input.Email"></span>
             </div>
             <div>
+                <label asp-for="Input.MobileNumber"></label>
+                <input asp-for="Input.MobileNumber" dir="ltr" placeholder="09123456789" />
+                <span asp-validation-for="Input.MobileNumber"></span>
+            </div>
+            <div>
                 <label asp-for="Input.Role"></label>
                 <select asp-for="Input.Role" asp-items="Model.RoleOptions"></select>
                 <span asp-validation-for="Input.Role"></span>
@@ -47,6 +52,11 @@
         <label class="admin-checkbox">
             <input asp-for="Input.IsActive" />
             <span>فعال باشد</span>
+        </label>
+
+        <label class="admin-checkbox">
+            <input asp-for="Input.ReceiveDemoRequestNotifications" />
+            <span>دریافت کننده نوتیفیکیشن درخواست دمو</span>
         </label>
 
         <div class="admin-form-actions">

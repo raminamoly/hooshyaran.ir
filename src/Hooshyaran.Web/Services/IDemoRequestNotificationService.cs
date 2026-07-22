@@ -2,7 +2,7 @@ using Hooshyaran.Web.Models;
 
 namespace Hooshyaran.Web.Services;
 
-public interface IDemoRequestEmailService
+public interface IDemoRequestNotificationService
 {
     Task NotifyAsync(DemoRequest demoRequest, CancellationToken cancellationToken = default);
 }

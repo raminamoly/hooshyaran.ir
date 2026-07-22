@@ -25,17 +25,29 @@
     {
         <div class="admin-alert @(Model.EmailTestSucceeded ? "admin-alert--success" : "admin-alert--error")">@Model.EmailTestMessage</div>
     }
+    @if (!string.IsNullOrWhiteSpace(Model.SmsTestMessage))
+    {
+        <div class="admin-alert @(Model.SmsTestSucceeded ? "admin-alert--success" : "admin-alert--error")">@Model.SmsTestMessage</div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.SitemapMessage))
+    {
+        <div class="admin-alert @(Model.SitemapRegenerated ? "admin-alert--success" : "admin-alert--error")">@Model.SitemapMessage</div>
+    }
 
     <form method="post" class="admin-form admin-edit-form glass-surface admin-tabs">
         <div asp-validation-summary="ModelOnly" class="admin-validation"></div>
 
-        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-general" checked />
-        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-email" />
-        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-database" />
+        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-general" checked="@(Model.ActiveSettingsTab == "general")" />
+        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-email" checked="@(Model.ActiveSettingsTab == "email")" />
+        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-sms" checked="@(Model.ActiveSettingsTab == "sms")" />
+        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-sitemap" checked="@(Model.ActiveSettingsTab == "sitemap")" />
+        <input class="admin-tab-input" type="radio" name="settings-tab" id="settings-database" checked="@(Model.ActiveSettingsTab == "database")" />
 
         <div class="admin-tab-list" role="tablist" aria-label="بخش‌های تنظیمات">
             <label class="admin-tab" for="settings-general" role="tab">تنظیمات عمومی</label>
             <label class="admin-tab" for="settings-email" role="tab">SMTP و ایمیل</label>
+            <label class="admin-tab" for="settings-sms" role="tab">ارسال پیامک</label>
+            <label class="admin-tab" for="settings-sitemap" role="tab">سایت مپ</label>
             <label class="admin-tab" for="settings-database" role="tab">بکاپ دیتابیس</label>
         </div>
 
@@ -89,9 +101,102 @@
                     <input asp-for="Input.EnableSsl" />
                     <span>SSL/TLS فعال باشد</span>
                 </label>
+                <label class="admin-checkbox">
+                    <input asp-for="Input.IgnoreInvalidTlsCertificate" />
+                    <span>خطای گواهی TLS این سرور نادیده گرفته شود</span>
+                </label>
                 <div class="admin-form-actions">
-                    <button class="button button--secondary" type="submit" asp-page-handler="TestEmail">ارسال ایمیل تست</button>
+                    <button class="button button--secondary admin-test-button" type="submit" asp-page-handler="TestEmail">ارسال ایمیل تست</button>
                     <p class="admin-help-text">قبل از ارسال تست، مقادیر همین فرم ذخیره می‌شوند.</p>
+                </div>
+            </fieldset>
+        </section>
+
+        <section class="admin-tab-panel admin-tab-panel--sms">
+            <fieldset class="admin-fieldset">
+                <legend>تنظیمات ارسال پیامک</legend>
+                <div class="admin-form-grid">
+                    <div>
+                        <label asp-for="Input.SmsApiUrl"></label>
+                        <input asp-for="Input.SmsApiUrl" dir="ltr" placeholder="https://api.sms.ir/v1/send/verify" />
+                        <span asp-validation-for="Input.SmsApiUrl"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Input.SmsApiKey"></label>
+                        <input asp-for="Input.SmsApiKey" placeholder="برای حفظ مقدار قبلی خالی بگذارید." />
+                    </div>
+                    <div>
+                        <label asp-for="Input.SmsOtpTemplateId"></label>
+                        <input asp-for="Input.SmsOtpTemplateId" type="number" dir="ltr" />
+                        <span asp-validation-for="Input.SmsOtpTemplateId"></span>
+                        <p class="admin-help-text">پارامتر این قالب باید با نام OTP ساخته شده باشد.</p>
+                    </div>
+                    <div>
+                        <label asp-for="Input.SmsMessageTemplateId"></label>
+                        <input asp-for="Input.SmsMessageTemplateId" type="number" dir="ltr" />
+                        <span asp-validation-for="Input.SmsMessageTemplateId"></span>
+                        <p class="admin-help-text">پارامتر این قالب باید با نام MESSAGE ساخته شده باشد.</p>
+                    </div>
+                </div>
+
+                <div class="sms-test-tool">
+                    <div>
+                        <h2>تست ارسال</h2>
+                        <p>قبل از ارسال تست، مقادیر همین فرم ذخیره می‌شوند.</p>
+                    </div>
+                    <div class="admin-form-grid">
+                        <div>
+                            <label asp-for="SmsTest.Mobile"></label>
+                            <input asp-for="SmsTest.Mobile" dir="ltr" placeholder="09125177721" />
+                        </div>
+                        <div>
+                            <label asp-for="SmsTest.TemplateType"></label>
+                            <select asp-for="SmsTest.TemplateType">
+                                <option value="@IndexModel.SmsTemplateTypes.Otp">کد یکبارمصرف</option>
+                                <option value="@IndexModel.SmsTemplateTypes.Message">پیام ساده</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label asp-for="SmsTest.Value"></label>
+                            <input asp-for="SmsTest.Value" placeholder="123456 یا متن پیام" />
+                        </div>
+                    </div>
+                    <div class="admin-form-actions">
+                        <button class="button button--secondary admin-test-button sms-test-tool__button" type="submit" asp-page-handler="TestSms">ارسال پیامک تست</button>
+                    </div>
+                </div>
+            </fieldset>
+        </section>
+
+        <section class="admin-tab-panel admin-tab-panel--sitemap">
+            <fieldset class="admin-fieldset">
+                <legend>بازطراحی سایت مپ</legend>
+                <div class="sitemap-tool">
+                    <div class="sitemap-tool__summary">
+                        <div>
+                            <span>آدرس سایت مپ</span>
+                            <a href="@Model.SitemapUrl" target="_blank" rel="noopener" dir="ltr">@Model.SitemapUrl</a>
+                        </div>
+                        <div>
+                            <span>تعداد آدرس‌ها</span>
+                            <strong>@(Model.LatestSitemapSnapshot?.UrlCount.ToString() ?? "هنوز تولید نشده")</strong>
+                        </div>
+                        <div>
+                            <span>آخرین تولید</span>
+                            <strong>@(Model.LatestSitemapSnapshot?.GeneratedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm") ?? "هنوز تولید نشده")</strong>
+                        </div>
+                        <div>
+                            <span>دامنه استفاده‌شده</span>
+                            <strong dir="ltr">@(Model.LatestSitemapSnapshot?.BaseUrl ?? Model.Input.WebsiteUrl)</strong>
+                        </div>
+                    </div>
+                    <div class="sitemap-tool__action">
+                        <div>
+                            <h2>تولید دوباره از روی داده‌های سایت</h2>
+                            <p>محصولات فعال، مقالات منتشرشده، مسیرهای ثابت عمومی و تگ‌های دارای محتوای منتشرشده وارد فایل سایت مپ می‌شوند.</p>
+                        </div>
+                        <button class="button button--primary" type="submit" asp-page-handler="RegenerateSitemap">بازطراحی سایت مپ</button>
+                    </div>
                 </div>
             </fieldset>
         </section>

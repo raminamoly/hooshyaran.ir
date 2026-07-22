@@ -68,5 +68,60 @@
     "source": "/posts/GovernmentsUseAI.html",
     "destination": "/blog/ai-for-government-public-sector-iran",
     "note": "مقاله قدیمی هوش مصنوعی در دولت‌ها به مقاله جدید دولت و خدمات عمومی منتقل می‌شود."
+  },
+  {
+    "source": "/blog/enterprise-ai-implementation-roadmap",
+    "destination": "/blog/enterprise-ai-roadmap-for-it-managers",
+    "note": "نامک آزمایشی نقشه راه استقرار هوش مصنوعی سازمانی به مقاله منتشرشده مدیران IT منتقل می‌شود."
+  },
+  {
+    "source": "/blog/enterprise-ai-chatbot-guide",
+    "destination": "/enterprise-ai-chatbot",
+    "note": "نامک آزمایشی راهنمای چت‌بات سازمانی به لندینگ اصلی چت‌بات سازمانی منتقل می‌شود."
+  },
+  {
+    "source": "/blog/ai-knowledge-base-guide",
+    "destination": "/ai-knowledge-base",
+    "note": "نامک آزمایشی پایگاه دانش هوش مصنوعی به لندینگ اصلی پایگاه دانش سازمانی منتقل می‌شود."
+  },
+  {
+    "source": "/blog/private-enterprise-ai-security",
+    "destination": "/blog/on-premise-ai-data-security-iran",
+    "note": "نامک آزمایشی امنیت هوش مصنوعی خصوصی به مقاله امنیت داده و استقرار داخلی منتقل می‌شود."
+  },
+  {
+    "source": "/blog/llmops-enterprise-ai-platform",
+    "destination": "/blog/what-is-llmops",
+    "note": "نامک آزمایشی پلتفرم LLMOps به مقاله منتشرشده LLMOps منتقل می‌شود."
+  },
+  {
+    "source": "/blog/ai-transformation-in-organizations",
+    "destination": "/blog/enterprise-ai-pilot-to-production",
+    "note": "نامک آزمایشی تحول هوش مصنوعی سازمانی به مقاله تبدیل پایلوت به محصول واقعی منتقل می‌شود."
+  },
+  {
+    "source": "/blog/rag-enterprise-knowledge-base",
+    "destination": "/blog/rag-vs-fine-tuning-persian-enterprise-ai",
+    "note": "نامک آزمایشی RAG و پایگاه دانش سازمانی به مقاله RAG در برابر Fine-Tuning منتقل می‌شود."
+  },
+  {
+    "source": "/blog/on-premise-ai-vs-cloud-ai",
+    "destination": "/blog/on-premise-ai-data-security-iran",
+    "note": "نامک آزمایشی مقایسه هوش مصنوعی داخلی و ابری به مقاله امنیت داده و استقرار داخلی منتقل می‌شود."
+  },
+  {
+    "source": "/blog/enterprise-ai-governance",
+    "destination": "/private-enterprise-ai",
+    "note": "نامک آزمایشی حاکمیت هوش مصنوعی سازمانی به لندینگ هوش مصنوعی خصوصی منتقل می‌شود."
+  },
+  {
+    "source": "/blog/ai-agent-workflow-automation",
+    "destination": "/blog/ai-workflow-automation",
+    "note": "نامک آزمایشی ایجنت و اتوماسیون فرایند به مقاله اتوماسیون هوشمند فرایندها منتقل می‌شود."
+  },
+  {
+    "source": "/blog/persian-enterprise-chatbot",
+    "destination": "/enterprise-ai-chatbot",
+    "note": "نامک آزمایشی چت‌بات فارسی سازمانی به لندینگ اصلی چت‌بات سازمانی منتقل می‌شود."
   }
 ]

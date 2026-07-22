@@ -10,11 +10,15 @@ public class AdminUser
 
     public string Email { get; set; } = string.Empty;
 
+    public string MobileNumber { get; set; } = string.Empty;
+
     public string PasswordHash { get; set; } = string.Empty;
 
     public string Role { get; set; } = AdminUserRoles.Author;
 
     public bool IsActive { get; set; } = true;
+
+    public bool ReceiveDemoRequestNotifications { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 

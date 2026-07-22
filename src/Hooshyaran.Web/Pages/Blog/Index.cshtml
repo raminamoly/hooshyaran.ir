@@ -1,7 +1,7 @@
 @page "/blog"
 @model Hooshyaran.Web.Pages.Blog.IndexModel
 @{
-    ViewData["Title"] = "بلاگ";
+    ViewData["Title"] = Model.Seo?.Title ?? "بلاگ";
     ViewData["Description"] = Model.Seo?.Description ?? "دانشنامه هوش مصنوعی سازمانی هوش‌یاران.";
     ViewData["Keywords"] = Model.Seo?.Keywords ?? "بلاگ هوش مصنوعی, مقالات AI سازمانی";
     ViewData["CanonicalPath"] = Model.Seo?.CanonicalPath ?? "/blog";

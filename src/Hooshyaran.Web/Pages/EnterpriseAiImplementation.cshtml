@@ -1,0 +1,172 @@
+@page "/enterprise-ai-implementation"
+@using System.Text.Json
+@{
+    ViewData["Title"] = "راه اندازی هوش مصنوعی سازمانی روی سرور شرکت";
+    ViewData["Description"] = "مسیر عملی راه اندازی هوش مصنوعی سازمانی؛ از انتخاب سناریو و نصب روی زیرساخت شرکت تا اتصال به اسناد، کنترل دسترسی و تحویل قابل سنجش.";
+    ViewData["Keywords"] = "راه اندازی هوش مصنوعی سازمانی, پیاده سازی هوش مصنوعی در سازمان, نصب هوش مصنوعی روی سرور شرکت, استقرار هوش مصنوعی سازمانی, هوش مصنوعی خصوصی برای سازمان";
+    ViewData["CanonicalPath"] = "/enterprise-ai-implementation";
+    ViewData["SocialImage"] = "/assets/content/llmops-private-ai-architecture-hero-v2.jpg";
+
+    var phases = new[]
+    {
+        new { Title = "نیازسنجی و انتخاب سناریو", Text = "در شروع، مسئله‌های واقعی سازمان، داده‌های آماده، ریسک امنیتی و شاخص‌های موفقیت مشخص می‌شوند تا پیاده سازی هوش مصنوعی در سازمان از یک پروژه مبهم به مسیر قابل سنجش تبدیل شود." },
+        new { Title = "طراحی معماری و مسیر استقرار", Text = "بر اساس حساسیت داده، تصمیم می‌گیریم کدام بخش روی سرور شرکت، کدام بخش در محیط کنترل‌شده و کدام مدل در مسیر محلی یا ابری اجرا شود." },
+        new { Title = "نصب، اتصال و کنترل دسترسی", Text = "پلتفرم هوش مصنوعی سازمانی به کاربران، نقش‌ها، اسناد، پایگاه دانش، مدل‌های زبانی و سامانه‌های داخلی متصل می‌شود." },
+        new { Title = "پایلوت و ارزیابی کیفیت", Text = "پاسخ‌ها با داده واقعی، کاربران واقعی و معیارهایی مثل دقت، منبع‌پذیری، زمان پاسخ، ریسک امنیتی و هزینه هر درخواست سنجیده می‌شوند." },
+        new { Title = "تحویل عملیاتی و توسعه مرحله‌ای", Text = "بعد از پایلوت، گزارش مدیریتی، فرآیند پشتیبانی، مالکیت سرویس و برنامه توسعه به واحدهای بعدی آماده می‌شود." }
+    };
+
+    var outputs = new[]
+    {
+        "نقشه راه پیاده سازی هوش مصنوعی در سازمان",
+        "معماری نصب روی سرور یا زیرساخت اختصاصی شرکت",
+        "تعریف کاربران، نقش‌ها، مدل‌ها و منابع دانش",
+        "پایلوت کنترل‌شده برای یک یا چند سناریوی واقعی",
+        "داشبورد مصرف، کیفیت پاسخ، رخدادها و هزینه",
+        "برنامه توسعه مرحله‌ای از پایلوت به بهره‌برداری سازمانی"
+    };
+
+    var faqs = new[]
+    {
+        new { Question = "راه اندازی هوش مصنوعی سازمانی از کجا شروع می‌شود؟", Answer = "بهترین شروع، انتخاب یک مسئله محدود و قابل اندازه‌گیری است؛ مثل چت با اسناد داخلی، پاسخ‌گویی منابع انسانی، تحلیل شکایات یا اتصال کنترل‌شده به یک سامانه." },
+        new { Question = "آیا نصب هوش مصنوعی روی سرور شرکت امکان‌پذیر است؟", Answer = "بله. بسته به سطح محرمانگی داده و ظرفیت زیرساخت، می‌توان بخش‌های حساس را روی سرور یا محیط اختصاصی سازمان اجرا کرد و برای بخش‌های کم‌ریسک‌تر از مسیرهای کنترل‌شده دیگر استفاده کرد." },
+        new { Question = "پیاده سازی هوش مصنوعی در سازمان چقدر زمان می‌برد؟", Answer = "برای یک پایلوت محدود معمولاً چند هفته زمان لازم است. زمان نسخه عملیاتی به تعداد منابع داده، سطح امنیت، تعداد کاربران و پیچیدگی اتصال به سامانه‌های داخلی بستگی دارد." },
+        new { Question = "چطور موفقیت پروژه سنجیده می‌شود؟", Answer = "شاخص‌هایی مثل کاهش زمان پاسخ، نرخ پذیرش پاسخ، درصد پاسخ‌های دارای منبع، تعداد رخدادهای امنیتی، هزینه هر درخواست موفق و استفاده واقعی کاربران بررسی می‌شوند." },
+        new { Question = "برای شروع، داده‌ها باید کامل و تمیز باشند؟", Answer = "نه الزاماً. برای شروع پایلوت، یک مجموعه محدود از اسناد معتبر و چند سناریوی پرتکرار کافی است. کیفیت داده در همان پایلوت سنجیده و مسیر پاک‌سازی مرحله‌ای مشخص می‌شود." }
+    };
+
+    var faqSchema = JsonSerializer.Serialize(new Dictionary<string, object?>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "FAQPage",
+        ["mainEntity"] = faqs.Select(item => new Dictionary<string, object?>
+        {
+            ["@type"] = "Question",
+            ["name"] = item.Question,
+            ["acceptedAnswer"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "Answer",
+                ["text"] = item.Answer
+            }
+        }).ToArray()
+    });
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "استقرار سازمانی",
+    "راه اندازی هوش مصنوعی سازمانی روی سرور و زیرساخت شرکت",
+    "از نیازسنجی و نصب تا اتصال به اسناد، کاربران، مدل‌های زبانی و گزارش‌ها؛ مسیری عملی برای پیاده سازی هوش مصنوعی در سازمان.",
+    "درخواست جلسه نیازسنجی",
+    "/request-demo",
+    "مشاهده پلتفرم",
+    "/ai-integrator"))
+
+<section class="content-band seo-landing-intro">
+    <div class="container seo-landing-grid">
+        <article class="about-panel glass-surface">
+            <h2>چرا راه اندازی هوش مصنوعی سازمانی فقط نصب یک مدل نیست؟</h2>
+            <p>در سازمان، مدل زبانی فقط یک بخش از راهکار است. برای بهره‌برداری واقعی باید کاربر، نقش، داده، اسناد، پایگاه دانش، لاگ، کیفیت پاسخ، هزینه و پشتیبانی همزمان دیده شوند. به همین دلیل راه اندازی هوش مصنوعی سازمانی باید مثل یک سرویس عملیاتی طراحی شود، نه یک دمو کوتاه.</p>
+            <p>هوش‌یاران این مسیر را از یک سناریوی محدود شروع می‌کند و آن را به پلتفرم هوش مصنوعی سازمانی قابل کنترل، قابل گزارش و قابل توسعه تبدیل می‌کند.</p>
+        </article>
+        <aside class="seo-landing-panel glass-surface">
+            <h2>مناسب برای</h2>
+            <ul class="trust-list">
+                <li>سازمان‌هایی که داده حساس یا اسناد داخلی دارند</li>
+                <li>شرکت‌هایی که می‌خواهند AI را روی زیرساخت خود اجرا کنند</li>
+                <li>مدیرانی که از PoC به بهره‌برداری واقعی می‌رسند</li>
+                <li>تیم‌هایی که به چت سازمانی، RAG و کنترل مصرف نیاز دارند</li>
+            </ul>
+        </aside>
+    </div>
+</section>
+
+<section class="content-band content-band--alt">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "فرایند اجرا",
+            "۵ مرحله برای پیاده سازی هوش مصنوعی در سازمان",
+            "این مراحل کمک می‌کنند پروژه از همان ابتدا با داده واقعی، کنترل امنیتی و شاخص مدیریتی جلو برود."))
+        <div class="seo-process-grid">
+            @for (var index = 0; index < phases.Length; index++)
+            {
+                <article class="seo-process-card">
+                    <span>@(index + 1)</span>
+                    <h2>@phases[index].Title</h2>
+                    <p>@phases[index].Text</p>
+                </article>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="content-band">
+    <div class="container product-summary-grid">
+        <article class="product-summary-card product-summary-card--problems">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-server"></use></svg></span>
+            <h2>خروجی‌های قابل تحویل</h2>
+            <ul>
+                @foreach (var output in outputs)
+                {
+                    <li>@output</li>
+                }
+            </ul>
+        </article>
+        <article class="product-summary-card product-summary-card--benefits">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
+            <h2>کنترل‌های ضروری</h2>
+            <ul>
+                <li>سطح دسترسی کاربران و نقش‌ها</li>
+                <li>ثبت درخواست، پاسخ، منبع و مدل استفاده‌شده</li>
+                <li>سیاست استفاده از مدل محلی یا ابری</li>
+                <li>ارزیابی کیفیت پاسخ فارسی و منابع سازمانی</li>
+                <li>مسیر ارجاع به انسان برای تصمیم‌های حساس</li>
+            </ul>
+        </article>
+        <article class="product-summary-card product-summary-card--features">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-chart"></use></svg></span>
+            <h2>شاخص‌های موفقیت</h2>
+            <ul>
+                <li>کاهش زمان جست‌وجوی اطلاعات</li>
+                <li>افزایش پاسخ‌های دارای منبع معتبر</li>
+                <li>کاهش درخواست‌های تکراری از تیم‌ها</li>
+                <li>شفاف شدن مصرف، هزینه و کیفیت AI</li>
+                <li>استفاده واقعی کاربران بعد از پایلوت</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<section class="content-band content-band--alt seo-faq-band">
+    <div class="container faq-shell">
+        <div>
+            <p class="eyebrow">سوالات متداول</p>
+            <h2>پرسش‌های رایج درباره راه اندازی هوش مصنوعی سازمانی</h2>
+            <p>پاسخ‌ها با نگاه اجرایی نوشته شده‌اند؛ یعنی نصب، داده، امنیت، کاربران و سنجش نتیجه در کنار هم دیده می‌شوند.</p>
+        </div>
+        <div class="faq-list">
+            @foreach (var faq in faqs)
+            {
+                <details>
+                    <summary>@faq.Question</summary>
+                    <p>@faq.Answer</p>
+                </details>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="content-band product-cta-band">
+    <div class="container">
+        @await Html.PartialAsync("_CtaSection", new CtaSectionViewModel(
+            "برای راه اندازی هوش مصنوعی سازمانی از یک جلسه نیازسنجی شروع کنید",
+            "در این جلسه، سناریوهای قابل شروع، داده‌های موجود، سطح محرمانگی، مسیر نصب و شاخص‌های موفقیت سازمان شما بررسی می‌شود.",
+            "درخواست جلسه نیازسنجی",
+            "/request-demo",
+            "مشاهده پلتفرم",
+            "/ai-integrator"))
+    </div>
+</section>
+
+@section Scripts {
+    <script type="application/ld+json">@Html.Raw(faqSchema)</script>
+}

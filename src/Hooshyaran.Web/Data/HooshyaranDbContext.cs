@@ -37,6 +37,8 @@ public class HooshyaranDbContext(DbContextOptions<HooshyaranDbContext> options) 
 
     public DbSet<MediaAsset> MediaAssets => Set<MediaAsset>();
 
+    public DbSet<SitemapSnapshot> SitemapSnapshots => Set<SitemapSnapshot>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -135,6 +137,7 @@ public class HooshyaranDbContext(DbContextOptions<HooshyaranDbContext> options) 
             entity.Property(user => user.UserName).HasMaxLength(120).IsRequired();
             entity.Property(user => user.DisplayName).HasMaxLength(160);
             entity.Property(user => user.Email).HasMaxLength(180);
+            entity.Property(user => user.MobileNumber).HasMaxLength(32);
             entity.Property(user => user.PasswordHash).HasMaxLength(500).IsRequired();
             entity.Property(user => user.Role).HasMaxLength(60).IsRequired();
         });
@@ -148,6 +151,8 @@ public class HooshyaranDbContext(DbContextOptions<HooshyaranDbContext> options) 
             entity.Property(settings => settings.FromEmail).HasMaxLength(180);
             entity.Property(settings => settings.FromName).HasMaxLength(180);
             entity.Property(settings => settings.AdminNotificationEmail).HasMaxLength(180);
+            entity.Property(settings => settings.SmsApiUrl).HasMaxLength(260);
+            entity.Property(settings => settings.SmsApiKey).HasMaxLength(500);
         });
 
         modelBuilder.Entity<DemoRequest>(entity =>
@@ -197,6 +202,13 @@ public class HooshyaranDbContext(DbContextOptions<HooshyaranDbContext> options) 
             entity.Property(asset => asset.Title).HasMaxLength(220);
             entity.Property(asset => asset.Description).HasMaxLength(700);
             entity.Property(asset => asset.SeoDescription).HasMaxLength(320);
+        });
+
+        modelBuilder.Entity<SitemapSnapshot>(entity =>
+        {
+            entity.HasIndex(snapshot => snapshot.GeneratedAt);
+            entity.Property(snapshot => snapshot.Xml).IsRequired();
+            entity.Property(snapshot => snapshot.BaseUrl).HasMaxLength(260).IsRequired();
         });
 
         modelBuilder.Entity<Tag>(entity =>

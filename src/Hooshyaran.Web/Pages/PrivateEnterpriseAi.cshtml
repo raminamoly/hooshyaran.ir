@@ -1,0 +1,159 @@
+@page "/private-enterprise-ai"
+@using System.Text.Json
+@{
+    ViewData["Title"] = "هوش مصنوعی خصوصی برای سازمان‌ها و شرکت‌ها";
+    ViewData["Description"] = "هوش مصنوعی خصوصی برای سازمان؛ راهکاری امن برای استفاده از مدل‌های زبانی، چت سازمانی، پایگاه دانش و گزارش مصرف در محیط کنترل‌شده شرکت.";
+    ViewData["Keywords"] = "هوش مصنوعی خصوصی برای سازمان, هوش مصنوعی امن برای شرکت‌ها, هوش مصنوعی امن برای شرکت ها, AI خصوصی سازمانی, استقرار داخلی هوش مصنوعی, On-Premise AI";
+    ViewData["CanonicalPath"] = "/private-enterprise-ai";
+    ViewData["SocialImage"] = "/assets/content/llmops-private-ai-architecture.svg";
+
+    var controls = new[]
+    {
+        new { Title = "مرز داده", Text = "مشخص می‌شود کدام داده‌ها داخل سازمان بمانند، کدام منابع قابل استفاده باشند و چه داده‌ای نباید به مدل ارسال شود." },
+        new { Title = "مدل و مسیر اجرا", Text = "برای هر سناریو، مسیر مدل محلی، مدل ابری کنترل‌شده یا معماری ترکیبی بر اساس حساسیت داده انتخاب می‌شود." },
+        new { Title = "دسترسی و لاگ", Text = "کاربران، نقش‌ها، منابع مجاز، درخواست‌ها، پاسخ‌ها و رخدادهای پرریسک ثبت و قابل بررسی می‌شوند." },
+        new { Title = "پایش کیفیت و هزینه", Text = "هوش مصنوعی امن برای شرکت‌ها فقط با امنیت کامل نمی‌شود؛ کیفیت پاسخ، مصرف، latency و هزینه هم باید قابل مشاهده باشد." }
+    };
+
+    var faqs = new[]
+    {
+        new { Question = "هوش مصنوعی خصوصی برای سازمان یعنی چه؟", Answer = "یعنی استفاده از مدل‌های زبانی و ابزارهای AI در چارچوبی که داده، کاربران، مدل‌ها، دسترسی‌ها، لاگ و گزارش‌ها در کنترل سازمان باشند." },
+        new { Question = "آیا همه چیز باید داخل سازمان نصب شود؟", Answer = "نه همیشه. انتخاب بین نصب داخلی، محیط اختصاصی یا معماری ترکیبی به سطح محرمانگی داده، کیفیت مورد نیاز، هزینه و زیرساخت سازمان بستگی دارد." },
+        new { Question = "هوش مصنوعی امن برای شرکت‌ها چه کنترل‌هایی لازم دارد؟", Answer = "کنترل دسترسی، ثبت رخداد، سیاست استفاده از مدل، محدودسازی منابع، ارجاع به منبع، ارزیابی کیفیت و مسیر ارجاع به انسان برای تصمیم‌های حساس ضروری است." },
+        new { Question = "آیا هوش مصنوعی خصوصی برای چت با اسناد هم مناسب است؟", Answer = "بله. یکی از کاربردهای مهم آن، ساخت پایگاه دانش و چت با اسناد سازمانی بدون خروج کنترل‌نشده داده از محیط سازمان است." },
+        new { Question = "برای سازمان بدون GPU داخلی هم قابل اجراست؟", Answer = "بله. معماری می‌تواند ترکیبی باشد؛ داده‌های حساس در محیط کنترل‌شده بمانند و برای سناریوهای کم‌ریسک از مدل یا زیرساخت بیرونی با سیاست مشخص استفاده شود." }
+    };
+
+    var faqSchema = JsonSerializer.Serialize(new Dictionary<string, object?>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "FAQPage",
+        ["mainEntity"] = faqs.Select(item => new Dictionary<string, object?>
+        {
+            ["@type"] = "Question",
+            ["name"] = item.Question,
+            ["acceptedAnswer"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "Answer",
+                ["text"] = item.Answer
+            }
+        }).ToArray()
+    });
+}
+
+@await Html.PartialAsync("_PageHero", new PageHeroViewModel(
+    "امنیت و استقرار",
+    "هوش مصنوعی خصوصی برای سازمان‌هایی که داده حساس دارند",
+    "استفاده امن، قابل کنترل و قابل گزارش از مدل‌های زبانی، چت سازمانی، پایگاه دانش و ایجنت‌ها در محیط کنترل‌شده شرکت.",
+    "درخواست مشاوره امنیت AI",
+    "/request-demo",
+    "مشاهده LLMOPS",
+    "/products/llmops"))
+
+<section class="content-band seo-landing-intro">
+    <div class="container seo-landing-grid">
+        <article class="about-panel glass-surface">
+            <h2>هوش مصنوعی خصوصی یعنی کنترل داده، مدل و استفاده</h2>
+            <p>برای بسیاری از سازمان‌ها، استفاده مستقیم از ابزارهای عمومی AI با داده داخلی، ریسک امنیتی و مدیریتی دارد. هوش مصنوعی خصوصی برای سازمان کمک می‌کند داده‌ها، کاربران، منابع دانش، مدل‌ها، لاگ‌ها و سیاست‌های استفاده در یک چارچوب قابل دفاع مدیریت شوند.</p>
+            <p>در این نگاه، هدف فقط نصب یک مدل محلی نیست. هدف ساخت سیستمی است که استفاده از AI را امن، قابل سنجش و قابل توسعه کند.</p>
+        </article>
+        <aside class="seo-landing-panel glass-surface">
+            <h2>چه زمانی لازم است؟</h2>
+            <ul class="trust-list">
+                <li>داده مشتری، مالی، منابع انسانی یا قراردادها حساس است</li>
+                <li>چند واحد سازمانی از AI استفاده می‌کنند</li>
+                <li>پاسخ‌ها باید لاگ، منبع و قابلیت audit داشته باشند</li>
+                <li>سازمان به نصب داخلی یا محیط اختصاصی نیاز دارد</li>
+            </ul>
+        </aside>
+    </div>
+</section>
+
+<section class="content-band content-band--alt">
+    <div class="container">
+        @await Html.PartialAsync("_SectionTitle", new SectionTitleViewModel(
+            "چارچوب کنترل",
+            "۴ ستون هوش مصنوعی امن برای شرکت‌ها",
+            "برای استفاده عملیاتی از AI، امنیت باید در داده، مدل، دسترسی و عملیات دیده شود."))
+        <div class="seo-process-grid">
+            @for (var index = 0; index < controls.Length; index++)
+            {
+                <article class="seo-process-card">
+                    <span>@(index + 1)</span>
+                    <h2>@controls[index].Title</h2>
+                    <p>@controls[index].Text</p>
+                </article>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="content-band">
+    <div class="container product-summary-grid">
+        <article class="product-summary-card product-summary-card--problems">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-shield"></use></svg></span>
+            <h2>ریسک‌های کنترل‌نشده</h2>
+            <ul>
+                <li>ارسال داده حساس به ابزارهای عمومی</li>
+                <li>پاسخ بدون منبع در تصمیم‌های سازمانی</li>
+                <li>دسترسی یکسان کاربران به منابع متفاوت</li>
+                <li>هزینه و مصرف نامعلوم مدل‌های زبانی</li>
+            </ul>
+        </article>
+        <article class="product-summary-card product-summary-card--benefits">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-server"></use></svg></span>
+            <h2>مسیرهای استقرار</h2>
+            <ul>
+                <li>نصب روی سرور و شبکه داخلی شرکت</li>
+                <li>استفاده از GPU داخلی یا ظرفیت اختصاصی</li>
+                <li>اتصال کنترل‌شده به مدل‌های ابری کم‌ریسک‌تر</li>
+                <li>معماری ترکیبی برای تعادل کیفیت، هزینه و امنیت</li>
+            </ul>
+        </article>
+        <article class="product-summary-card product-summary-card--features">
+            <span class="product-summary-card__icon" aria-hidden="true"><svg><use href="#icon-chart"></use></svg></span>
+            <h2>آنچه باید گزارش شود</h2>
+            <ul>
+                <li>کاربر، مدل، زمان، منبع و پاسخ</li>
+                <li>مصرف و هزینه هر واحد یا سناریو</li>
+                <li>خطا، پاسخ نامعتبر و رخداد پرریسک</li>
+                <li>کیفیت پاسخ و بازخورد کاربران</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<section class="content-band content-band--alt seo-faq-band">
+    <div class="container faq-shell">
+        <div>
+            <p class="eyebrow">سوالات متداول</p>
+            <h2>پرسش‌های رایج درباره هوش مصنوعی خصوصی برای سازمان</h2>
+            <p>این بخش برای تیم‌هایی است که امنیت داده، کنترل دسترسی و قابلیت دفاع مدیریتی برایشان مهم است.</p>
+        </div>
+        <div class="faq-list">
+            @foreach (var faq in faqs)
+            {
+                <details>
+                    <summary>@faq.Question</summary>
+                    <p>@faq.Answer</p>
+                </details>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="content-band product-cta-band">
+    <div class="container">
+        @await Html.PartialAsync("_CtaSection", new CtaSectionViewModel(
+            "مسیر هوش مصنوعی خصوصی سازمان خود را ارزیابی کنید",
+            "در جلسه مشاوره، سطح محرمانگی داده، سناریوهای قابل شروع، مدل مناسب، مسیر نصب و کنترل‌های امنیتی سازمان شما بررسی می‌شود.",
+            "درخواست مشاوره امنیت AI",
+            "/request-demo",
+            "مشاهده LLMOPS",
+            "/products/llmops"))
+    </div>
+</section>
+
+@section Scripts {
+    <script type="application/ld+json">@Html.Raw(faqSchema)</script>
+}
